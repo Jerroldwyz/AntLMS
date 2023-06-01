@@ -1,0 +1,57 @@
+CREATE TABLE Users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  contact_details JSONB
+);
+
+CREATE TABLE Courses (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  enabled BOOLEAN DEFAULT true,
+  creator_id INTEGER REFERENCES Users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Topics (
+  id SERIAL PRIMARY KEY,
+  course_id INTEGER REFERENCES Courses(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  type VARCHAR(255) NOT NULL,
+  content TEXT
+);
+
+CREATE TABLE Quizzes (
+  id SERIAL PRIMARY KEY,
+  topic_id INTEGER REFERENCES Topics(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Questions (
+  id SERIAL PRIMARY KEY,
+  quiz_id INTEGER REFERENCES Quizzes(id) ON DELETE CASCADE,
+  question_text TEXT,
+  explanation TEXT
+);
+
+CREATE TABLE Choices (
+  id SERIAL PRIMARY KEY,
+  question_id INTEGER REFERENCES Questions(id) ON DELETE CASCADE,
+  choice_text TEXT,
+  is_correct BOOLEAN DEFAULT false
+);
+
+CREATE TABLE Enrollments (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
+  course_id INTEGER REFERENCES Courses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Managers (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Roles (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);

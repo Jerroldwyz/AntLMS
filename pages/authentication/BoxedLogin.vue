@@ -29,6 +29,7 @@ const emailRules = ref([
           <a href="/authentication/boxedregister" class="text-primary text-decoration-none">Sign Up</a>
         </h6>
 
+
         <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
           <v-text-field v-model="email" :rules="emailRules" label="E-mail" class="mt-4" required
             variant="outlined"></v-text-field>
