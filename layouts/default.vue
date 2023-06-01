@@ -15,39 +15,16 @@ useHead({
     return titleChunk ? `${titleChunk} - Dashboard` : 'Dashboard'
   },
 })
-
-const classs = 'page-enter'
 </script>
 
 <template>
-  <v-app
-    :theme="customizer.darktheme ? 'dark' : 'light'"
-    :class="[
-      customizer.mini_sidebar ? 'mini-sidebar' : '',
-      customizer.setHorizontalLayout ? 'horizontalLayout' : 'verticalLayout',
-    ]"
-  >
-    <Customizer />
-    <VerticalSidebarVue v-if="!customizer.setHorizontalLayout" />
-    <VerticalHeaderVue v-if="!customizer.setHorizontalLayout" />
-    <v-main>
-      <HorizontalHeader v-if="customizer.setHorizontalLayout" />
-      <HorizontalSidebar v-if="customizer.setHorizontalLayout" />
+  <v-app>
+    <VerticalSidebarVue />
+    <VerticalHeaderVue />
       <v-container fluid class="page-wrapper">
-        <div v-if="classs">
+        <div>
           <slot />
         </div>
-        <v-btn
-          class="customizer-btn"
-          icon="mdi-cog"
-          size="large"
-          flat
-          @click.stop="
-            customizer.SET_CUSTOMIZER_DRAWER(!customizer.Customizer_drawer)
-          "
-        >
-        </v-btn>
       </v-container>
-    </v-main>
   </v-app>
 </template>
