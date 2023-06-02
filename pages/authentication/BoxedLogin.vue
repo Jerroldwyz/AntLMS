@@ -19,7 +19,7 @@ const emailRules = ref([
 </script>
 
 <template>
-  <v-container id="login" class="fill-height justify-center" tag="section">
+  <v-container id="login" class="d-flex fill-height align-center justify-center" tag="section">
     <v-card width="50%" elevation="10">
       <div class="pa-7 pa-sm-10">
         <img src="/images/logo-icon.png" />
@@ -59,3 +59,6 @@ const emailRules = ref([
     </v-card>
   </v-container>
 </template>
+
+<style scoped>
+</style>
