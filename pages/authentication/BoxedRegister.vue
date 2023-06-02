@@ -28,7 +28,9 @@ const fnameRules = ref([
   <v-container id="login" class="d-flex fill-height align-center justify-center" tag="section">
     <v-card width="50%" elevation="10">
       <div class="pa-7 pa-sm-10">
+        <a href="/dashboards/analytical">
         <img src="/images/logo-icon.png" />
+        </a>
         <h2 class="font-weight-bold mt-4 text--darken-2">Sign Up</h2>
         <h6 class="text-subtitle-1 text-grey-darken-1">
           Already have an account?
