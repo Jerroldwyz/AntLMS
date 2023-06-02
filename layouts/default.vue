@@ -19,3 +19,11 @@ useHead({
     </div>
   </v-app>
 </template>
+
+
+<style scoped>
+
+.v-application {
+  background-color: #f1f1f1;
+}
+</style>

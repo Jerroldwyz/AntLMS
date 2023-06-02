@@ -16,10 +16,10 @@ const cardData = [
     <h1 class="mt-6 mb-10">Dashboard</h1>
       <v-row>
         <v-col v-for="card in cardData">
-          <v-card width=300 height=300>
+          <v-card width=250 height=250>
             <img style="width: 100%; height: 65%;" :src="card.img" />
             <v-card-text>
-              <h5 class="title font-weight-medium text-h5 text-center">
+              <h5 class="title font-weight-medium text-h6 text-center">
                 {{ card.text }}
               </h5>
             </v-card-text>
@@ -31,4 +31,9 @@ const cardData = [
   </div>
 </template>
 
-<style></style>
+<style scoped>
+.v-card-text {
+
+  padding: 0px;
+}
+</style>
