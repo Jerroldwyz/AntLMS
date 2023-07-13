@@ -1,0 +1,4 @@
+---
+- hosts: antlms-server
+  roles:
+    - deploy-antlms
