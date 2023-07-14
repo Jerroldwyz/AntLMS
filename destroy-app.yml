@@ -1,5 +1,6 @@
 
 ---
-- hosts: antlms-server
+- hosts: all
+
   roles:
     - destroy-antlms
