@@ -9,3 +9,4 @@ dist
 .terraform*
 *.docx
 *.odt
+s3-data/
