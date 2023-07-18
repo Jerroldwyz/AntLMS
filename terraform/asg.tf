@@ -2,64 +2,26 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
-  for_each = {
-    # On-demand instances
-    ex-1 = {
-      instance_type              = "t3.large"
-      use_mixed_instances_policy = false
-      mixed_instances_policy     = {}
-      user_data                  = <<-EOT
-        #!/bin/bash
-        cat <<'EOF' >> /etc/ecs/ecs.config
-        ECS_CLUSTER=${local.name}
-        ECS_LOGLEVEL=debug
-        ECS_CONTAINER_INSTANCE_TAGS=${jsonencode(local.tags)}
-        ECS_ENABLE_TASK_IAM_ROLE=true
-        EOF
-      EOT
-    }
-    # Spot instances
-    ex-2 = {
-      instance_type              = "t3.medium"
-      use_mixed_instances_policy = true
-      mixed_instances_policy = {
-        instances_distribution = {
-          on_demand_base_capacity                  = 0
-          on_demand_percentage_above_base_capacity = 0
-          spot_allocation_strategy                 = "price-capacity-optimized"
-        }
-
-        override = [
-          {
-            instance_type     = "m4.large"
-            weighted_capacity = "2"
-          },
-          {
-            instance_type     = "t3.large"
-            weighted_capacity = "1"
-          },
-        ]
-      }
-      user_data = <<-EOT
-        #!/bin/bash
-        cat <<'EOF' >> /etc/ecs/ecs.config
-        ECS_CLUSTER=${local.name}
-        ECS_LOGLEVEL=debug
-        ECS_CONTAINER_INSTANCE_TAGS=${jsonencode(local.tags)}
-        ECS_ENABLE_TASK_IAM_ROLE=true
-        ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
-        EOF
-      EOT
-    }
-  }
+  instance_type              = "t3a.micro"
+  use_mixed_instances_policy = false
+  mixed_instances_policy     = {}
 
   name = "${local.name}-${each.key}"
 
-  image_id      = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
-  instance_type = each.value.instance_type
+  image_id = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
 
-  security_groups                 = [module.autoscaling_sg.security_group_id]
-  user_data                       = base64encode(each.value.user_data)
+  security_groups = [module.autoscaling_sg.security_group_id]
+  user_data = base64encode(
+    <<-EOT
+        #!/bin/bash
+        cat <<'EOF' >> /etc/ecs/ecs.config
+        ECS_CLUSTER=${local.name}
+        ECS_LOGLEVEL=debug
+        ECS_CONTAINER_INSTANCE_TAGS=${jsonencode(local.tags)}
+        ECS_ENABLE_TASK_IAM_ROLE=true
+        EOF
+    EOT
+  )
   ignore_desired_capacity_changes = true
 
   create_iam_instance_profile = true
@@ -74,7 +36,7 @@ module "autoscaling" {
   health_check_type   = "EC2"
   min_size            = 1
   max_size            = 5
-  desired_capacity    = 2
+  desired_capacity    = 1
 
   # https://github.com/hashicorp/terraform-provider-aws/issues/12582
   autoscaling_group_tags = {
@@ -83,10 +45,6 @@ module "autoscaling" {
 
   # Required for  managed_termination_protection = "ENABLED"
   protect_from_scale_in = true
-
-  # Spot instances
-  use_mixed_instances_policy = each.value.use_mixed_instances_policy
-  mixed_instances_policy     = each.value.mixed_instances_policy
 
   tags = local.tags
 }

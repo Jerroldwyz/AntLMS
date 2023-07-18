@@ -2,9 +2,8 @@
 
 # Create ECS Cluster
 
-module "ecs" {
-  source  = "terraform-aws-modules/ecs/aws"
-  version = "5.2.0"
+module "ecs_cluster" {
+  source = "terraform-aws-modules/ecs/aws//modules/cluster"
 
   cluster_name = local.name
 
@@ -12,8 +11,8 @@ module "ecs" {
   default_capacity_provider_use_fargate = false
   autoscaling_capacity_providers = {
     # On-demand instances
-    ex-1 = {
-      auto_scaling_group_arn         = module.autoscaling["ex-1"].autoscaling_group_arn
+    one = {
+      auto_scaling_group_arn         = module.autoscaling.autoscaling_group_arn
       managed_termination_protection = "ENABLED"
 
       managed_scaling = {
@@ -28,29 +27,14 @@ module "ecs" {
         base   = 20
       }
     }
-    # Spot instances
-    ex-2 = {
-      auto_scaling_group_arn         = module.autoscaling["ex-2"].autoscaling_group_arn
-      managed_termination_protection = "ENABLED"
-
-      managed_scaling = {
-        maximum_scaling_step_size = 15
-        minimum_scaling_step_size = 5
-        status                    = "ENABLED"
-        target_capacity           = 90
-      }
-
-      default_capacity_provider_strategy = {
-        weight = 40
-      }
-    }
   }
 
   tags = local.tags
 }
 
+
 module "ecs_service" {
-  source = "../../modules/service"
+  source = "terraform-aws-modules/ecs/aws//modules/service"
 
   # Service
   name        = local.name
@@ -60,8 +44,8 @@ module "ecs_service" {
   requires_compatibilities = ["EC2"]
   capacity_provider_strategy = {
     # On-demand instances
-    ex-1 = {
-      capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["ex-1"].name
+    one = {
+      capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["one"].name
       weight            = 1
       base              = 1
     }
