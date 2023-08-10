@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     //   extractCSS: false,
     transpile: ['vuetify'],
   },
-  css: ['@/assets/scss/style.scss'],
   modules: ['@pinia/nuxt'],
   vite: {
     define: {

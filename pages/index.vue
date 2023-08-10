@@ -1,7 +1,10 @@
 <template>
-  <div></div>
+  <h1> Example index page </h1>
+  <VuetifyTest />
 </template>
-<script setup lang="ts">
-const router = useRouter()
-router.push('/dashboards/analytical')
-</script>
+
+<style>
+h1 {
+  color: red;
+}
+</style>
