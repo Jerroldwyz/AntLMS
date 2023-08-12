@@ -7,8 +7,9 @@ services:
     restart: on-failure
     ports:
       - 5432:5432
-    volumes:
-      - ./sql-migrations:/docker-entrypoint-initdb.d
+    # Run: "npx prisma migrate dev --name init" on host computer
+    #volumes:
+    #- ./sql-migrations:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: antlms-user
       POSTGRES_PASSWORD: example
