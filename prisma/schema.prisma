@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id              Int           @id @default(autoincrement())
+  email           String        @db.VarChar(255)
+  password        String        @db.VarChar(255)
+  contact_details Json?
+  enrollments     enrollments[]
+  managers        managers[]
+  courses         courses[]
+}
+
+model courses {
+  id          Int           @id @default(autoincrement())
+  title       String
+  enabled     Boolean       @default(true)
+  creator_id  Int
+  creator     users         @relation(fields: [creator_id], references: [id])
+  topics      topics[]
+  enrollments enrollments[]
+}
+
+model topics {
+  id        Int       @id @default(autoincrement())
+  course_id Int
+  title     String
+  type      String
+  content   String?
+  course    courses   @relation(fields: [course_id], references: [id])
+  quizzes   quizzes[]
+}
+
+model quizzes {
+  id        Int         @id @default(autoincrement())
+  topic_id  Int
+  title     String
+  topic     topics      @relation(fields: [topic_id], references: [id])
+  questions questions[]
+}
+
+model questions {
+  id            Int       @id @default(autoincrement())
+  quiz_id       Int
+  question_text String
+  explanation   String?
+  quiz          quizzes   @relation(fields: [quiz_id], references: [id])
+  choices       choices[]
+}
+
+model choices {
+  id          Int       @id @default(autoincrement())
+  question_id Int
+  choice_text String
+  is_correct  Boolean   @default(false)
+  question    questions @relation(fields: [question_id], references: [id])
+}
+
+model enrollments {
+  id        Int     @id @default(autoincrement())
+  user_id   Int
+  course_id Int
+  user      users   @relation(fields: [user_id], references: [id])
+  course    courses @relation(fields: [course_id], references: [id])
+}
+
+model managers {
+  id      Int   @id @default(autoincrement())
+  user_id Int
+  user    users @relation(fields: [user_id], references: [id])
+}
