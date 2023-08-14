@@ -12,6 +12,7 @@
     "@mdi/font": "6.7.96",
     "@pinia/nuxt": "^0.4.6",
     "@prisma/client": "^5.1.1",
+    "firebase": "^10.1.0",
     "pinia": "^2.0.27",
     "vue": "3.2.34",
     "vuetify": "3.0.1"
