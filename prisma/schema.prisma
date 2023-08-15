@@ -1,80 +1,75 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model users {
+model User {
   id              Int           @id @default(autoincrement())
-  email           String        @db.VarChar(255)
-  password        String        @db.VarChar(255)
+  email           String
+  password        String
   contact_details Json?
-  enrollments     enrollments[]
-  managers        managers[]
-  courses         courses[]
+  Course          Course[]
+  Enrollments     Enrollments[]
+  Managers        Managers[]
 }
 
-model courses {
+model Course {
   id          Int           @id @default(autoincrement())
   title       String
   enabled     Boolean       @default(true)
+  topic       String[]
   creator_id  Int
-  creator     users         @relation(fields: [creator_id], references: [id])
-  topics      topics[]
-  enrollments enrollments[]
+  creator     User          @relation(fields: [creator_id], references: [id])
+  Enrollments Enrollments[]
 }
 
-model topics {
-  id        Int       @id @default(autoincrement())
-  course_id Int
-  title     String
-  type      String
-  content   String?
-  course    courses   @relation(fields: [course_id], references: [id])
-  quizzes   quizzes[]
+// Do we need this?
+//model Topic {
+//  id        Int     @id @default(autoincrement())
+//  title     String
+//  type      String
+//  content   String?
+//  course_id Int
+//  course    Course  @relation(fields: [course_id], references: [id])
+//  Quiz      Quiz[]
+//}
+
+model Quiz {
+  id       Int        @id @default(autoincrement())
+  title    String
+  topic_id Int
+  //topic    Topic      @relation(fields: [topic_id], references: [id])
+  Question Question[]
 }
 
-model quizzes {
-  id        Int         @id @default(autoincrement())
-  topic_id  Int
-  title     String
-  topic     topics      @relation(fields: [topic_id], references: [id])
-  questions questions[]
-}
-
-model questions {
-  id            Int       @id @default(autoincrement())
-  quiz_id       Int
+model Question {
+  id            Int      @id @default(autoincrement())
   question_text String
-  explanation   String?
-  quiz          quizzes   @relation(fields: [quiz_id], references: [id])
-  choices       choices[]
+  explanation   String
+  quiz_id       Int
+  quiz          Quiz     @relation(fields: [quiz_id], references: [id])
+  Choice        Choice[]
 }
 
-model choices {
-  id          Int       @id @default(autoincrement())
-  question_id Int
+model Choice {
+  id          Int      @id @default(autoincrement())
   choice_text String
-  is_correct  Boolean   @default(false)
-  question    questions @relation(fields: [question_id], references: [id])
+  is_correct  Boolean  @default(false)
+  question_id Int
+  question    Question @relation(fields: [question_id], references: [id])
 }
 
-model enrollments {
-  id        Int     @id @default(autoincrement())
+model Enrollments {
+  id        Int    @id @default(autoincrement())
   user_id   Int
+  user      User   @relation(fields: [user_id], references: [id])
   course_id Int
-  user      users   @relation(fields: [user_id], references: [id])
-  course    courses @relation(fields: [course_id], references: [id])
+  course    Course @relation(fields: [course_id], references: [id])
 }
 
-model managers {
-  id      Int   @id @default(autoincrement())
+model Managers {
+  id      Int  @id @default(autoincrement())
   user_id Int
-  user    users @relation(fields: [user_id], references: [id])
+  user    User @relation(fields: [user_id], references: [id])
+}
+
+// Prisma docs have an example using an enum instead.
+model Roles {
+  id   Int    @id @default(autoincrement())
+  name String
 }

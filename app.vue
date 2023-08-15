@@ -6,6 +6,7 @@
 
     <AuthLogin v-else />
   </div>
+
 </template>
 
 <script setup>
