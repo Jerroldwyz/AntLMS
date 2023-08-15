@@ -49,23 +49,29 @@
 
 <template>
   <v-sheet :height="400" :width="400" border rounded>
-    <v-form v-model="valid" @submit.prevent="createCourse">
-      <v-text-field
-        v-model="course.title"
-        :rules="titleRules"
-        label="Title"
-      ></v-text-field>
-      
-      <v-select
-          v-model="course.topic"
-          :rules="topicRules"
-          label="Topic"
-          :items="topicItems"
-          multiple
-          chips
-      ></v-select>
+    <v-form class="h-100 pa-6" v-model="valid" @submit.prevent="createCourse">
+      <div class="h-100 d-flex flex-column">
+        <div class="h-100">
+          <v-text-field
+            v-model="course.title"
+            :rules="titleRules"
+            label="Title"
+          ></v-text-field>
 
-      <v-btn type="submit" :loading="loading"> Create Course </v-btn>
+          <v-select
+              v-model="course.topic"
+              :rules="topicRules"
+              label="Topic"
+              :items="topicItems"
+              multiple
+              chips
+          ></v-select>
+        </div>
+
+        <div class="d-flex justify-center align-start">
+          <v-btn type="submit" :loading="loading"> Create Course </v-btn>
+        </div>
+      </div>
     </v-form>
   </v-sheet>
 </template>

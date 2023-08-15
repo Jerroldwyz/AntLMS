@@ -6,7 +6,9 @@
 
 <template>
   <v-dialog v-model="createDialog">
-    <CourseCreationForm />
+    <v-row justify="center">
+      <CourseCreationForm />
+    </v-row>
   </v-dialog>
   <v-btn @click="createDialog = true">Create Course</v-btn>
 </template>
