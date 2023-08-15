@@ -1,10 +1,6 @@
 export default defineNuxtConfig({
-  ssr: false,
-  typescript: {
-    shim: false,
-  },
+  css: ['vuetify/lib/styles/main.sass'],
   build: {
-    //   extractCSS: false,
     transpile: ['vuetify'],
   },
   modules: ['@pinia/nuxt'],
@@ -12,19 +8,6 @@ export default defineNuxtConfig({
     define: {
       'process.env.DEBUG': false,
     },
-    build: {
-      chunkSizeWarningLimit: 1600,
-    },
-  },
-  devServerHandlers: [],
-  hooks: {
-    //   "build:done": (builder) => {
-    //     const extraFilePath = path.join(
-    //       builder.nuxt.options.buildDir + "/dist/server",
-    //       "server.mjs"
-    //     );
-    //     fs.writeFileSync(extraFilePath, "export {};");
-    //   },
   },
   runtimeConfig: {
     firebaseApiKey: process.env.FIREBASE_API_KEY,

@@ -43,5 +43,4 @@ services:
       /usr/bin/mc alias set myminio http://s3:9000 minioadmin minioadmin;
       /usr/bin/mc mb myminio/antlms;
       /usr/bin/mc anonymous set public myminio/antlms;
-      exit 0;
-      "
+      exit 0;"
