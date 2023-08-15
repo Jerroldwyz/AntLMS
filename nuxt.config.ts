@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 export default defineNuxtConfig({
   ssr: false,
   typescript: {
@@ -18,7 +17,7 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 1600,
     },
   },
-  devServerHandlers: [],
+
   hooks: {
     //   "build:done": (builder) => {
     //     const extraFilePath = path.join(
