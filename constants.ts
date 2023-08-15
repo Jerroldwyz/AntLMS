@@ -7,6 +7,6 @@ export const topicItems = [
                    "Business",
                    "Law",
                    "Health",
-                   "Other",
+                   "Miscellaneous",
                  ]
 

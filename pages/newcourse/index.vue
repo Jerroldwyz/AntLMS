@@ -1,22 +1,21 @@
 <script setup lang="ts">
-  import { topicItems } from "~~/constants.ts"
+  import { topicItems } from "~~/constants"
 
-  const course: Course = ref({
+  const course = ref({
     title: "",
-    topic: "",
-    other_topic: ""
+    topic: [],
   })
 
   const loading = ref(false);
-  const valid = ref("");
+  const valid = ref<boolean | null | undefined>(null);
 
   const titleRules = [
-    value => {
+    (value: string) => {
       if (value) return true
 
       return "You must enter a title"
     },
-    value => {
+    (value: string) => {
         if (value.length > 5) return true
 
         return "Title must be 5 characters or more"
@@ -24,18 +23,10 @@
   ]
 
   const topicRules = [
-    value => {
-      if (value) return true
+    (value: string[]) => {
+      if (value.length > 0) return true
 
-      return "You must pick a course topic"
-    }
-  ]
-
-  const otherRules = [
-    value => {
-      if (value) return true
-
-      return "You must specify other"
+      return "You must pick atleast one course topic"
     }
   ]
 
@@ -48,7 +39,7 @@
           }
       })
 
-      loading.value = pending
+      loading.value = pending.value
       navigateTo("/")
     }
   }
@@ -69,17 +60,11 @@
           :rules="topicRules"
           label="Topic"
           :items="topicItems"
+          multiple
+          chips
       ></v-select>
 
-      <div v-if="course.topic == 'Other'">
-        <v-text-field
-            v-model="course.other_topic"
-            :rules="otherRules"
-            label="Other (Please specify)"
-        ></v-text-field>
-      </div>
-
-      <v-btn type="submit" :loading="loading.value"> Create Course </v-btn>
+      <v-btn type="submit" :loading="loading"> Create Course </v-btn>
     </v-form>
   </v-sheet>
 </template>

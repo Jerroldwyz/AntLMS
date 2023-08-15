@@ -1,15 +1,19 @@
+import { PrismaClient } from '@prisma/client'
+
 export default defineEventHandler(async (e) => {
   const prisma = new PrismaClient();
-  const topic = await readBody(e).topic
+
+  const body = await readBody(e)
+  console.log(body.course)
   await prisma.course.create({
       data: {
-        title: course.title
-        topic: course.type
-        creator: "Jamie"
+        title: body.course.title,
+        topic: body.course.topic,
+        creator_id: 1
       }
   })
 
   return {
-    title: body.topic.title
+    title: body.course.title
   }
 })
