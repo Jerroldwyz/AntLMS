@@ -5,10 +5,10 @@
 </script>
 
 <template>
-  <v-dialog v-model="createDialog">
-    <v-row justify="center">
-      <CourseCreationForm />
-    </v-row>
-  </v-dialog>
   <v-btn @click="createDialog = true">Create Course</v-btn>
+  <v-dialog v-model="createDialog">
+    <div class="d-flex justify-center align-center">
+      <CourseCreationForm />
+    </div>
+  </v-dialog>
 </template>

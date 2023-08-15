@@ -7,10 +7,3 @@
     Create Course
   </NuxtLink>
 </template>
-
-<style>
-h1 {
-  color: red;
-}
-</style>
-
