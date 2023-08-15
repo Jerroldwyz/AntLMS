@@ -5,13 +5,14 @@
             <v-container>
                 <v-col>
                     <v-col cols="12" sm="12">
-                        <v-text-field v-model="username" :readonly="loading" :rules="[required]" clearable
+                        <v-text-field v-model="username" required :readonly="loading" :rules="[emailRules]" clearable
                             label="Email"></v-text-field>
 
                     </v-col>
 
                     <v-col cols=" 12" sm="12">
-                        <v-text-field v-model="password" type="password" label="Password" :rules="[required]" />
+                        <v-text-field v-model="password" required type="password" label="Password"
+                            :rules="[passwordRules]" />
                     </v-col>
 
                     <v-btn color="secondary" class="button" @click="handleLogin">Login</v-btn>
@@ -47,9 +48,15 @@ export default {
                 console.log(error);
             }
         },
-        required(v) {
-            return !!v || 'Field is required'
+        emptyRules(v) {
+            return !!v || 'Field cannot be empty';
         },
+        emailRules(v) {
+            return /.+@.+\..+/.test(v) || 'Email must be valid';
+        },
+        passwordRules(v) {
+            return v.length >= 8 || 'Too Short';
+        }
     },
 };
 </script>
