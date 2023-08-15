@@ -4,6 +4,7 @@
   const course = ref({
     title: "",
     topic: [],
+    creator_id: 0
   })
 
   const loading = ref(false);

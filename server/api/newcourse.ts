@@ -5,11 +5,12 @@ export default defineEventHandler(async (e) => {
 
   const body = await readBody(e)
   console.log(body.course)
+
   await prisma.course.create({
       data: {
         title: body.course.title,
         topic: body.course.topic,
-        creator_id: 1
+        creator_id: body.course.creator_id
       }
   })
 
