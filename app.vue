@@ -9,12 +9,6 @@
 </template>
 
 <script setup>
-const { registerUser } = useFirebase()
-const creds = reactive({
-  email: 'abc@gmail.com',
-  password: '12345678',
-})
-
-const result = await registerUser(creds.email, creds.password)
-console.log(result)
+const { useAuthUser } = useAuth()
+const user = useAuthUser()
 </script>
