@@ -1,4 +1,4 @@
-export const topicItems = [
+export const tags = [
                    "Mathematics",
                    "Science",
                    "Humanities",

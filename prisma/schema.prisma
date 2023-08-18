@@ -12,22 +12,23 @@ model Course {
   id          Int           @id @default(autoincrement())
   title       String
   enabled     Boolean       @default(true)
-  topic       String[]
+  tag       String[]
   creator_id  Int
   creator     User          @relation(fields: [creator_id], references: [id])
   Enrollments Enrollments[]
 }
 
-// Do we need this?
-//model Topic {
-//  id        Int     @id @default(autoincrement())
-//  title     String
-//  type      String
-//  content   String?
-//  course_id Int
-//  course    Course  @relation(fields: [course_id], references: [id])
-//  Quiz      Quiz[]
-//}
+model Topic {
+  id        Int     @id @default(autoincrement())
+  title     String
+  type      String
+  content   String?
+  course_id Int
+  course    Course  @relation(fields: [course_id], references: [id])
+  Quiz      Quiz[]?
+  Content   Content[]?
+}
+
 
 model Quiz {
   id       Int        @id @default(autoincrement())

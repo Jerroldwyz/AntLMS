@@ -1,16 +1,5 @@
 <script setup lang="ts">
-  import { topicItems } from "~~/constants"
-
-  const course = ref({
-    title: "",
-    topic: [],
-    creator_id: 0
-  })
-
-  const loading = ref(false);
-  const valid = ref<boolean | null | undefined>(null);
-
-  const pages = ref(["Basic Info"])
+  import { tags } from "~~/constants"
 
   const titleRules = [
     (value: string) => {
@@ -25,78 +14,55 @@
     },
   ]
 
-  const topicRules = [
+  const tagRules = [
     (value: string[]) => {
       if (value.length > 0) return true
 
       return "You must pick atleast one course topic"
     }
   ]
-
-  function createCourse() {
-    if (valid.value) {
-      let { data, pending } = useFetch("/api/newcourse", {
-          method: "post",
-          body: {
-            course
-          }
-      })
-
-      loading.value = pending.value
-      navigateTo("/")
-    }
-  }
-
-  function prevPage() {
-    pages.value.pop();
-  }
-
-  function nextPage() {
-    pages.value.push("Content")
-  }
-
 </script>
 
 <template> 
-  <v-sheet class="w-50 pa-8" :elevation="2" border rounded="lg">
-  <h4 class="text-h4"> Create A New Course </h4>
-  <v-breadcrumbs class="pb-8" :items="pages"></v-breadcrumbs>
-  <v-form v-model="valid" @submit.prevent="createCourse">
-    <v-sheet class="pa-8" :elevation="2">
-        <div>
-          <div>
-            <v-text-field
-              v-model="course.title"
-              :rules="titleRules"
-              label="Title"
-              variant="underlined"
-            ></v-text-field>
+  <v-card width="50%">
+    <form>
+    <v-card color="blue-darken-4" flat rounded="0">
+      <v-container class="pa-2">
+        <v-row>
+          <v-col>
+            <v-card-title> Create A New Course </v-card-title>
+          </v-col>
+          <v-col align="right">
+            <v-btn 
+              color="blue-darken-4" 
+              icon="mdi-close" 
+              flat 
+              @click="$emit('close')"></v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
 
-            <v-select
-                v-model="course.topic"
-                :rules="topicRules"
-                label="Topic (at least one)"
-                :items="topicItems"
-                variant="underlined"
-                multiple
-                chips
-            ></v-select>
-          </div>
+    <v-card-text>
+      <v-text-field label="Title" :rules="titleRules"></v-text-field>
+      <v-select
+        label="Tag(s)"
+        :items="tags"
+        :rules="tagRules" 
+        multiple 
+        chips></v-select>
+      <v-file-input label="Thumbnail"></v-file-input>
+    </v-card-text>
 
-          
-        </div>
-      </v-sheet>
-
-      <div class="d-flex mt-8">
-        <div v-if="pages.length > 1">
-          <v-btn @click="prevPage"> Prev </v-btn>
-        </div>
-
-        <div justify="end">
-          <v-btn @click="nextPage"> Next </v-btn>
-        </div>
-      </div>
-      </v-form>
-  </v-sheet>
+    <v-card color="grey-lighten-2">
+      <v-container>
+        <v-row justify="end">
+          <v-btn variant="text" @click="$emit('close')"> Cancel </v-btn>
+          <v-btn color="blue-darken-2"> Create Course </v-btn>
+        </v-row>
+      </v-container>
+    </v-card>
+    </form>
+  </v-card>
 </template>
 
