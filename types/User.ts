@@ -1,3 +1,5 @@
 export interface User {
-  email: string | null
+  accessToken?: string
+  uid: string
+  email?: string
 }
