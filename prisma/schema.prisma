@@ -1,3 +1,8 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model User {
   id              Int           @id @default(autoincrement())
   email           String
@@ -12,22 +17,23 @@ model Course {
   id          Int           @id @default(autoincrement())
   title       String
   enabled     Boolean       @default(true)
-  topic       String[]
+  topic       String
   creator_id  Int
   creator     User          @relation(fields: [creator_id], references: [id])
   Enrollments Enrollments[]
+  Topic       Topic[]
 }
 
 // Do we need this?
-//model Topic {
-//  id        Int     @id @default(autoincrement())
-//  title     String
-//  type      String
-//  content   String?
-//  course_id Int
-//  course    Course  @relation(fields: [course_id], references: [id])
-//  Quiz      Quiz[]
-//}
+model Topic {
+  id        Int     @id @default(autoincrement())
+  title     String
+  type      String
+  content   String?
+  course_id Int
+  course    Course  @relation(fields: [course_id], references: [id])
+  Quiz      Quiz[]
+}
 
 model Quiz {
   id       Int        @id @default(autoincrement())
@@ -35,6 +41,8 @@ model Quiz {
   topic_id Int
   //topic    Topic      @relation(fields: [topic_id], references: [id])
   Question Question[]
+  Topic    Topic?     @relation(fields: [topicId], references: [id])
+  topicId  Int?
 }
 
 model Question {
