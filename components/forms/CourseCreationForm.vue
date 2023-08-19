@@ -24,25 +24,16 @@
 </script>
 
 <template> 
-  <v-card width="50%">
+  <v-card width="40%">
     <form>
-    <v-card color="blue-darken-4" flat rounded="0">
-      <v-container class="pa-2">
-        <v-row>
-          <v-col>
-            <v-card-title> Create A New Course </v-card-title>
-          </v-col>
-          <v-col align="right">
-            <v-btn 
-              color="blue-darken-4" 
-              icon="mdi-close" 
-              flat 
-              @click="$emit('close')"></v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-
+    <v-row>
+      <v-col>
+        <v-card-title class="text-h5"> Create A New Course </v-card-title>
+      </v-col>
+      <v-col align="right">
+        <v-btn @click="$emit('close')" icon="mdi-close" flat></v-btn>
+      </v-col>
+    </v-row>
     <v-card-text>
       <v-text-field label="Title" :rules="titleRules"></v-text-field>
       <v-select
@@ -54,11 +45,11 @@
       <v-file-input label="Thumbnail"></v-file-input>
     </v-card-text>
 
-    <v-card color="grey-lighten-2">
+    <v-card color="grey-lighten-3">
       <v-container>
         <v-row justify="end">
-          <v-btn variant="text" @click="$emit('close')"> Cancel </v-btn>
-          <v-btn color="blue-darken-2"> Create Course </v-btn>
+          <v-btn class="text-capitalize" variant="text" @click="$emit('close')"> Cancel </v-btn>
+          <v-btn class="text-capitalize" color="blue-darken-2" @click="$emit('course-success');$emit('close')"> Create Course </v-btn>
         </v-row>
       </v-container>
     </v-card>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import  CourseCreationForm  from "~~/components/forms/CourseCreationForm"
-  const createDialog = ref(false)
+  import CourseCreationForm from "~~/components/forms/CourseCreationForm"
+  const createCourseDialog = ref(false)
+  const courseCreatedAlert = ref(false)
+  const courseErrorAlert = ref(true)
   const courses = ref([
     { 
       title: "Baking 101",
@@ -14,20 +16,38 @@
 </script>
 
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="2" v-for="course in courses">
-        <Course :title="course.title" :img="course.img" />
-      </v-col>
-      <v-col cols="2">
-        <CreateCourseBtn @click="createDialog = true" />
-      </v-col>
-    </v-row>
-  </v-container>
-  <v-dialog v-model="createDialog">
+    <v-alert
+      v-model="courseCreatedAlert"
+      type="success"
+      density="compact"
+      title="Course Created"
+      rounded="0"
+      closable
+      text="Click on the course you just created in order to add further information."
+      ></v-alert>
+    <v-alert
+        v-model="courseErrorAlert"
+        type="error"
+        density="compact"
+        title="Course Not Created"
+        rounded="0"
+        closable
+        text="Something went wrong. Please try again later."
+    ></v-alert>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="2" v-for="course in courses">
+          <Course :title="course.title" :img="course.img" />
+        </v-col>
+        <v-col cols="2">
+          <CreateCourseBtn @click="createCourseDialog = true" />
+        </v-col>
+      </v-row>
+    </v-container>
+  <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <CourseCreationForm @close="createDialog = false" />
+        <CourseCreationForm @course-success="courseCreatedAlert = true" @close="createCourseDialog = false" />
       </v-row>
     </v-container>
   </v-dialog>
