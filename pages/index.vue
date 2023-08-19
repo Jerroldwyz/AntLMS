@@ -3,14 +3,7 @@
 
 <template>
   <h1> Example index page </h1>
-  <NuxtLink to="/newcourse">
-    Create Course
+  <NuxtLink to="/mycourses">
+    View Courses
   </NuxtLink>
 </template>
-
-<style>
-h1 {
-  color: red;
-}
-</style>
-
