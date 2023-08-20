@@ -1,19 +1,19 @@
 <script setup lang="ts">
   const props = defineProps(["title", "img"])
-
 </script>
 
 
 <template>
   <v-card 
-    height="100%"
-    :elevation="2" 
+    class="fill-height"
+    @click=""
+    elevation=2
     rounded="lg"
   > 
     <v-img 
-      height="75%"
-      cover
+      class="h-75"
       :src="props.img"
+      cover
     ></v-img>
 
     <v-card-item>
