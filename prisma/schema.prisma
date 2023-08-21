@@ -12,40 +12,72 @@ datasource db {
 
 model users {
   id              Int           @id @default(autoincrement())
+  name            String
   email           String        @db.VarChar(255)
-  password        String        @db.VarChar(255)
   contact_details Json?
   enrollments     enrollments[]
-  managers        managers[]
   courses         courses[]
 }
 
 model courses {
-  id          Int           @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   title       String
-  enabled     Boolean       @default(true)
+  enabled     Boolean        @default(true)
+  thumbnail   String?
   creator_id  Int
-  creator     users         @relation(fields: [creator_id], references: [id])
+  creator     users          @relation(fields: [creator_id], references: [id], onDelete: Cascade)
   topics      topics[]
+  course_tags courses_tags[]
   enrollments enrollments[]
+}
+
+model tags {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  course_tags courses_tags[]
+}
+
+model courses_tags {
+  id        Int     @id @default(autoincrement())
+  course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id Int
+  tag       tags    @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  tag_id    Int
+
+  @@unique([course_id, tag_id])
 }
 
 model topics {
   id        Int       @id @default(autoincrement())
   course_id Int
   title     String
-  type      String
-  content   String?
-  course    courses   @relation(fields: [course_id], references: [id])
+  course    courses   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   quizzes   quizzes[]
+  content   content[]
+}
+
+model content {
+  id             Int          @id @default(autoincrement())
+  title          String
+  type           content_type
+  content        String?
+  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic_id       Int
+  topic_position Int
+}
+
+enum content_type {
+  TEXT
+  VIDEO
 }
 
 model quizzes {
-  id        Int         @id @default(autoincrement())
-  topic_id  Int
-  title     String
-  topic     topics      @relation(fields: [topic_id], references: [id])
-  questions questions[]
+  id             Int         @id @default(autoincrement())
+  topic_id       Int
+  title          String
+  topic          topics      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  questions      questions[]
+  topic_position Int
 }
 
 model questions {
@@ -53,7 +85,7 @@ model questions {
   quiz_id       Int
   question_text String
   explanation   String?
-  quiz          quizzes   @relation(fields: [quiz_id], references: [id])
+  quiz          quizzes   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
   choices       choices[]
 }
 
@@ -62,19 +94,13 @@ model choices {
   question_id Int
   choice_text String
   is_correct  Boolean   @default(false)
-  question    questions @relation(fields: [question_id], references: [id])
+  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
 
 model enrollments {
   id        Int     @id @default(autoincrement())
   user_id   Int
   course_id Int
-  user      users   @relation(fields: [user_id], references: [id])
-  course    courses @relation(fields: [course_id], references: [id])
-}
-
-model managers {
-  id      Int   @id @default(autoincrement())
-  user_id Int
-  user    users @relation(fields: [user_id], references: [id])
+  user      users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
 }

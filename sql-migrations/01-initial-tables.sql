@@ -1,57 +1,81 @@
-CREATE TABLE Users (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  contact_details JSONB
+-- Create tables
+CREATE TABLE users (
+  id serial PRIMARY KEY,
+  name varchar(255) NOT NULL,
+  email varchar(255),
+  contact_details json
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Courses (
-  id SERIAL PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  enabled BOOLEAN DEFAULT true,
-  creator_id INTEGER REFERENCES Users(id) ON DELETE CASCADE
+CREATE TABLE courses (
+  id serial PRIMARY KEY,
+  title varchar(255) NOT NULL,
+  enabled boolean DEFAULT true,
+  thumbnail varchar(255),
+  creator_id integer REFERENCES users(id)
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Topics (
-  id SERIAL PRIMARY KEY,
-  course_id INTEGER REFERENCES Courses(id) ON DELETE CASCADE,
-  title VARCHAR(255) NOT NULL,
-  type VARCHAR(255) NOT NULL,
-  content TEXT
+CREATE TABLE tags (
+  id serial PRIMARY KEY,
+  name varchar(255) UNIQUE NOT NULL
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Quizzes (
-  id SERIAL PRIMARY KEY,
-  topic_id INTEGER REFERENCES Topics(id) ON DELETE CASCADE,
-  title VARCHAR(255) NOT NULL
+CREATE TABLE courses_tags (
+  id serial PRIMARY KEY,
+  course_id integer REFERENCES courses(id),
+  tag_id integer REFERENCES tags(id),
+  UNIQUE (course_id, tag_id)
 );
 
-CREATE TABLE Questions (
-  id SERIAL PRIMARY KEY,
-  quiz_id INTEGER REFERENCES Quizzes(id) ON DELETE CASCADE,
-  question_text TEXT,
-  explanation TEXT
+CREATE TABLE topics (
+  id serial PRIMARY KEY,
+  course_id integer REFERENCES courses(id),
+  title varchar(255) NOT NULL
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Choices (
-  id SERIAL PRIMARY KEY,
-  question_id INTEGER REFERENCES Questions(id) ON DELETE CASCADE,
-  choice_text TEXT,
-  is_correct BOOLEAN DEFAULT false
+CREATE TABLE content (
+  id serial PRIMARY KEY,
+  title varchar(255) NOT NULL,
+  type content_type NOT NULL,
+  content text,
+  topic_id integer REFERENCES topics(id),
+  topic_position integer
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Enrollments (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
-  course_id INTEGER REFERENCES Courses(id) ON DELETE CASCADE
+CREATE TABLE quizzes (
+  id serial PRIMARY KEY,
+  topic_id integer REFERENCES topics(id),
+  title varchar(255) NOT NULL,
+  topic_position integer
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Managers (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE
+CREATE TABLE questions (
+  id serial PRIMARY KEY,
+  quiz_id integer REFERENCES quizzes(id),
+  question_text text NOT NULL,
+  explanation text
+  -- Other fields and constraints can be added here
 );
 
-CREATE TABLE Roles (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL
+CREATE TABLE choices (
+  id serial PRIMARY KEY,
+  question_id integer REFERENCES questions(id),
+  choice_text text NOT NULL,
+  is_correct boolean DEFAULT false
+  -- Other fields and constraints can be added here
 );
+
+CREATE TABLE enrollments (
+  id serial PRIMARY KEY,
+  user_id integer REFERENCES users(id),
+  course_id integer REFERENCES courses(id)
+  -- Other fields and constraints can be added here
+);
+
+-- Create content_type enum type
+CREATE TYPE content_type AS ENUM ('TEXT', 'VIDEO');

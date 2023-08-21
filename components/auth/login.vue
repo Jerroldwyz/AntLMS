@@ -23,42 +23,72 @@
     </div>
 </template>
 
-<script>
+<script setup>
+const username = ref('');
+const password = ref('');
+const errorMessage = ref('');
 
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-            errorMessage: '',
-        };
-    },
-    methods: {
-        async handleLogin() {
-            const { login } = useAuth();
-            try {
-                await login({
-                    email: this.username,
-                    password: this.password,
-                });
-                this.errorMessage = "";
-                this.$router.push('/dashboard');
-            } catch (error) {
-                this.errorMessage = error.statusMessage || 'An error occurred during login.';
-                console.log(error);
-            }
-        },
-        emptyRules(v) {
-            return !!v || 'Field cannot be empty';
-        },
-        emailRules(v) {
-            return /.+@.+\..+/.test(v) || 'Email must be valid';
-        },
-        passwordRules(v) {
-            return v.length >= 8 || 'Too Short';
-        }
-    },
-};
+
+async function handleLogin() {
+    const { login } = useAuth();
+    try {
+        await login({
+            email: username.value,
+            password: password.value,
+        });
+        errorMessage.value = "";
+        $router.push('/dashboard');
+    } catch (error) {
+        errorMessage.value = error.statusMessage || 'An error occurred during login.';
+        console.log(error);
+    }
+}
+
+function emptyRules(v) {
+    return !!v || 'Field cannot be empty';
+}
+
+function emailRules(v) {
+    return /.+@.+\..+/.test(v) || 'Email must be valid';
+}
+
+function passwordRules(v) {
+    return v.length >= 8 || 'Too Short';
+}
+// export default {
+//     data() {
+//         return {
+//             username: '',
+//             password: '',
+//             errorMessage: '',
+//         };
+//     },
+//     methods: {
+//         async handleLogin() {
+//             const { login } = useAuth();
+//             try {
+//                 await login({
+//                     email: this.username,
+//                     password: this.password,
+//                 });
+//                 this.errorMessage = "";
+//                 this.$router.push('/dashboard');
+//             } catch (error) {
+//                 this.errorMessage = error.statusMessage || 'An error occurred during login.';
+//                 console.log(error);
+//             }
+//         },
+//         emptyRules(v) {
+//             return !!v || 'Field cannot be empty';
+//         },
+//         emailRules(v) {
+//             return /.+@.+\..+/.test(v) || 'Email must be valid';
+//         },
+//         passwordRules(v) {
+//             return v.length >= 8 || 'Too Short';
+//         }
+//     },
+// };
 </script>
 
 <style>
