@@ -4,7 +4,7 @@
             <div class="pa-7 pa-sm-10">
                 <h2 class="font-weight-bold mt-4 text--darken-2">Sign in</h2>
                 <h6 class="text-subtitle-1 text-grey-darken-1">Don't have an account?</h6>
-                <NuxtLink to="/auth/register" class="text-primary text-decoration-none">Sign Up</NuxtLink>
+                <NuxtLink to="/auth/register" class="text-primary text-decoration-none">Sign up</NuxtLink>
 
                 <v-form ref="form" v-model="valid" @submit.prevent="signIn">
                     <v-text-field v-model="email" :rules="emailRules" label="E-mail" class="mt-4" required
@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+const { $firebaseAuth } = useNuxtApp()
+const { signInUser } = useFirebase($firebaseAuth)
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)

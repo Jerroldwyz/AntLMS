@@ -15,7 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (user) {
         firebaseUser.value = formatUser(user)
         console.log(
-          `[Firebase Client] User signed in as ${firebaseUser.value.uid}`
+          `[Firebase Client] User signed in as ${firebaseUser.value.email}`
         )
       } else {
         firebaseUser.value = null

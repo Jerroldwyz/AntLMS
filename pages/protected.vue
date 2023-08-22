@@ -7,7 +7,8 @@
 </template>
 
 <script setup lang="ts">
-
+const { $firebaseAuth } = useNuxtApp()
+const { signOutUser } = useFirebase($firebaseAuth)
 const router = useRouter()
 
 const signOut = async () => {

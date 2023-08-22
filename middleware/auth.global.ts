@@ -1,4 +1,4 @@
-const protectedRoutes = ['/', '/dashboard', '/protected', '/newcourse']
+const allowedRoutes = ['/auth/register', '/login']
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const user = useUser()
@@ -7,11 +7,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     `[Auth global] direct to ${to.path} with user ${user.value?.email}`
   )
 
-  // if (user.value) {
-  //   return navigateTo(to.path)
-  // }
-
-  if (!user.value && to.path !== '/login') {
+  if (!user.value && !allowedRoutes.includes(to.path)) {
     return navigateTo('/login')
   }
 })
