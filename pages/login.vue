@@ -28,9 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { signInWithEmailAndPassword } from 'firebase/auth'
-
-const { $firebaseAuth } = useNuxtApp()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)

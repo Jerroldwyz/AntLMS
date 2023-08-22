@@ -1,6 +1,17 @@
+const protectedRoutes = ['/', '/dashboard', '/protected', '/newcourse']
+
 export default defineNuxtRouteMiddleware((to, from) => {
-  const protectedRoutes = ['/', '/dashboard', '/protected', '/newcourse']
-  const user = useFirebaseUser()
-  console.log('Auth middleware: ', to.path)
-  console.log('Current user: ', user.value)
+  const user = useUser()
+
+  console.log(
+    `[Auth global] direct to ${to.path} with user ${user.value?.email}`
+  )
+
+  // if (user.value) {
+  //   return navigateTo(to.path)
+  // }
+
+  if (!user.value && to.path !== '/login') {
+    return navigateTo('/login')
+  }
 })

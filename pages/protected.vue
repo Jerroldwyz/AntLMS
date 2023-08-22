@@ -1,6 +1,7 @@
 <template>
     <div>
         This page is protected
+        <NuxtLink to="/">Home page</NuxtLink>
     </div>
     <v-btn @click="signOut">Sign Out</v-btn>
 </template>

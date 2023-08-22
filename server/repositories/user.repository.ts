@@ -71,7 +71,7 @@ export async function updateUser(uid: string, email: string) {
     return { message: 'User updated successfully' }
   } catch (error) {
     throw createError({
-      message: error.message,
+      message: `Unable to update user ${uid}`,
     })
   }
 }
