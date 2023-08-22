@@ -19,6 +19,21 @@ export const getCourseById = (course_id: number) => {
     });
 }
 
+export const getCourses = (creator_id: number) => {
+
+    return prisma.courses.findMany({
+        where: {
+            creator_id: creator_id
+        },
+        select: {
+            id: true,
+            title: true,
+            enabled: true,
+            thumbnail: true,
+        },
+    });
+}
+
 export const createCourse = (course_data: any) => {
     return prisma.courses.create({
         data: course_data
