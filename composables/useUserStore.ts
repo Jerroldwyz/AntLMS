@@ -15,10 +15,10 @@ export const useUserStore = defineStore('user-store', {
       }
     },
     // create new user
-    async create(email: string) {
+    async create(uid: string, email: string) {
       await $fetch('/api/users/create', {
         method: 'POST',
-        body: { email },
+        body: { uid, email },
       })
         .catch((error) => console.error(error))
         .then(() => {

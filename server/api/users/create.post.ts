@@ -1,1 +1,6 @@
-export default defineEventHandler((event) => {})
+export default defineEventHandler(async (event) => {
+  // TODO: autorized API session
+  const { uid, email } = await readBody(event)
+  const user = await createUser(uid, email)
+  return user
+})
