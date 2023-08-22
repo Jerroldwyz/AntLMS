@@ -1,12 +1,12 @@
-import { prisma } from '../../db/index';
+import { createTopic } from "~~/server/db/topic";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
-    return await prisma.topics.create({
-        data: {
-            course_id: body.course_id,
-            title: body.title,
-        },
-    })
+    const prismaQuery = {
+        course_id: body.courseId,
+        title: body.title,
+    }
+
+    return await createTopic(prismaQuery);
 })
