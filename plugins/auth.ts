@@ -1,10 +1,10 @@
 export default defineNuxtPlugin(() => {
-  addRouteMiddleware('auth', () => {
+  addRouteMiddleware('auth', (to, from) => {
     const { $firebaseAuth } = useNuxtApp()
-    console.log('Auth middleware:', $firebaseAuth?.currentUser)
+    // console.log('Auth middleware:', $firebaseAuth)
 
-    if (!$firebaseAuth?.currentUser?.uid) {
-      return navigateTo('/login')
-    }
+    // if (!$firebaseAuth.currentUser?.uid) {
+    //   return navigateTo('/login')
+    // }
   })
 })

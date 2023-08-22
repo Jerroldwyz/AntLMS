@@ -4,9 +4,8 @@ datasource db {
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
+  uid             String        @id
   email           String
-  password        String
   contact_details Json?
   Course          Course[]
   Enrollments     Enrollments[]
@@ -18,8 +17,8 @@ model Course {
   title       String
   enabled     Boolean       @default(true)
   topic       String
-  creator_id  Int
-  creator     User          @relation(fields: [creator_id], references: [id])
+  creator_id  String
+  creator     User          @relation(fields: [creator_id], references: [uid])
   Enrollments Enrollments[]
   Topic       Topic[]
 }
@@ -64,16 +63,16 @@ model Choice {
 
 model Enrollments {
   id        Int    @id @default(autoincrement())
-  user_id   Int
-  user      User   @relation(fields: [user_id], references: [id])
+  user_id   String
+  user      User   @relation(fields: [user_id], references: [uid])
   course_id Int
   course    Course @relation(fields: [course_id], references: [id])
 }
 
 model Managers {
-  id      Int  @id @default(autoincrement())
-  user_id Int
-  user    User @relation(fields: [user_id], references: [id])
+  id      Int    @id @default(autoincrement())
+  user_id String
+  user    User   @relation(fields: [user_id], references: [uid])
 }
 
 // Prisma docs have an example using an enum instead.
