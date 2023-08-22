@@ -1,18 +1,16 @@
-import { error } from 'console'
 import {
   UserCredential,
   createUserWithEmailAndPassword,
-  getAuth,
   signInWithEmailAndPassword,
   Auth,
 } from 'firebase/auth'
 
 export default (firebaseAuth: Auth) => {
-  const createUser = async (email: string, password: string) => {
-    return new Promise((resolve, reject) => {
+  const createUser = async <IUser>(email: string, password: string) => {
+    return new Promise<IUser>((resolve, reject) => {
       createUserWithEmailAndPassword(firebaseAuth, email, password)
         .then((userCredentials) => {
-          resolve(userCredentials)
+          resolve(formatUser(userCredentials.user))
         })
         .catch((error) => reject(error))
     })
