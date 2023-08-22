@@ -36,10 +36,10 @@ export const updateCourseTitle = (account_id: number, course_title: string) => {
     });
 }
 
-export const updateCourseThumbnail = (account_id: number, thumbnail: string) => {
+export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
     return prisma.courses.update({
         where: {
-            id: account_id
+            id: course_id
         },
         data: {
             thumbnail: thumbnail
@@ -47,11 +47,11 @@ export const updateCourseThumbnail = (account_id: number, thumbnail: string) => 
     });
 }
 
-export const changeEnabled = (account_id: number, enabled: boolean) => {
+export const changeEnabled = (course_id: number, enabled: boolean) => {
 
     return prisma.courses.update({
         where: {
-            id: account_id
+            id: course_id
         },
         data: {
             enabled: enabled
@@ -59,10 +59,10 @@ export const changeEnabled = (account_id: number, enabled: boolean) => {
     });
 }
 
-export const deleteCourse = (account_id: number) => {
+export const deleteCourse = (course_id: number) => {
     return prisma.courses.delete({
         where: {
-            id: account_id
+            id: course_id
         },
 
     });
