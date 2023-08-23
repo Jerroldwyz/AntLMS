@@ -58,6 +58,8 @@ export const updateContentPosition = (content_id: number, content_position: numb
 }
 
 export const updateTitle = (content_id: number, content_title: string) => {
+    console.log(content_id);
+
     return prisma.content.update({
         where: {
             id: content_id
