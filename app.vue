@@ -1,15 +1,10 @@
 <template>
   <div>
-  <!-- <NuxtLayout v-if="user"> -->
+    <NuxtLayout>
       <NuxtPage />
-      <!-- </NuxtLayout> -->
-
-    <!-- <AuthLogin v-else /> -->
+    </NuxtLayout>
   </div>
-
 </template>
 
 <script setup>
-//const { useAuthUser } = useAuth()
-//const user = useAuthUser()
 </script>
