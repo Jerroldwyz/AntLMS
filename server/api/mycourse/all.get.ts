@@ -1,4 +1,4 @@
-import { getCourses } from "~~/server/db/course";
+import { getCourses } from "~~/server/db/mycourse";
 
 export default defineEventHandler(async (event) => {
     const query = await getQuery(event);

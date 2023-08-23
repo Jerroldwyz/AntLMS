@@ -1,4 +1,4 @@
-import { updateCourseTitle } from "~~/server/db/course";
+import { updateCourseTitle } from "~~/server/db/mycourse";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);

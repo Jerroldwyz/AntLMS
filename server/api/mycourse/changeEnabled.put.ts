@@ -1,4 +1,4 @@
-import { changeEnabled } from "~~/server/db/course";
+import { changeEnabled } from "~~/server/db/mycourse";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);

@@ -11,7 +11,6 @@ export const getContentById = (content_id: number) => {
             type: true,
             content: true,
             topic_id: true,
-            topic_position: true
         },
     });
 }

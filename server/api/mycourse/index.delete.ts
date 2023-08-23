@@ -1,4 +1,4 @@
-import { deleteCourse } from "~~/server/db/course";
+import { deleteCourse } from "~~/server/db/mycourse";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
