@@ -27,7 +27,6 @@
                 </v-responsive>
 
                 <v-menu
-                    min-width="200px"
                     rounded
                 >
                     <template v-slot:activator="{ props }">
