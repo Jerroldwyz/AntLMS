@@ -63,9 +63,29 @@ export const getCourses = (creator_id: number) => {
     });
 }
 
-export const createCourse = (course_data: any) => {
+export const createCourse = async (course_data: any) => {
+    // return prisma.courses.create({
+    //     data: course_data
+    // });
     return prisma.courses.create({
-        data: course_data
+        data: {
+            title: course_data.title,
+            creator_id: course_data.creatorId,
+            thumbnail: course_data.thumbnail,
+            course_tags: {
+                create: course_data.tags.map((t: any) => ({
+                    tag: {
+                        connectOrCreate: {
+                            where: { name: t },
+                            create: { name: t }
+                        }
+                    }
+                }))
+            }
+        },
+        include: {
+            course_tags: true
+        }
     });
 }
 
