@@ -4,10 +4,10 @@
             <v-container class="mx-auto d-flex align-center justify-center">
                 <span class="text-button text-white bg-brown px-2 py-1 rounded-lg">AntLMS</span>
                 <v-btn variant="text">
-                    <NuxtLink to="/dashboard" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
+                    <NuxtLink to="/" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
                 </v-btn>
                 <v-btn variant="text">
-                    <NuxtLink to="/courses" class="text-button text-decoration-none text-black">My Courses</NuxtLink>
+                    <NuxtLink to="/mycourses" class="text-button text-decoration-none text-black">My Courses</NuxtLink>
                 </v-btn>
                 <v-btn variant="text">
                     <NuxtLink to="/courses?search=" class="text-button text-decoration-none text-black">Browse</NuxtLink>
