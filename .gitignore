@@ -6,7 +6,4 @@ node_modules
 .output
 .env
 dist
-.terraform*
-*.docx
-*.odt
 s3-data/
