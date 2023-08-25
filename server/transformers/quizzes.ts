@@ -1,4 +1,4 @@
-export const quizzTransformer = (quiz: any) => {
+export const quizTransformer = (quiz: any) => {
     return {
         id: quiz.title,
         title: quiz.title,
