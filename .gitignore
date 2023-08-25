@@ -7,3 +7,5 @@ node_modules
 .env
 dist
 s3-data/
+.terraform.lock.hcl
+.terraform
