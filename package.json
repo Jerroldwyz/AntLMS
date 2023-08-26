@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "migrate": "prisma migrate dev --name init"
+    "migrate": "prisma generate && prisma migrate dev --name init"
   },
   "dependencies": {
     "@mdi/font": "6.7.96",
