@@ -1,12 +1,11 @@
 import { Unsubscribe, User } from 'firebase/auth'
-import useUser from './useFirebaseUser'
 
 export default () => {
   const { $firebaseAuth } = useNuxtApp()
 
   const token = useCookie('token')
 
-  const firebaseUser = useFirebaseUser()
+  const firebaseUser = useUser()
 
   let unsubscribe: Unsubscribe
 

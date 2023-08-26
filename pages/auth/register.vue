@@ -7,6 +7,8 @@
                     <NuxtLink to="/login" class="text-primary text-decoration-none">Sign in</NuxtLink>
                 </h6>
                 <v-form ref="form" v-model="valid" @submit.prevent="signUp">
+                    <v-text-field v-model="firstName" :rules="nameRules" label="First name" class="mt-4"
+                        required></v-text-field>
                     <v-text-field v-model="email" :rules="emailRules" label="E-mail" class="mt-4" required></v-text-field>
                     <v-text-field v-model="password" :rules="passwordRules" label="Password" type="password" class="mt-4"
                         required></v-text-field>
@@ -25,13 +27,21 @@ import { IUser } from '~~/types'
 
 const { $firebaseAuth } = useNuxtApp()
 const { createUser } = useFirebase($firebaseAuth)
+const router = useRouter()
+const userStore = useUserStore()
+
 const email = ref('')
 const password = ref('')
 const confirmedPassword = ref('')
 const valid = ref(true)
 const disabled = ref(false)
-const router = useRouter()
-const userStore = useUserStore()
+const firstName = ref('')
+const lastName = ref('')
+const phoneNumber = ref(0)
+
+const nameRules = ref([
+    (v: string) => !!v || 'Name is required'
+])
 
 const emailRules = ref([
     (v: string) => !!v || 'E-mail is required',
