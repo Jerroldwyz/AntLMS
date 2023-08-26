@@ -1,7 +1,7 @@
 <template>
     <v-app id="inspire">
         <v-app-bar flat>
-            <v-container class="mx-auto d-flex align-center justify-center">
+            <v-container class="pa-8 d-flex align-center justify-center" fluid="true">
                 <span class="text-button text-white bg-brown px-2 py-1 rounded-lg">AntLMS</span>
                 <v-btn variant="text">
                     <NuxtLink to="/" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
@@ -76,15 +76,13 @@
         </v-app-bar>
 
         <v-main class="bg-grey-lighten-3">
-            <v-container>
-                <v-sheet
+            <v-sheet
                 min-height="80vh"
                 rounded="lg"
-                class="pa-4"
-                >
-                    <slot />
-                </v-sheet>
-            </v-container>
+                class="ma-4 pa-4"
+            >
+                <slot />
+            </v-sheet>
         </v-main>
         <v-footer>
             <v-row justify="center" no-gutters>
