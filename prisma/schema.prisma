@@ -1,14 +1,17 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id              Int           @id @default(autoincrement())
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  uid             String        @id
   name            String
   email           String        @db.VarChar(255)
   contact_details Json?
@@ -21,8 +24,8 @@ model courses {
   title       String
   enabled     Boolean        @default(true)
   thumbnail   String?
-  creator_id  Int
-  creator     users          @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  creator_id  String
+  creator     users          @relation(fields: [creator_id], references: [uid], onDelete: Cascade)
   topics      topics[]
   course_tags courses_tags[]
   enrollments enrollments[]
@@ -77,25 +80,27 @@ model quizzes {
   topic_position Int
 }
 
-model Question {
+model questions {
   id            Int       @id @default(autoincrement())
+  quiz_id       Int
   question_text String
   explanation   String?
   quiz          quizzes   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
   choices       choices[]
 }
 
-model Choice {
+model choices {
   id          Int       @id @default(autoincrement())
+  question_id Int
   choice_text String
   is_correct  Boolean   @default(false)
   question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
 
-model Enrollments {
+model enrollments {
   id        Int     @id @default(autoincrement())
-  user_id   Int
+  user_id   String
   course_id Int
-  user      users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user      users   @relation(fields: [user_id], references: [uid], onDelete: Cascade)
   course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
 }
