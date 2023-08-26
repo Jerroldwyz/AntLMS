@@ -2,8 +2,8 @@
 </script>
 
 <template>
-  <div>
-    This is home page
-  </div>
+  <h1> Example index page </h1>
+  <NuxtLink to="/mycourses">
+    View Courses
+  </NuxtLink>
 </template>
-
