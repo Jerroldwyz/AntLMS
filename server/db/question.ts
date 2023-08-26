@@ -20,7 +20,7 @@ export const getQuestionById = (question_id: number) => {
 }
 
 export const createQuestion = async (question_data: any) => {
-    return prisma.quizzes.create({
+    return prisma.questions.create({
         data: question_data
     });
 }
