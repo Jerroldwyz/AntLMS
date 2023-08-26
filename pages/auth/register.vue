@@ -4,12 +4,21 @@
             <div class="pa-7 pa-sm-10">
                 <h2 class="font-weight-bold mt-4 text--darken-2">Sign up</h2>
                 <h6 class="text-subtitle-1 text-grey-darken-1">Already have an account?
-                    <NuxtLink to="/login" class="text-primary text-decoration-none">Sign in</NuxtLink>
+                    <NuxtLink to="/auth/login" class="text-primary text-decoration-none">Sign in</NuxtLink>
                 </h6>
                 <v-form ref="form" v-model="valid" @submit.prevent="signUp">
-                    <v-text-field v-model="firstName" :rules="nameRules" label="First name" class="mt-4"
-                        required></v-text-field>
+                    <v-row>
+                        <v-col>
+                            <v-text-field v-model="firstName" :rules="nameRules" label="First name" class="mt-4"
+                                required></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-text-field v-model="lastName" :rules="nameRules" label="Last name" class="mt-4"
+                                required></v-text-field>
+                        </v-col>
+                    </v-row>
                     <v-text-field v-model="email" :rules="emailRules" label="E-mail" class="mt-4" required></v-text-field>
+                    <v-text-field v-model="phoneNumber" label="Phone number" class="mt-4"></v-text-field>
                     <v-text-field v-model="password" :rules="passwordRules" label="Password" type="password" class="mt-4"
                         required></v-text-field>
                     <v-text-field v-model="confirmedPassword" :rules="passwordValidation" label="Confirm password"
@@ -23,6 +32,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    layout: false
+})
 import { IUser } from '~~/types'
 
 const { $firebaseAuth } = useNuxtApp()
@@ -33,11 +45,11 @@ const userStore = useUserStore()
 const email = ref('')
 const password = ref('')
 const confirmedPassword = ref('')
-const valid = ref(true)
+const valid = ref(false)
 const disabled = ref(false)
 const firstName = ref('')
 const lastName = ref('')
-const phoneNumber = ref(0)
+const phoneNumber = ref()
 
 const nameRules = ref([
     (v: string) => !!v || 'Name is required'
@@ -61,9 +73,19 @@ const passwordValidation = ref([
 const signUp = async () => {
     disabled.value = true
     try {
-        const newUser: IUser = await createUser(email.value, password.value)
-        await userStore.create(newUser.uid, newUser.email)
-        router.push('/login')
+        // new firebase user
+        const newFirebaseUser: IUser = await createUser(email.value, password.value)
+        // new user
+        const userProps = {
+            uid: newFirebaseUser.uid,
+            email: newFirebaseUser.email,
+            name: `${firstName.value} ${lastName.value}`,
+            contact_details: {
+                phone_number: phoneNumber.value
+            }
+        }
+        await userStore.create(userProps)
+        router.push('/auth/login')
     } catch (error) {
         alert(error)
     }

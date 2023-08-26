@@ -28,6 +28,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    layout: false
+})
 const { $firebaseAuth } = useNuxtApp()
 const { signInUser } = useFirebase($firebaseAuth)
 const valid = ref(true)
@@ -52,7 +55,7 @@ const signIn = async () => {
     disabled.value = true
     try {
         await signInUser(email.value, password.value)
-        router.push('/protected')
+        router.push('/')
     } catch (error) {
         alert(error)
     }

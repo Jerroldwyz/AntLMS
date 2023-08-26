@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import { IUser } from '~~/types'
 
+const route = '/api/account'
+
 export const useUserStore = defineStore('user-store', {
   state: () => ({ users: [] as IUser[] }),
   actions: {
     // get all users
     async getAll() {
       try {
-        let data = await $fetch<IUser[]>('/api/users')
+        let data = await $fetch<IUser[]>(route)
         this.users = data
         return data as IUser[]
       } catch (error) {
@@ -15,10 +17,10 @@ export const useUserStore = defineStore('user-store', {
       }
     },
     // create new user
-    async create(uid: string, email: string) {
-      await $fetch('/api/users/create', {
+    async create({ ...user }) {
+      await $fetch(route, {
         method: 'POST',
-        body: { uid, email },
+        body: user,
       })
         .catch((error) => console.error(error))
         .then(() => {
