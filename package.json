@@ -6,7 +6,8 @@
     "lint": "eslint . --fix --ext .ts,.vue",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "migrate": "prisma generate && prisma migrate dev --name init"
   },
   "dependencies": {
     "@mdi/font": "6.7.96",
