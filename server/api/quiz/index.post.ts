@@ -1,4 +1,5 @@
 import { createQuiz } from "~~/server/db/quiz";
+import { quizTransformer } from "~~/server/transformers/quiz";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
@@ -11,5 +12,5 @@ export default defineEventHandler(async (event) => {
 
     const quiz = await createQuiz(prismaData);
 
-    return quiz;
+    return quizTransformer(quiz);
 })
