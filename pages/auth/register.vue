@@ -36,14 +36,10 @@ definePageMeta({
     layout: false
 })
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { IUser } from '~~/types'
 
 const { $firebaseAuth } = useNuxtApp()
-const { createUser } = useFirebase($firebaseAuth)
 const router = useRouter()
 const userStore = useUserStore()
-const user$ = useUser()
-const token = useCookie('token')
 
 const email = ref('')
 const password = ref('')
@@ -78,9 +74,6 @@ const signUp = async () => {
     try {
         // new firebase user
         const firebaseUser = (await createUserWithEmailAndPassword($firebaseAuth, email.value, password.value)).user
-        // user$.value = formatUser(firebaseUser.user)
-        // token.value = await firebaseUser.user.getIdToken()
-        // new user
         const userProps = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,

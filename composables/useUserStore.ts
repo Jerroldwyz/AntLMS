@@ -1,9 +1,9 @@
-import { error } from 'console'
 import { defineStore } from 'pinia'
 import { IUser } from '~~/types'
 
 const route = '/api/account'
 
+// store for user on client side
 export const useUserStore = defineStore('user-store', {
   state: () => ({ users: [] as IUser[] }),
   actions: {
