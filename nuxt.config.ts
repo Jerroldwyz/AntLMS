@@ -23,6 +23,13 @@ export default defineNuxtConfig({
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID,
       },
+      firebaseAuthCookie: {
+        name: 'fb',
+        lifetime: 60 * 60 * 8,
+        domain: '',
+        path: '/',
+        sameSite: 'lax',
+      },
     },
   },
 })

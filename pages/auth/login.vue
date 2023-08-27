@@ -28,11 +28,15 @@
 </template>
 
 <script setup lang="ts">
+import { signInWithEmailAndPassword } from 'firebase/auth'
+
 definePageMeta({
     layout: false
 })
 const { $firebaseAuth } = useNuxtApp()
 const { signInUser } = useFirebase($firebaseAuth)
+const user = useUser()
+const token = useCookie('token')
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
@@ -54,7 +58,9 @@ const emailRules = ref([
 const signIn = async () => {
     disabled.value = true
     try {
-        await signInUser(email.value, password.value)
+        const credentials = (await signInWithEmailAndPassword($firebaseAuth, email.value, password.value)).user
+        user.value = formatUser(credentials)
+        token.value = await credentials.getIdToken()
         router.push('/')
     } catch (error) {
         alert(error)

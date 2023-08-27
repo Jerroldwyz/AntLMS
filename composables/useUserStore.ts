@@ -1,3 +1,4 @@
+import { error } from 'console'
 import { defineStore } from 'pinia'
 import { IUser } from '~~/types'
 
@@ -24,8 +25,16 @@ export const useUserStore = defineStore('user-store', {
       })
         .catch((error) => console.error(error))
         .then(() => {
-          console.log('User created')
+          console.log('You have created a user')
         })
+    },
+    async register({ ...user }) {
+      await $fetch('/api/signin', {
+        method: 'POST',
+        body: user,
+      })
+        .catch((error) => console.error(error))
+        .then(() => console.log('You have register'))
     },
   },
 })

@@ -11,17 +11,24 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // reactive user state observer
   nuxtApp.hooks.hook('app:mounted', () => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        firebaseUser.value = formatUser(user)
-        console.log(
-          `[Firebase Client] User signed in as ${firebaseUser.value.email}`
-        )
-      } else {
-        firebaseUser.value = null
-        console.log('[Firebase Client] User has signed out')
-      }
-    })
+    // auth.onAuthStateChanged(async (user) => {
+    //   if (user) {
+    //     firebaseUser.value = formatUser(user)
+    //   } else {
+    //     firebaseUser.value = null
+    //     console.log('[Firebase Client] User has signed out')
+    //   }
+    // })
+    // auth.onIdTokenChanged(async (user) => {
+    //   if (user) {
+    //     const token = await user.getIdToken()
+    //     setServerSession(token)
+    //     firebaseUser.value = formatUser(user)
+    //   } else {
+    //     setServerSession('')
+    //     firebaseUser.value = null
+    //   }
+    // })
   })
 
   return {
@@ -31,3 +38,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
   }
 })
+
+const setServerSession = (token: string) => {
+  return $fetch('/api/session', {
+    method: 'POST',
+    body: {
+      token,
+    },
+  })
+}
