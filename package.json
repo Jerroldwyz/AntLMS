@@ -16,7 +16,6 @@
     "pinia": "^2.0.27",
     "sass": "^1.65.1",
     "vue": "3.2.34",
-    "vuedraggable": "^4.1.0",
     "vuetify": "^3.0.1"
   },
   "devDependencies": {
