@@ -1,30 +1,38 @@
 <template>
     <v-app id="inspire">
         <v-app-bar flat>
-            <v-container class="pa-8 d-flex align-center justify-center" fluid="true">
-                <span class="text-button text-white bg-brown px-2 py-1 rounded-lg">AntLMS</span>
-                <v-btn variant="text">
-                    <NuxtLink to="/" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
+            <v-container class="pa-8 d-flex align-center justify-center " fluid="true">
+                
+                <v-btn prepend-icon="mdi-vuetify" variant="text" color="black" size="large">
+                    <NuxtLink to="/home" class="text-button text-decoration-none text-black">AntLMS</NuxtLink>
                 </v-btn>
-                <v-btn variant="text">
-                    <NuxtLink to="/mycourses" class="text-button text-decoration-none text-black">My Courses</NuxtLink>
-                </v-btn>
-                <v-btn variant="text">
-                    <NuxtLink to="/courses?search=" class="text-button text-decoration-none text-black">Browse</NuxtLink>
-                </v-btn>
+                
+                <!-- <v-btn class="appbar-button" size="large">
+                    <NuxtLink to="/mycourses" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
+                </v-btn> -->
+
                 <v-spacer></v-spacer>
 
-                <v-responsive max-width="160">
-                    <v-text-field
-                        density="compact"
-                        flat
-                        hide-details
-                        label="Course Search"
-                        rounded="lg"
-                        variant="filled"
-                        single-line
-                    ></v-text-field>
+                <v-responsive max-width="500">
+                    <v-card-text>
+                        <v-text-field
+                            :loading="loading"
+                            density="compact"
+                            variant="solo"
+                            label="Search for courses"
+                            append-inner-icon="mdi-magnify"
+                            single-line
+                            hide-details
+                            @click:append-inner="onClick"
+                        ></v-text-field>
+                    </v-card-text>
                 </v-responsive>
+
+                <v-spacer></v-spacer>
+
+                <!-- <v-btn>
+                    <v-icon size="large" icon="mdi-bell-badge"></v-icon>
+                </v-btn> -->
 
                 <v-menu
                     min-width="200px"
@@ -74,7 +82,7 @@
                 </v-menu>
             </v-container>
         </v-app-bar>
-
+        
         <v-main class="bg-grey-lighten-3">
             <v-sheet
                 min-height="80vh"
@@ -84,18 +92,47 @@
                 <slot />
             </v-sheet>
         </v-main>
+
         <v-footer>
             <v-row justify="center" no-gutters>
-                <v-col class="text-center mt-4" cols="12">
-                    {{ new Date().getFullYear() }} — <strong>AntLMS</strong>
+                <v-col class="text-center mt-4" cols="12" >
+                    AntLMS &copy {{ new Date().getFullYear() }}
                 </v-col>
             </v-row>
         </v-footer>
     </v-app>
 </template>
 
-<script setup>
+<script>
+  export default {
+    data: () => ({
+        links: [
+        'Home',
+        'About Us',
+        'Team',
+        'Services',
+        'Blog',
+        'Contact Us',
+      ],
+      loaded: false,
+      loading: false,
+    }),
+
+    methods: {
+      onClick () {
+        this.loading = true
+
+        setTimeout(() => {
+          this.loading = false
+          this.loaded = true
+        }, 2000)
+      },
+    },
+  }
 </script>
 
 <style>
+.v-footer {
+    font-size: small;
+}
 </style>
