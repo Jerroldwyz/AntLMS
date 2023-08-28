@@ -66,6 +66,21 @@
                         size="small"
                     >
                         Disable
+                        <v-dialog
+                            activator="parent"
+                            v-model="disableDialog[n]"
+                            width="auto"
+                        >
+                            <v-card>
+                                <v-card-text>
+                                    Are you sure you want to disable course TITLE?
+                                </v-card-text>
+                                <v-card-actions class="d-flex justify-center align-center pb-4">
+                                    <v-btn color="red" variant="outlined">Yes</v-btn>
+                                    <v-btn color="black" variant="outlined" @click="disableDialog[n] = false">No</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-btn>
                     <v-btn
                         class="ms-2"
@@ -76,7 +91,7 @@
                     Delete
                         <v-dialog
                             activator="parent"
-                            v-model="dialog[n]"
+                            v-model="deleteDialog[n]"
                             width="auto"
                         >
                             <v-card>
@@ -85,7 +100,7 @@
                                 </v-card-text>
                                 <v-card-actions class="d-flex justify-center align-center pb-4">
                                     <v-btn color="red" variant="outlined">Yes</v-btn>
-                                    <v-btn color="black" variant="outlined" @click="dialog[n] = false">No</v-btn>
+                                    <v-btn color="black" variant="outlined" @click="deleteDialog[n] = false">No</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -98,5 +113,6 @@
 </template>
 
 <script setup>
-    const dialog = ref({});
+    const disableDialog = ref({});
+    const deleteDialog = ref({});
 </script>

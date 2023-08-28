@@ -49,7 +49,54 @@
                         variant="outlined"
                         size="small"
                     >
-                        Edit role
+                        Edit Role
+                        <v-dialog
+                            v-model="roleDialog[n]"
+                            activator="parent"
+                            scrollable
+                            width="auto"
+                        >
+                            <v-card>
+                                <v-card-title>Select Role</v-card-title>
+                                <v-divider></v-divider>
+                                <v-card-text>
+                                    <v-radio-group
+                                        v-model="dialogm1"
+                                        column
+                                    >
+                                        <v-radio
+                                            label="Admin"
+                                            value="admin"
+                                        ></v-radio>
+                                        <v-radio
+                                            label="Manager"
+                                            value="manager"
+                                        ></v-radio>
+                                        <v-radio
+                                            label="Staff"
+                                            value="staff"
+                                        ></v-radio>
+                                    </v-radio-group>
+                                </v-card-text>
+                                <v-divider></v-divider>
+                                <v-card-actions>
+                                    <v-btn
+                                        color="blue-darken-1"
+                                        variant="text"
+                                        @click="roleDialog[n] = false"
+                                    >
+                                        Save
+                                    </v-btn>
+                                    <v-btn
+                                        color="black"
+                                        variant="text"
+                                        @click="roleDialog[n] = false"
+                                    >
+                                        Close
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-btn>
 
                     <v-btn
@@ -58,6 +105,21 @@
                         size="small"
                     >
                         Disable
+                        <v-dialog
+                            activator="parent"
+                            v-model="disableDialog[n]"
+                            width="auto"
+                        >
+                            <v-card>
+                                <v-card-text>
+                                    Are you sure you want to disable course TITLE?
+                                </v-card-text>
+                                <v-card-actions class="d-flex justify-center align-center pb-4">
+                                    <v-btn color="red" variant="outlined">Yes</v-btn>
+                                    <v-btn color="black" variant="outlined" @click="disableDialog[n] = false">No</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-btn>
                     <v-btn
                         class="ms-2"
@@ -65,10 +127,10 @@
                         size="small"
                         color="red"
                     >
-                    Delete
+                        Delete
                         <v-dialog
                             activator="parent"
-                            v-model="dialog[n]"
+                            v-model="deleteDialog[n]"
                             width="auto"
                         >
                             <v-card>
@@ -77,7 +139,7 @@
                                 </v-card-text>
                                 <v-card-actions class="d-flex justify-center align-center pb-4">
                                     <v-btn color="red" variant="outlined">Yes</v-btn>
-                                    <v-btn color="black" variant="outlined" @click="dialog[n] = false">No</v-btn>
+                                    <v-btn color="black" variant="outlined" @click="deleteDialog[n] = false">No</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -90,5 +152,7 @@
 </template>
 
 <script setup>
-    const dialog = ref({});
+    const disableDialog = ref({});
+    const deleteDialog = ref({});
+    const roleDialog = ref({});
 </script>
