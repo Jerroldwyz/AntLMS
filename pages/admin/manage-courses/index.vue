@@ -73,7 +73,22 @@
                         size="small"
                         color="red"
                     >
-                        Delete
+                    Delete
+                        <v-dialog
+                            activator="parent"
+                            v-model="dialog[n]"
+                            width="auto"
+                        >
+                            <v-card>
+                                <v-card-text>
+                                    Are you sure you want to delete course TITLE?
+                                </v-card-text>
+                                <v-card-actions class="d-flex justify-center align-center pb-4">
+                                    <v-btn color="red" variant="outlined">Yes</v-btn>
+                                    <v-btn color="black" variant="outlined" @click="dialog[n] = false">No</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-btn>
                 </td>
             </tr>
@@ -81,3 +96,7 @@
         </v-table>
     </div>
 </template>
+
+<script setup>
+    const dialog = ref({});
+</script>
