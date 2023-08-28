@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CourseEditForm from "~~/components/forms/CourseEditForm"
 const route = useRoute()
 
 </script>
@@ -6,11 +7,7 @@ const route = useRoute()
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-form class="w-50">
-          <v-text-field label="Title"></v-text-field>
-          <v-select label="Tag(s)" multiple chips></v-select>
-          <v-file-input label="Thumbnail"></v-file-input>
-        </v-form>
+        <CourseEditForm />
       </v-col>
 
       <v-col>
