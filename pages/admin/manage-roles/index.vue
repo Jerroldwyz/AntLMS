@@ -1,3 +1,11 @@
+<script setup>
+    const deleteDialog = ref({});
+    const roleDialog = ref({});
+    definePageMeta({
+        layout: "admin",
+    });
+</script>
+
 <template>
     <h1 class="mb-4">Admin Panel - Manage admin roles</h1>
     <v-text-field
@@ -120,7 +128,7 @@
                                 <v-divider></v-divider>
                                 <v-card-actions>
                                     <v-btn
-                                        color="blue-darken-1"
+                                        color="green-darken-1"
                                         variant="text"
                                         @click="roleDialog[n] = false"
                                     >
@@ -167,8 +175,3 @@
         </v-table>
     </div>
 </template>
-
-<script setup>
-    const deleteDialog = ref({});
-    const roleDialog = ref({});
-</script>

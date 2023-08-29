@@ -1,3 +1,11 @@
+<script setup>
+    const disableDialog = ref({});
+    const deleteDialog = ref({});
+    definePageMeta({
+        layout: "admin",
+    });
+</script>
+
 <template>
     <h1 class="mb-4">Admin Panel - Courses</h1>
     <v-text-field
@@ -111,8 +119,3 @@
         </v-table>
     </div>
 </template>
-
-<script setup>
-    const disableDialog = ref({});
-    const deleteDialog = ref({});
-</script>

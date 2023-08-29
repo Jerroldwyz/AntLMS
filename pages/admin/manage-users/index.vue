@@ -1,15 +1,15 @@
 <script setup>
+    const viewDialog = ref({});
+    const editDialog = ref({});
     const disableDialog = ref({});
     const deleteDialog = ref({});
-    const roleDialog = ref({});
-    const dialogm1 = ref("");
     definePageMeta({
         layout: "admin",
     });
 </script>
 
 <template>
-    <h1 class="mb-4">Admin Panel - Site Admins</h1>
+    <h1 class="mb-4">Admin Panel - Users</h1>
     <v-text-field
         clearable
         label="Search"
@@ -33,13 +33,13 @@
             <thead>
             <tr>
                 <th class="text-left">
+                Thumbnail
+                </th>
+                <th class="text-left">
                 User Name
                 </th>
                 <th class="text-left">
                 Email
-                </th>
-                <th class="text-left">
-                Role
                 </th>
                 <th class="text-right">
                 Actions
@@ -50,18 +50,33 @@
             <tr
                 v-for="n in 9"
             >
+                <td>
+                    <v-avatar
+                        class="ma-2"
+                        color="grey-darken-1"
+                        size="large"
+                    >
+                        <span class="text-h6">AN</span>
+                    </v-avatar>
+                </td>
                 <td>USER NAME</td>
                 <td>EMAIL</td>
-                <td>ROLE</td>
                 <td class="text-right">
                     <v-btn
                         class="ms-2"
                         variant="outlined"
                         size="small"
                     >
-                        Edit Role
+                        View
+                    </v-btn>
+                    <v-btn
+                        class="ms-2"
+                        variant="outlined"
+                        size="small"
+                    >
+                        Edit
                         <v-dialog
-                            v-model="roleDialog[n]"
+                            v-model="editDialog[n]"
                             activator="parent"
                             scrollable
                             width="auto"
@@ -93,14 +108,14 @@
                                     <v-btn
                                         color="green-darken-1"
                                         variant="text"
-                                        @click="roleDialog[n] = false"
+                                        @click="editDialog[n] = false"
                                     >
                                         Save
                                     </v-btn>
                                     <v-btn
                                         color="black"
                                         variant="text"
-                                        @click="roleDialog[n] = false"
+                                        @click="editDialog[n] = false"
                                     >
                                         Close
                                     </v-btn>
