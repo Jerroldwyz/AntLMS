@@ -8,8 +8,8 @@ import {
 } from 'firebase/auth'
 
 export default (firebaseAuth: Auth) => {
-  const createUser = async <IUser>(email: string, password: string) => {
-    return new Promise<IUser>((resolve, reject) => {
+  const createUser = async <User>(email: string, password: string) => {
+    return new Promise<User>((resolve, reject) => {
       createUserWithEmailAndPassword(firebaseAuth, email, password)
         .then((userCredentials) => {
           resolve(formatUser(userCredentials.user))
