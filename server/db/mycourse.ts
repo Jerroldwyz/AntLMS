@@ -1,4 +1,5 @@
 import { prisma } from ".";
+import Course from "~~/types/Course"
 
 export const getCourseById = (course_id: number) => {
 
@@ -65,7 +66,7 @@ export const getCourses = (creator_id: number) => {
     });
 }
 
-export const createCourse = async (course_data: any) => {
+export const createCourse = async (course_data: Course) => {
     // return prisma.courses.create({
     //     data: course_data
     // });
@@ -75,11 +76,11 @@ export const createCourse = async (course_data: any) => {
             creator_id: course_data.creatorId,
             thumbnail: course_data.thumbnail,
             course_tags: {
-                create: course_data.tags.map((t: any) => ({
+                create: course_data.tags.map((tag: string) => ({
                     tag: {
                         connectOrCreate: {
-                            where: { name: t },
-                            create: { name: t }
+                            where: { name: tag },
+                            create: { name: tag }
                         }
                     }
                 }))

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import CourseCreationForm from "~~/components/forms/CourseCreationForm"
+  import CourseCreationForm from "~~/components/forms/CourseCreationForm.vue"
   const createCourseDialog = ref(false)
   const courseCreatedAlert = ref(false)
-  const courseErrorAlert = ref(true)
+  const courseErrorAlert = ref(false)
   const courses = ref([
     { 
       title: "Baking 101",
@@ -47,7 +47,7 @@
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <CourseCreationForm @course-success="courseCreatedAlert = true" @close="createCourseDialog = false" />
+        <CourseCreationForm @course-success="courseCreatedAlert = true" @course-failure="courseErrorAlert = true" @close="createCourseDialog = false" />
       </v-row>
     </v-container>
   </v-dialog>
