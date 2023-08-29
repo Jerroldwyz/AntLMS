@@ -1,8 +1,8 @@
-import { IUser } from '~~/types'
+import { User } from '~~/types'
 import { prisma } from '.'
 
 // TODO create account
-export const createAccount = async (user: IUser) => {
+export const createAccount = async (user: User) => {
   var newUser = null
   try {
     newUser = await prisma.users.create({
