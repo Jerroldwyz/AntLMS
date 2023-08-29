@@ -53,11 +53,9 @@
         </v-app-bar>
 
         <v-main class="bg-grey-lighten-3">
-            <v-container>
-                <v-sheet min-height="80vh" rounded="lg" class="pa-4">
-                    <slot />
-                </v-sheet>
-            </v-container>
+            <v-sheet min-height="80vh" rounded="lg" class="ma-4 pa-4">
+                <slot />
+            </v-sheet>
         </v-main>
         <v-footer>
             <v-row justify="center" no-gutters>
