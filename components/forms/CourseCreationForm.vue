@@ -2,7 +2,9 @@
 import Course from "~~/types/Course"
 import { tags } from "~~/constants"
 
-const emit = defineEmits(["close", "courseSuccess", "courseFailure"])
+const emit = defineEmits<{
+  (e: "courseOutcome", status: "success" | "failure"): void
+}>()
 
 const titleRules = [
   (value: string) => {
@@ -46,11 +48,9 @@ async function createCourse() {
         }
       })
       loading.value = false
-      emit("close")
-      emit("courseSuccess")
+      emit("courseOutcome", "success")
     } catch(e) {
-      emit("close")
-      emit("courseFailure")
+      emit("courseOutcome", "failure")
     }
   }
 
