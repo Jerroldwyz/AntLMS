@@ -1,20 +1,17 @@
 <template>
     <v-app id="inspire">
+
         <v-app-bar flat>
-            <v-container class="pa-8 d-flex align-center justify-center " fluid="true">
+            <v-container class="d-flex align-center justify-space-between" fluid="true">
                 
                 <v-btn prepend-icon="mdi-vuetify" variant="text" color="black" size="large">
                     <NuxtLink to="/home" class="text-button text-decoration-none text-black">AntLMS</NuxtLink>
                 </v-btn>
-                
-                <!-- <v-btn class="appbar-button" size="large">
-                    <NuxtLink to="/mycourses" class="text-button text-decoration-none text-black">Dashboard</NuxtLink>
-                </v-btn> -->
 
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer> -->
 
-                <v-responsive max-width="500">
-                    <v-card-text>
+                <v-responsive max-width="500" align-center justify-center>
+                    <v-card-text >
                         <v-text-field
                             :loading="loading"
                             density="compact"
@@ -28,11 +25,7 @@
                     </v-card-text>
                 </v-responsive>
 
-                <v-spacer></v-spacer>
-
-                <!-- <v-btn>
-                    <v-icon size="large" icon="mdi-bell-badge"></v-icon>
-                </v-btn> -->
+                <!-- <v-spacer></v-spacer> -->
 
                 <v-menu
                     min-width="200px"
@@ -82,6 +75,59 @@
                 </v-menu>
             </v-container>
         </v-app-bar>
+
+        <v-navigation-drawer
+        expand-on-hover
+        rail
+        permanent
+        >
+            <v-divider></v-divider>
+            
+            <v-list nav rounded>
+            
+                <v-list-item class="listItemFont" prepend-icon="mdi-home" title="Home" value="home" href="/home"></v-list-item>
+            
+                <!-- <v-divider></v-divider> -->
+
+                <v-list-group class="listItemFont" value="Browse">
+                    <template v-slot:activator="{props}">
+                        <v-list-item
+                            v-bind="props"
+                            prepend-icon="mdi-format-list-bulleted"
+                            title="Browse">
+                        </v-list-item>
+                    </template>
+
+                    <v-list-item
+                        v-for="(browseTitle, i) in browse"
+                        :key="i"
+                        :title="browseTitle"
+                        :value="title">
+                    </v-list-item>
+                </v-list-group>
+
+                <!-- <v-divider></v-divider> -->
+
+                <v-list-group class="listItemFont" value="Dashboard">
+                    <template v-slot:activator="{props}">
+                        <v-list-item
+                            v-bind="props"
+                            prepend-icon="mdi-view-dashboard"
+                            title="Dashboard">
+                        </v-list-item>
+                    </template>
+
+                    <v-list-item
+                        v-for="(courseTitle, i) in dashboard"
+                        :key="i"
+                        :title="courseTitle"
+                        :value="title">
+                    </v-list-item>
+                </v-list-group>
+                
+            </v-list>
+
+        </v-navigation-drawer>
         
         <v-main class="bg-grey-lighten-3">
             <v-sheet
@@ -106,16 +152,15 @@
 <script>
   export default {
     data: () => ({
-        links: [
-        'Home',
-        'About Us',
-        'Team',
-        'Services',
-        'Blog',
-        'Contact Us',
-      ],
       loaded: false,
       loading: false,
+      browse: [
+        "Creative", "Technology", "Business"
+      ],
+      dashboard: [
+        "Math 101", "Business 101", "Baking 101"
+      ]
+
     }),
 
     methods: {
@@ -135,4 +180,9 @@
 .v-footer {
     font-size: small;
 }
+
+.listItemFont .v-list-item-title{
+    font-size: 15px;
+}
+
 </style>
