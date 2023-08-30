@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import CourseEditForm from "~~/components/forms/CourseEditForm"
 const route = useRoute()
 </script>
 <template>
   <v-container fluid>
     <v-row>
       <v-col>
-        <CourseEditForm />
+        <FormCourseEdit />
       </v-col>
 
       <v-col>
