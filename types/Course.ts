@@ -1,6 +1,6 @@
 type Course = {
   title: string
-  creatorId: number
+  creatorId: string
   thumbnail: string
   tags: string[]
 }

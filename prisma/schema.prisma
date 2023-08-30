@@ -11,7 +11,7 @@ datasource db {
 }
 
 model users {
-  id              Int           @id @default(autoincrement())
+  uid             String        @id
   name            String
   email           String        @db.VarChar(255)
   contact_details Json?
@@ -24,8 +24,8 @@ model courses {
   title       String
   enabled     Boolean        @default(true)
   thumbnail   String?
-  creator_id  Int
-  creator     users          @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  creator_id  String
+  creator     users          @relation(fields: [creator_id], references: [uid], onDelete: Cascade)
   topics      topics[]
   course_tags courses_tags[]
   enrollments enrollments[]
@@ -99,8 +99,8 @@ model choices {
 
 model enrollments {
   id        Int     @id @default(autoincrement())
-  user_id   Int
+  user_id   String
   course_id Int
-  user      users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user      users   @relation(fields: [user_id], references: [uid], onDelete: Cascade)
   course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
 }

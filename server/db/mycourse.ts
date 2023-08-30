@@ -48,7 +48,7 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getCourses = (creator_id: number) => {
+export const getCourses = (creator_id: string) => {
   console.log(creator_id)
 
   return prisma.courses.findMany({

@@ -38,12 +38,12 @@ import AccountSetting from "@/components/AccountSetting.vue"
 import AccountSettingForm from "@/components/forms/AccountSettingForm.vue"
 
 interface UserData {
-  id: number;
-  name: string;
-  email: string;
-  gender: string;
+  id: number
+  name: string
+  email: string
+  gender: string
   // Add profilePicture field
-  profilePicture: File | null;
+  profilePicture: File | null
 }
 
 const editAccountDialog = ref(false)
@@ -53,14 +53,14 @@ const userData = ref<UserData>({
   name: "John Doe",
   email: "johndoe@example.com",
   gender: "Male",
-  profilePicture: null // Initialize profile picture
+  profilePicture: null, // Initialize profile picture
 })
 
 const updatePasswordCallback = (updatedUserData: UserData | null) => {
   if (updatedUserData !== null) {
-    userData.value = updatedUserData;
-    accountUpdatedAlert.value = true;
+    userData.value = updatedUserData
+    accountUpdatedAlert.value = true
   }
-  editAccountDialog.value = false;
+  editAccountDialog.value = false
 }
 </script>
