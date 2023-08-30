@@ -120,15 +120,7 @@ const topics = ref([
           >
             Cancel
           </v-btn>
-          <v-btn
-            class="text-capitalize bg-primary"
-            @click="
-              $emit('course-success')
-              $emit('close')
-            "
-          >
-            Save Changes
-          </v-btn>
+          <v-btn class="text-capitalize bg-primary"> Save Changes </v-btn>
         </v-row>
       </v-container>
     </v-card>
