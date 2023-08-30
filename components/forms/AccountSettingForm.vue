@@ -8,6 +8,9 @@
       <v-text-field v-model="userData.name" label="Full Name"></v-text-field>
       <v-select v-model="userData.gender" :items="['Male', 'Female', 'Other']" label="Gender"></v-select>
       
+      <!-- Add a new input field for profile picture -->
+      <v-file-input v-model="profilePicture" label="Profile Picture" accept="image/*"></v-file-input>
+      
       <v-text-field v-model="currentPassword" label="Current Password" type="password"></v-text-field>
       <v-text-field v-model="newPassword" label="New Password" type="password"></v-text-field>
       <v-text-field v-model="confirmPassword" label="Confirm New Password" type="password"></v-text-field>
@@ -35,12 +38,14 @@ const currentPassword = ref("")
 const newPassword = ref("")
 const confirmPassword = ref("")
 const errorMessage = ref("")
+const profilePicture = ref([] as File[]) // Initialize as an empty array of Files
 
 const closeDialog = () => {
   currentPassword.value = "";
   newPassword.value = "";
   confirmPassword.value = "";
   errorMessage.value = "";
+  profilePicture.value = []; // Reset the profile picture selection
   props.saveChangesCallback(null); // Passing null to indicate cancel
 }
 
@@ -50,10 +55,15 @@ const saveChanges = () => {
     return;
   }
   
-  // Clear the error message if passwords match
+  
+  // Clear the error message if everything is valid
   errorMessage.value = "";
 
-  const updatedUserData = { ...props.userData, newPassword: newPassword.value }
+  const updatedUserData = {
+    ...props.userData,
+    profilePicture: profilePicture.value, // Store the uploaded picture
+    newPassword: newPassword.value
+  };
   props.saveChangesCallback(updatedUserData);
 }
 </script>

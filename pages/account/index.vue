@@ -38,20 +38,22 @@ import AccountSetting from "@/components/AccountSetting.vue"
 import AccountSettingForm from "@/components/forms/AccountSettingForm.vue"
 
 interface UserData {
-  id: string
+  id: number;
   name: string;
   email: string;
-  gender: String
-
+  gender: string;
+  // Add profilePicture field
+  profilePicture: File | null;
 }
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
 const userData = ref<UserData>({
-  id: "111",
+  id: 1,
   name: "John Doe",
   email: "johndoe@example.com",
-  gender: "Male"
+  gender: "Male",
+  profilePicture: null // Initialize profile picture
 })
 
 const updatePasswordCallback = (updatedUserData: UserData | null) => {
