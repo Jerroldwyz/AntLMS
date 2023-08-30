@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import AccountSetting from "@/components/AccountSetting.vue"
-import AccountSettingForm from "@/components/forms/AccountSettingForm.vue"
+import AccountSettingForm from "@/components/form/AccountSettingForm.vue"
 
 interface UserData {
   id: number;
