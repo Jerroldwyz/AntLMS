@@ -1,7 +1,7 @@
-import { getContentById } from "~~/server/db/content";
+import { getContentById } from "~~/server/db/content"
 
 export default defineEventHandler(async (event) => {
-    const query = await getQuery(event);
+  const query = await getQuery(event)
 
-    return await getContentById(parseInt(query.contentId as string));
+  return await getContentById(parseInt(query.contentId as string))
 })
