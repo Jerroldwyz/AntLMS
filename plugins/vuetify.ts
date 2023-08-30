@@ -4,8 +4,21 @@ import "@mdi/font/css/materialdesignicons.css"
 import * as components from "vuetify/components"
 import * as directives from "vuetify/directives"
 
+const myTheme = {
+  dark: false,
+  colors: {
+    primary: "#224466",
+  },
+}
+
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify: any = createVuetify({
+    theme: {
+      defaultTheme: "myTheme",
+      themes: {
+        myTheme,
+      },
+    },
     components,
     directives,
   })
