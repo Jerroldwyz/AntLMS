@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CourseCreationForm from "~~/components/forms/CourseCreationForm"
 const createCourseDialog = ref(false)
 const courseSuccessAlert = ref(false)
 const courseFailureAlert = ref(false)
@@ -67,7 +66,7 @@ const courses = ref([
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <CourseCreationForm
+        <FormCreateCourse
           @course-outcome="handleCourseOutcome"
           @close="createCourseDialog = false"
         />
