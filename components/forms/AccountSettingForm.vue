@@ -4,9 +4,10 @@
       <v-card-title class="text-h5"> Account Settings </v-card-title>
       
       <!-- Additional form fields for account settings -->
+      <v-text-field v-model="userData.id" label="ID" disabled></v-text-field>
       <v-text-field v-model="userData.name" label="Full Name"></v-text-field>
-      <v-text-field v-model="userData.email" label="Email"></v-text-field>
-      <v-text-field v-model="userData.username" label="Username"></v-text-field>
+      <v-select v-model="userData.gender" :items="['Male', 'Female', 'Other']" label="Gender"></v-select>
+      
       <v-text-field v-model="currentPassword" label="Current Password" type="password"></v-text-field>
       <v-text-field v-model="newPassword" label="New Password" type="password"></v-text-field>
       <v-text-field v-model="confirmPassword" label="Confirm New Password" type="password"></v-text-field>

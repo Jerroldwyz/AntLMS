@@ -2,7 +2,10 @@
   <v-container fluid>
     <v-row>
       <v-col cols="6">
-        <AccountSetting :userData="userData" />
+        <AccountSetting
+          :userData="userData"
+          :updatePasswordCallback="updatePasswordCallback"
+        />
       </v-col>
       <v-col cols="6">
         <v-dialog v-model="editAccountDialog">
@@ -10,7 +13,7 @@
             <v-row justify="center">
               <AccountSettingForm
                 :userData="userData"
-                :saveChangesCallback="handleAccountSuccess"
+                :saveChangesCallback="updatePasswordCallback"
               />
             </v-row>
           </v-container>
@@ -35,20 +38,23 @@ import AccountSetting from "@/components/AccountSetting.vue"
 import AccountSettingForm from "@/components/forms/AccountSettingForm.vue"
 
 interface UserData {
+  id: string
   name: string;
   email: string;
-  username: string;
+  gender: String
+
 }
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
 const userData = ref<UserData>({
+  id: "111",
   name: "John Doe",
   email: "johndoe@example.com",
-  username: "johndoe123"
+  gender: "Male"
 })
 
-const handleAccountSuccess = (updatedUserData: UserData | null) => {
+const updatePasswordCallback = (updatedUserData: UserData | null) => {
   if (updatedUserData !== null) {
     userData.value = updatedUserData;
     accountUpdatedAlert.value = true;
