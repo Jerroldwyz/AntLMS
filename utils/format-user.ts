@@ -1,7 +1,9 @@
 import { DecodedIdToken } from "firebase-admin/auth"
-import { User } from "firebase/auth"
-import { IUser } from "~~/types"
+import { User as FirebaseUser } from "firebase/auth"
+import * as types from "~~/types"
 
-export const formatUser = <IUser>(user: User | DecodedIdToken) => {
-  return <IUser>{ uid: user.uid, email: user.email || "" }
+type TypeUser = types.User;
+
+export const formatUser = <TypeUser>(user: FirebaseUser | DecodedIdToken) => {
+  return <TypeUser>{ uid: user.uid, email: user.email || "" }
 }
