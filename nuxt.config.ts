@@ -1,30 +1,12 @@
 export default defineNuxtConfig({
-  ssr: false,
-  typescript: {
-    shim: false,
-  },
+  css: ["vuetify/lib/styles/main.sass"],
   build: {
-    //   extractCSS: false,
-    transpile: ['vuetify'],
+    transpile: ["vuetify"],
   },
-  css: ['@/assets/scss/style.scss'],
-  modules: ['@pinia/nuxt'],
+  modules: ["@pinia/nuxt"],
   vite: {
     define: {
-      'process.env.DEBUG': false,
+      "process.env.DEBUG": false,
     },
-    build: {
-      chunkSizeWarningLimit: 1600,
-    },
-  },
-
-  hooks: {
-    //   "build:done": (builder) => {
-    //     const extraFilePath = path.join(
-    //       builder.nuxt.options.buildDir + "/dist/server",
-    //       "server.mjs"
-    //     );
-    //     fs.writeFileSync(extraFilePath, "export {};");
-    //   },
   },
 })

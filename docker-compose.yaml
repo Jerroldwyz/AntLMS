@@ -1,5 +1,5 @@
 # Use postgres/example user/password credentials
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -7,8 +7,9 @@ services:
     restart: on-failure
     ports:
       - 5432:5432
-    volumes:
-      - ./sql-migrations:/docker-entrypoint-initdb.d
+    # set this value in you .env file or export it in the shell
+    # DATABASE_URL='postgresql://antlms-user:example@localhost:5432/antlms?schema=public&connection_limit=5'
+    # Then run "npm run migrate" on host computer to migrate schema with prisma
     environment:
       POSTGRES_USER: antlms-user
       POSTGRES_PASSWORD: example
@@ -42,5 +43,4 @@ services:
       /usr/bin/mc alias set myminio http://s3:9000 minioadmin minioadmin;
       /usr/bin/mc mb myminio/antlms;
       /usr/bin/mc anonymous set public myminio/antlms;
-      exit 0;
-      "
+      exit 0;"

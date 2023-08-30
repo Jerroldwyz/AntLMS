@@ -1,7 +1,7 @@
-import { createCourse } from "~~/server/db/mycourse";
+import { createCourse } from "~~/server/db/mycourse"
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody(event);
+  const body = await readBody(event)
 
-    return await createCourse(body as JSON);
+  return await createCourse(body as JSON)
 })
