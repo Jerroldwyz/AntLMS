@@ -85,7 +85,13 @@
             
             <v-list nav rounded>
             
-                <v-list-item class="listItemFont" prepend-icon="mdi-home" title="Home" value="home" href="/home"></v-list-item>
+                <v-list-item 
+                    class="listItemFont" 
+                    prepend-icon="mdi-home" 
+                    title="Home" 
+                    value="home" 
+                    href="/home">
+                </v-list-item>
             
                 <!-- <v-divider></v-divider> -->
 
@@ -102,7 +108,8 @@
                         v-for="(browseTitle, i) in browse"
                         :key="i"
                         :title="browseTitle"
-                        :value="title">
+                        :value="title"
+                        href="?">
                     </v-list-item>
                 </v-list-group>
 
@@ -121,10 +128,20 @@
                         v-for="(courseTitle, i) in dashboard"
                         :key="i"
                         :title="courseTitle"
-                        :value="title">
+                        :value="title"
+                        href="?">
                     </v-list-item>
                 </v-list-group>
                 
+                <v-list-item
+                    class="listItemFont" 
+                    prepend-icon="mdi-cog"
+                    title="Settings"
+                    value="Settings"
+                    href="?"
+                    >
+                </v-list-item>
+
             </v-list>
 
         </v-navigation-drawer>
