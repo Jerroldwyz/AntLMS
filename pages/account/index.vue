@@ -10,8 +10,7 @@
             <v-row justify="center">
               <AccountSettingForm
                 :userData="userData"
-                :saveChanges="handleAccountSuccess"
-                @close="editAccountDialog = false"
+                :saveChangesCallback="handleAccountSuccess"
               />
             </v-row>
           </v-container>
@@ -32,20 +31,28 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import AccountSetting from "././components/AccountSetting.vue"
-import AccountSettingForm from "././components/AccountSettingForm.vue"
+import AccountSetting from "@/components/AccountSetting.vue"
+import AccountSettingForm from "@/components/AccountSettingForm.vue"
+
+interface UserData {
+  name: string;
+  email: string;
+  username: string;
+}
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
-const userData = ref({
+const userData = ref<UserData>({
   name: "John Doe",
   email: "johndoe@example.com",
   username: "johndoe123"
 })
 
-const handleAccountSuccess = (updatedUserData: userData) => {
-  // Update the user data with the updatedUserData
-  userData.value = updatedUserData
-  accountUpdatedAlert.value = true
+const handleAccountSuccess = (updatedUserData: UserData | null) => {
+  if (updatedUserData !== null) {
+    userData.value = updatedUserData;
+    accountUpdatedAlert.value = true;
+  }
+  editAccountDialog.value = false;
 }
 </script>

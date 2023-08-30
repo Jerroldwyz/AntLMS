@@ -21,13 +21,16 @@
     <v-divider></v-divider>
     <v-card-text>
       <v-subheader>Change Password</v-subheader>
-      <!-- Include password fields here if needed -->
+      <v-text-field v-model="currentPassword" label="Current Password" type="password"></v-text-field>
+      <v-text-field v-model="newPassword" label="New Password" type="password"></v-text-field>
+      <v-text-field v-model="confirmPassword" label="Confirm New Password" type="password"></v-text-field>
+      <p class="error-message">{{ errorMessage }}</p>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue"
+import { defineProps, ref } from "vue"
 
 interface UserData {
   name: string;
@@ -37,4 +40,17 @@ interface UserData {
 
 const props = defineProps<{
   userData: UserData;
+}>()
+
+const currentPassword = ref("")
+const newPassword = ref("")
+const confirmPassword = ref("")
+const errorMessage = ref("")
 </script>
+
+<style scoped>
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+</style>

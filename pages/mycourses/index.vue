@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import CourseCreationForm from "~~/components/forms/CourseCreationForm"
+  import CourseCreationForm from "././components/forms/CourseCreationForm.vue"
   const createCourseDialog = ref(false)
   const courseCreatedAlert = ref(false)
   const courseErrorAlert = ref(true)
