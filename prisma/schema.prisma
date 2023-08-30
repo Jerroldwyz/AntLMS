@@ -1,76 +1,106 @@
-model User {
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
   id              Int           @id @default(autoincrement())
-  email           String
-  password        String
+  name            String
+  email           String        @db.VarChar(255)
   contact_details Json?
-  Course          Course[]
-  Enrollments     Enrollments[]
-  Managers        Managers[]
+  enrollments     enrollments[]
+  courses         courses[]
 }
 
-model Course {
-  id          Int           @id @default(autoincrement())
+model courses {
+  id          Int            @id @default(autoincrement())
   title       String
-  enabled     Boolean       @default(true)
-  tag       String[]
+  enabled     Boolean        @default(true)
+  thumbnail   String?
   creator_id  Int
-  creator     User          @relation(fields: [creator_id], references: [id])
-  Enrollments Enrollments[]
+  creator     users          @relation(fields: [creator_id], references: [id], onDelete: Cascade)
+  topics      topics[]
+  course_tags courses_tags[]
+  enrollments enrollments[]
 }
 
-model Topic {
+model tags {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  course_tags courses_tags[]
+}
+
+model courses_tags {
   id        Int     @id @default(autoincrement())
+  course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id Int
+  tag       tags    @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  tag_id    Int
+
+  @@unique([course_id, tag_id])
+}
+
+model topics {
+  id        Int       @id @default(autoincrement())
+  course_id Int
   title     String
-  type      String
-  content   String?
-  course_id Int
-  course    Course  @relation(fields: [course_id], references: [id])
-  Quiz      Quiz[]?
-  Content   Content[]?
+  course    courses   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  quizzes   quizzes[]
+  content   content[]
 }
 
-
-model Quiz {
-  id       Int        @id @default(autoincrement())
-  title    String
-  topic_id Int
-  //topic    Topic      @relation(fields: [topic_id], references: [id])
-  Question Question[]
+model content {
+  id             Int          @id @default(autoincrement())
+  title          String
+  type           content_type
+  content        String?
+  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic_id       Int
+  topic_position Int
 }
 
-model Question {
-  id            Int      @id @default(autoincrement())
-  question_text String
-  explanation   String
+enum content_type {
+  TEXT
+  VIDEO
+}
+
+model quizzes {
+  id             Int         @id @default(autoincrement())
+  topic_id       Int
+  title          String
+  topic          topics      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  questions      questions[]
+  topic_position Int
+}
+
+model questions {
+  id            Int       @id @default(autoincrement())
   quiz_id       Int
-  quiz          Quiz     @relation(fields: [quiz_id], references: [id])
-  Choice        Choice[]
+  question_text String
+  explanation   String?
+  quiz          quizzes   @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  choices       choices[]
 }
 
-model Choice {
-  id          Int      @id @default(autoincrement())
-  choice_text String
-  is_correct  Boolean  @default(false)
+model choices {
+  id          Int       @id @default(autoincrement())
   question_id Int
-  question    Question @relation(fields: [question_id], references: [id])
+  choice_text String
+  is_correct  Boolean   @default(false)
+  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade)
 }
 
-model Enrollments {
-  id        Int    @id @default(autoincrement())
+model enrollments {
+  id        Int     @id @default(autoincrement())
   user_id   Int
-  user      User   @relation(fields: [user_id], references: [id])
   course_id Int
-  course    Course @relation(fields: [course_id], references: [id])
-}
-
-model Managers {
-  id      Int  @id @default(autoincrement())
-  user_id Int
-  user    User @relation(fields: [user_id], references: [id])
-}
-
-// Prisma docs have an example using an enum instead.
-model Roles {
-  id   Int    @id @default(autoincrement())
-  name String
+  user      users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
 }
