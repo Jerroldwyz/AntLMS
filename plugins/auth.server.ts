@@ -11,6 +11,8 @@ export default defineNuxtPlugin(async () => {
       const result = await auth.verifyIdToken(token.value)
       user.value = formatUser(result)
       console.log(user.value)
+    } else {
+      user.value = null
     }
   } catch (error) {
     // not authenticated or invalid token
