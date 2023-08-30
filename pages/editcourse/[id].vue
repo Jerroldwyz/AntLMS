@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import CourseEditForm from "~~/components/forms/CourseEditForm"
 const route = useRoute()
-
 </script>
 <template>
   <v-container fluid>
