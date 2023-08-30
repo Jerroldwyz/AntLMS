@@ -15,13 +15,20 @@
       </v-row>
       <v-divider class="mb-2"></v-divider>
       <v-form>
-        <v-text-field label="Title"></v-text-field>
+        <v-text-field
+          label="Title"
+          variant="outlined"
+        ></v-text-field>
         <v-select
           label="Tag(s)"
           multiple
+          variant="outlined"
           chips
         ></v-select>
-        <v-file-input label="Thumbnail"></v-file-input>
+        <v-file-input
+          label="Thumbnail"
+          variant="outlined"
+        ></v-file-input>
       </v-form>
     </v-container>
     <v-card color="grey-lighten-3">
@@ -34,15 +41,7 @@
           >
             Cancel
           </v-btn>
-          <v-btn
-            class="text-capitalize bg-primary"
-            @click="
-              $emit('course-success')
-              $emit('close')
-            "
-          >
-            Save Changes
-          </v-btn>
+          <v-btn class="text-capitalize bg-primary"> Save Changes </v-btn>
         </v-row>
       </v-container>
     </v-card>
