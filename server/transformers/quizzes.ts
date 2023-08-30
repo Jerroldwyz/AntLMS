@@ -1,7 +1,7 @@
 export const quizTransformer = (quiz: any) => {
   return {
-    id: quiz.title,
+    id: quiz.id,
     title: quiz.title,
-    topicPosition: quiz.topic_position,
+    topicPosition: quiz.topic_position ?? 0,
   }
 }

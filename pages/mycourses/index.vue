@@ -1,8 +1,21 @@
 <script setup lang="ts">
-import CourseCreationForm from "~~/components/forms/CourseCreationForm"
+import CourseCreationForm from "~~/components/forms/CourseCreationForm.vue"
 const createCourseDialog = ref(false)
 const courseCreatedAlert = ref(false)
-const courseErrorAlert = ref(true)
+const courseFailureAlert = ref(false)
+
+function handleCourseOutcome(outcome: "success" | "failure") {
+  if (outcome === "success") {
+    createCourseDialog.value = false
+    courseCreatedAlert.value = true
+  }
+
+  if (outcome === "failure") {
+    createCourseDialog.value = false
+    courseFailureAlert.value = true
+  }
+}
+
 const courses = ref([
   {
     title: "Baking 101",
@@ -26,7 +39,7 @@ const courses = ref([
     text="Click on the course you just created in order to add further information."
   ></v-alert>
   <v-alert
-    v-model="courseErrorAlert"
+    v-model="courseFailureAlert"
     type="error"
     density="compact"
     title="Course Not Created"
@@ -54,7 +67,7 @@ const courses = ref([
     <v-container fluid>
       <v-row justify="center">
         <CourseCreationForm
-          @course-success="courseCreatedAlert = true"
+          @course-outcome="handleCourseOutcome"
           @close="createCourseDialog = false"
         />
       </v-row>

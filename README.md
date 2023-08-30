@@ -1,4 +1,5 @@
 # Node Version
+
 v16 up
 
 # Nuxt 3 Minimal Starter
@@ -18,6 +19,24 @@ pnpm install --shamefully-hoist
 ```
 
 ## Development Server
+
+Start Docker Compose for local DB and S3
+
+```
+docker compose up -d
+```
+
+Set your local environment
+
+```
+export DATABASE_URL='postgresql://antlms-user:example@localhost:5432/antlms?schema=public&connection_limit=5'
+```
+
+Migrate the DB schema
+
+```
+npm run migrate
+```
 
 Start the development server on http://localhost:3000
 

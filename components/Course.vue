@@ -1,17 +1,18 @@
 <script setup lang="ts">
-const props = defineProps(["title", "img"])
+const props = defineProps(["id", "title", "img"])
 </script>
 
 <template>
   <v-card
-    height="100%"
-    :elevation="2"
+    class="fill-height"
+    @click="navigateTo(`/editcourse/${props.id}`)"
+    elevation="2"
     rounded="lg"
   >
     <v-img
-      height="75%"
-      cover
+      class="h-75"
       :src="props.img"
+      cover
     ></v-img>
 
     <v-card-item>
