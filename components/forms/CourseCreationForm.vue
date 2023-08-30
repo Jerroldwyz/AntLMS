@@ -1,59 +1,119 @@
 <script setup lang="ts">
-  import { tags } from "~~/constants"
+import Course from "~~/types/Course"
+import { tags } from "~~/constants"
 
-  const titleRules = [
-    (value: string) => {
-      if (value) return true
+const emit = defineEmits<{
+  (e: "courseOutcome", status: "success" | "failure"): void
+}>()
 
-      return "You must enter a title"
-    },
-    (value: string) => {
-        if (value.length > 5) return true
+const titleRules = [
+  (value: string) => {
+    if (value) return true
 
-        return "Title must be 5 characters or more"
-    },
-  ]
+    return "You must enter a title"
+  },
+  (value: string) => {
+    if (value.length > 5) return true
 
-  const tagRules = [
-    (value: string[]) => {
-      if (value.length > 0) return true
+    return "Title must be 5 characters or more"
+  },
+]
 
-      return "You must pick atleast one course topic"
+const tagRules = [
+  (value: string[]) => {
+    if (value.length > 0) return true
+
+    return "You must pick atleast one course topic"
+  },
+]
+
+const course = ref<Course>({
+  title: "",
+  creatorId: 1,
+  thumbnail: "",
+  tags: [],
+})
+
+const loading = ref(false)
+const valid = ref(false)
+
+async function createCourse() {
+  if (valid.value === true) {
+    try {
+      loading.value = true
+      await $fetch("/api/mycourses", {
+        method: "post",
+        body: {
+          course: course.value,
+        },
+      })
+      loading.value = false
+      emit("courseOutcome", "success")
+    } catch (e) {
+      emit("courseOutcome", "failure")
     }
-  ]
+  }
+}
 </script>
 
-<template> 
-  <v-card width="40%">
-    <form>
-    <v-row>
-      <v-col>
-        <v-card-title class="text-h5"> Create A New Course </v-card-title>
-      </v-col>
-      <v-col align="right">
-        <v-btn @click="$emit('close')" icon="mdi-close" flat></v-btn>
-      </v-col>
-    </v-row>
-    <v-card-text>
-      <v-text-field label="Title" :rules="titleRules"></v-text-field>
-      <v-select
-        label="Tag(s)"
-        :items="tags"
-        :rules="tagRules" 
-        multiple 
-        chips></v-select>
-      <v-file-input label="Thumbnail"></v-file-input>
-    </v-card-text>
+<template>
+  <v-card class="w-50">
+    <v-form
+      v-model="valid"
+      @submit.prevent="createCourse"
+    >
+      <v-row>
+        <v-col>
+          <v-card-title class="text-h5"> Create A New Course </v-card-title>
+        </v-col>
+        <v-col class="d-flex justify-end align-center">
+          <v-btn
+            @click="$emit('close')"
+            icon="mdi-close"
+            flat
+          ></v-btn>
+        </v-col>
+      </v-row>
+      <v-card-text>
+        <v-text-field
+          v-model="course.title"
+          label="Title"
+          :rules="titleRules"
+        ></v-text-field>
+        <v-select
+          v-model="course.tags"
+          label="Tag(s)"
+          :items="tags"
+          :rules="tagRules"
+          multiple
+          chips
+        ></v-select>
+        <v-file-input
+          v-model="course.thumbnail"
+          label="Thumbnail"
+        ></v-file-input>
+      </v-card-text>
 
-    <v-card color="grey-lighten-3">
-      <v-container>
-        <v-row justify="end">
-          <v-btn class="text-capitalize" variant="text" @click="$emit('close')"> Cancel </v-btn>
-          <v-btn class="text-capitalize" color="blue-darken-2" @click="$emit('course-success');$emit('close')"> Create Course </v-btn>
-        </v-row>
-      </v-container>
-    </v-card>
-    </form>
+      <v-card color="grey-lighten-3">
+        <v-container>
+          <v-row justify="end">
+            <v-btn
+              class="text-capitalize"
+              variant="text"
+              @click="$emit('close')"
+            >
+              Cancel
+            </v-btn>
+            <v-btn
+              class="text-capitalize bg-primary"
+              type="submit"
+              :loading="loading"
+            >
+              Create Course
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-form>
   </v-card>
 </template>
-
