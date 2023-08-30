@@ -29,7 +29,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue"
 
+interface UserData {
+  name: string;
+  email: string;
+  username: string;
+}
+
 const props = defineProps<{
-  userData: String 
-}>()
+  userData: UserData;
 </script>

@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import AccountSetting from "././components/AccountSetting"
-import AccountSettingForm from "~~/components/AccountSettingForm"
+import AccountSetting from "././components/AccountSetting.vue"
+import AccountSettingForm from "././components/AccountSettingForm.vue"
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
