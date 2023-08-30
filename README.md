@@ -1,4 +1,5 @@
 # Node Version
+
 v16 up
 
 # Nuxt 3 Minimal Starter
