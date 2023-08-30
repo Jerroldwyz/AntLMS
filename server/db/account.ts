@@ -1,5 +1,5 @@
-import { User } from '~~/types'
-import { prisma } from '.'
+import { User } from "~~/types"
+import { prisma } from "."
 
 // TODO create account
 export const createAccount = async (user: User) => {
@@ -16,7 +16,7 @@ export const createAccount = async (user: User) => {
   } catch (error) {
     throw createError({
       statusCode: 500, // internal server error
-      statusMessage: 'Unable to create new user',
+      statusMessage: "Unable to create new user",
     })
   }
 

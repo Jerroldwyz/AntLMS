@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   Auth,
-} from 'firebase/auth'
+} from "firebase/auth"
 
 export default (firebaseAuth: Auth) => {
   const createUser = async <User>(email: string, password: string) => {

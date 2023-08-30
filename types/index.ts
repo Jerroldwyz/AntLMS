@@ -1,4 +1,4 @@
-import { JsonObject } from '@prisma/client/runtime/library'
+import { JsonObject } from "@prisma/client/runtime/library"
 
 export type User = {
   uid: string

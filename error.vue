@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const title = ref('404-Page Not Found')
+const title = ref("404-Page Not Found")
 
 useHead({
   meta: [{ content: title }],
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} - 404-Page Not Found` : 'Dashboard'
+    return titleChunk ? `${titleChunk} - 404-Page Not Found` : "Dashboard"
   },
 })
 </script>
@@ -18,7 +18,11 @@ useHead({
         <p class="text-grey-darken-1 mt-4 mb-4">
           You seem to be trying to find your way home
         </p>
-        <v-btn color="secondary" to="/">Go to Home</v-btn>
+        <v-btn
+          color="secondary"
+          to="/"
+          >Go to Home</v-btn
+        >
       </div>
     </div>
   </div>
@@ -29,7 +33,7 @@ useHead({
   height: 100%;
   width: 100%;
   background-repeat: no-repeat;
-  background: url('/images/background/error-bg.jpg');
+  background: url("/images/background/error-bg.jpg");
   background-size: cover;
   display: flex;
   height: 100vh;

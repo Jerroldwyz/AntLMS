@@ -1,4 +1,4 @@
-import { prisma } from '.'
+import { prisma } from "."
 
 export const getCourseById = (course_id: number) => {
   return prisma.courses.findUnique({

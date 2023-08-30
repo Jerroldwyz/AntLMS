@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia'
-import { IUser } from '~~/types'
+import { defineStore } from "pinia"
+import { IUser } from "~~/types"
 
-const route = '/api/account'
+const route = "/api/account"
 
 // store for user on client side
-export const useUserStore = defineStore('user-store', {
+export const useUserStore = defineStore("user-store", {
   state: () => ({ users: [] as IUser[] }),
   actions: {
     // get all users
@@ -20,21 +20,21 @@ export const useUserStore = defineStore('user-store', {
     // create new user
     async create({ ...user }) {
       await $fetch(route, {
-        method: 'POST',
+        method: "POST",
         body: user,
       })
         .catch((error) => console.error(error))
         .then(() => {
-          console.log('You have created a user')
+          console.log("You have created a user")
         })
     },
     async register({ ...user }) {
-      await $fetch('/api/signin', {
-        method: 'POST',
+      await $fetch("/api/signin", {
+        method: "POST",
         body: user,
       })
         .catch((error) => console.error(error))
-        .then(() => console.log('You have register'))
+        .then(() => console.log("You have register"))
     },
   },
 })

@@ -1,4 +1,4 @@
-const allowedRoutes = ['/auth/register', '/auth/login']
+const allowedRoutes = ["/auth/register", "/auth/login"]
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const user = useUser()
@@ -9,11 +9,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   if (user.value) {
     if (allowedRoutes.includes(to.path)) {
-      return navigateTo('/')
+      return navigateTo("/")
     }
   } else {
     if (!allowedRoutes.includes(to.path)) {
-      return navigateTo('/auth/login')
+      return navigateTo("/auth/login")
     }
   }
 })

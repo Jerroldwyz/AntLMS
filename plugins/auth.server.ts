@@ -1,8 +1,8 @@
-import { getAuth } from 'firebase-admin/auth'
-import app from '~~/utils/firebase-admin'
+import { getAuth } from "firebase-admin/auth"
+import app from "~~/utils/firebase-admin"
 
 export default defineNuxtPlugin(async () => {
-  const token = useCookie('token')
+  const token = useCookie("token")
   const user = useUser()
 
   try {

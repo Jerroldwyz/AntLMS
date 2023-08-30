@@ -1,4 +1,4 @@
-import { getAccountById } from '~~/server/db/account'
+import { getAccountById } from "~~/server/db/account"
 
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event)

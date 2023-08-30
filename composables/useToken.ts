@@ -1,9 +1,9 @@
-import { Unsubscribe } from 'firebase/auth'
+import { Unsubscribe } from "firebase/auth"
 
 // firebase id token observer
 export default () => {
   const { $firebaseAuth } = useNuxtApp()
-  const token = useCookie('token')
+  const token = useCookie("token")
 
   const firebaseUser = useUser()
 

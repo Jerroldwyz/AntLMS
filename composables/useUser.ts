@@ -1,6 +1,6 @@
-import { User } from '~~/types'
+import { User } from "~~/types"
 
 // user auth state observer
 export default () => {
-  return useState<User | null>('usser', () => null)
+  return useState<User | null>("usser", () => null)
 }
