@@ -3,12 +3,12 @@ CREATE TYPE "content_type" AS ENUM ('TEXT', 'VIDEO');
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "uid" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "contact_details" JSONB,
 
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "users_pkey" PRIMARY KEY ("uid")
 );
 
 -- CreateTable
@@ -17,7 +17,7 @@ CREATE TABLE "courses" (
     "title" TEXT NOT NULL,
     "enabled" BOOLEAN NOT NULL DEFAULT true,
     "thumbnail" TEXT,
-    "creator_id" INTEGER NOT NULL,
+    "creator_id" TEXT NOT NULL,
 
     CONSTRAINT "courses_pkey" PRIMARY KEY ("id")
 );
@@ -93,7 +93,7 @@ CREATE TABLE "choices" (
 -- CreateTable
 CREATE TABLE "enrollments" (
     "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "user_id" TEXT NOT NULL,
     "course_id" INTEGER NOT NULL,
 
     CONSTRAINT "enrollments_pkey" PRIMARY KEY ("id")
@@ -106,7 +106,7 @@ CREATE UNIQUE INDEX "tags_name_key" ON "tags"("name");
 CREATE UNIQUE INDEX "courses_tags_course_id_tag_id_key" ON "courses_tags"("course_id", "tag_id");
 
 -- AddForeignKey
-ALTER TABLE "courses" ADD CONSTRAINT "courses_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "courses" ADD CONSTRAINT "courses_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("uid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "courses_tags" ADD CONSTRAINT "courses_tags_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "courses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -130,7 +130,7 @@ ALTER TABLE "questions" ADD CONSTRAINT "questions_quiz_id_fkey" FOREIGN KEY ("qu
 ALTER TABLE "choices" ADD CONSTRAINT "choices_question_id_fkey" FOREIGN KEY ("question_id") REFERENCES "questions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("uid") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "courses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
