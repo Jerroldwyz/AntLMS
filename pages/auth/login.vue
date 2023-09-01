@@ -76,6 +76,7 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 definePageMeta({
   layout: false,
 })
+
 const { $firebaseAuth } = useNuxtApp()
 const { signInUser } = useFirebase($firebaseAuth)
 const user = useUser()
@@ -102,15 +103,7 @@ const emailRules = ref([
 const signIn = async () => {
   disabled.value = true
   try {
-    const credentials = (
-      await signInWithEmailAndPassword(
-        $firebaseAuth,
-        email.value,
-        password.value
-      )
-    ).user
-    user.value = formatUser(credentials)
-    token.value = await credentials.getIdToken()
+    await signInWithEmailAndPassword($firebaseAuth, email.value, password.value)
     router.push("/")
   } catch (error) {
     alert(error)

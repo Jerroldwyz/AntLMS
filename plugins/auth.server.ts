@@ -1,21 +1,18 @@
 import { getAuth } from "firebase-admin/auth"
 import app from "~~/utils/firebase-admin"
 
-export default defineNuxtPlugin(async () => {
-  const token = useCookie("token")
-  const user = useUser()
+// server side runtime
+export default defineNuxtPlugin(async (nuxtApp) => {
+  const token = useFirebaseToken()
+  const firebaseUser = useUser()
+  const auth = getAuth(app)
+
+  if (!token.value) return
 
   try {
-    const auth = getAuth(app)
-    if (token.value) {
-      const result = await auth.verifyIdToken(token.value)
-      user.value = formatUser(result)
-      console.log(user.value)
-    } else {
-      user.value = null
-    }
+    const result = await auth.verifyIdToken(token.value)
+    firebaseUser.value = formatUser(result)
   } catch (error) {
-    // not authenticated or invalid token
-    token.value = null
+    console.error("Not authenticated or invalid token")
   }
 })
