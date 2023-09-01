@@ -109,6 +109,8 @@ model enrollments {
   course     courses      @relation(fields: [course_id], references: [id], onDelete: Cascade)
   progress   progress[]
   quiz_score quiz_score[]
+
+  @@unique([course_id, user_id])
 }
 
 model progress {
