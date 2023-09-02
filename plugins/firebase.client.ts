@@ -12,8 +12,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hooks.hook("app:mounted", () => {
     auth.onIdTokenChanged(async (user) => {
       if (user) {
+        console.log("User signed in")
         const token = await user.getIdToken()
-        console.log(`[CLIENT] User signed in with token: ${token}`)
         setServerSession(token)
         firebaseUser.value = formatUser(user)
         navigateTo("/")

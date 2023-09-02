@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
-  console.log(cookieOptions)
+
   if (body.token) {
     setCookie(event, `${cookieOptions.name}-token`, body.token, {
       domain: cookieOptions.domain,

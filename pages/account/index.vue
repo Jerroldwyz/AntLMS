@@ -11,7 +11,7 @@
         <v-dialog v-model="editAccountDialog">
           <v-container fluid>
             <v-row justify="center">
-              <AccountSettingForm
+              <FormAccountSettingForm
                 :userData="userData"
                 :saveChangesCallback="updatePasswordCallback"
               />
@@ -34,8 +34,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import AccountSetting from "@/components/AccountSetting.vue"
-import AccountSettingForm from "@/components/forms/AccountSettingForm.vue"
 
 interface UserData {
   id: number

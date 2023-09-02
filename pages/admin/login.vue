@@ -8,11 +8,8 @@
       elevation="10"
     >
       <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4 text--darken-2">Sign in</h2>
-        <h6 class="text-subtitle-1 text-grey-darken-1">
-          Are you an admin?
-          <NuxtLink to="/admin/login">Sign in here</NuxtLink>
-        </h6>
+        <h2 class="font-weight-bold mt-4 text--darken-2">Sign in as Admin</h2>
+        <NuxtLink to="/auth/login">Sign in as user</NuxtLink>
         <v-form
           ref="form"
           v-model="valid"
@@ -47,14 +44,6 @@
             >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
           >
         </v-form>
-        <h6 class="text-subtitle-1 text-grey-darken-1">
-          Don't have an account?
-          <NuxtLink
-            to="/auth/register"
-            class="text-primary text-decoration-none"
-            >Sign up</NuxtLink
-          >
-        </h6>
       </div>
     </v-card>
   </v-container>
@@ -83,7 +72,7 @@ const signIn = async () => {
   disabled.value = true
   try {
     await signInWithEmailAndPassword($firebaseAuth, email.value, password.value)
-    router.push("/")
+    router.push("/admin")
   } catch (error) {
     alert(error)
   }
