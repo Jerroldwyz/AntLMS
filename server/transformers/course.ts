@@ -34,9 +34,7 @@ type Content = {
   complete?: boolean
 }
 
-export const contentTransformer = (content: any, user_id?: string) => {
-  console.log(content)
-
+const contentTransformer = (content: any, user_id?: string) => {
   const val: Content = {
     title: content.title,
     type: content.type,

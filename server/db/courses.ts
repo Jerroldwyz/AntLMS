@@ -21,6 +21,7 @@ export const getCourseById = (course_id: number) => {
               title: true,
               type: true,
               topic_position: true,
+              content: true,
               progress: {
                 select: {
                   user_id: true,
