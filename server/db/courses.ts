@@ -21,6 +21,11 @@ export const getCourseById = (course_id: number) => {
               title: true,
               type: true,
               topic_position: true,
+              progress: {
+                select: {
+                  user_id: true,
+                },
+              },
             },
           },
           quizzes: {
