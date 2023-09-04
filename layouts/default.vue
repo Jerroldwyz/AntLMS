@@ -128,11 +128,17 @@
             </v-list-item>
           </template>
 
-          <v-list-item
+          <!-- <v-list-item
             v-for="(browseTitle, i) in browse"
             :key="i"
             :title="browseTitle"
             :value="title"
+            href="?"
+          > -->
+          <v-list-item
+            v-for="(browseTitle, i) in browse"
+            :key="i"
+            :title="browseTitle"
             href="?"
           >
           </v-list-item>
@@ -151,11 +157,17 @@
             </v-list-item>
           </template>
 
-          <v-list-item
+          <!-- <v-list-item
             v-for="(courseTitle, i) in dashboard"
             :key="i"
             :title="courseTitle"
             :value="title"
+            href="?"
+          > -->
+          <v-list-item
+            v-for="(courseTitle, i) in dashboard"
+            :key="i"
+            :title="courseTitle"
             href="?"
           >
           </v-list-item>
@@ -230,10 +242,6 @@ export default {
 
 .listItemFont .v-list-item-title {
   font-size: 15px;
-}
-
-.flex-grow {
-  flex-grow: 1;
 }
 
 .drawer-list {
