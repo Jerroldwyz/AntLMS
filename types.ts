@@ -6,3 +6,10 @@ export type User = {
   email: string
   contact_details: JsonObject
 }
+
+export type Course = {
+  title: string
+  creatorId: string
+  thumbnail: string
+  tags: string[]
+}

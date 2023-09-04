@@ -86,3 +86,54 @@ export const deleteQuiz = (quiz_id: number) => {
     },
   })
 }
+
+export const evaluateQuiz = (result: number[]) => {
+  return prisma.choices.findMany({
+    where: {
+      id: { in: result },
+    },
+  })
+}
+
+export const storeQuizResult = (
+  result: any,
+  enrollment_id: number,
+  user_id: string,
+  quiz_id: number
+) => {
+  return prisma.quiz_score.create({
+    data: {
+      enrollment_id: enrollment_id,
+      user_id: user_id,
+      quiz_id: quiz_id,
+      score: result.correctAnswer,
+      total_marks: result.totalQuestion,
+    },
+  })
+}
+
+export const storeExistingQuizResult = (result: any, quiz_score_id: number) => {
+  return prisma.quiz_score.update({
+    where: {
+      id: quiz_score_id,
+    },
+    data: {
+      score: result.correctAnswer,
+      total_marks: result.totalQuestion,
+    },
+  })
+}
+
+export const getQuizResult = (user_id: string, quiz_id: number) => {
+  return prisma.quiz_score.findMany({
+    where: {
+      user_id: user_id,
+      quiz_id: quiz_id,
+    },
+    select: {
+      id: true,
+      score: true,
+      total_marks: true,
+    },
+  })
+}
