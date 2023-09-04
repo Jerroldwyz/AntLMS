@@ -75,6 +75,7 @@ CREATE TABLE enrollments (
   user_id integer REFERENCES users(id),
   course_id integer REFERENCES courses(id)
   -- Other fields and constraints can be added here
+  UNIQUE (course_id, tag_id)
 );
 
 -- Create content_type enum type
