@@ -10,3 +10,4 @@ dist
 s3-data/
 .terraform.lock.hcl
 .terraform
+prisma/migrations/
