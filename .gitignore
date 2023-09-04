@@ -4,8 +4,10 @@ node_modules
 .nitro
 .cache
 .output
+.vscode
 .env
 dist
 s3-data/
 .terraform.lock.hcl
 .terraform
+prisma/migrations/

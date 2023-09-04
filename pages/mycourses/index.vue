@@ -1,27 +1,26 @@
 <script setup lang="ts">
-import CourseCreationForm from "~~/components/forms/CourseCreationForm.vue"
 const createCourseDialog = ref(false)
-const courseCreatedAlert = ref(false)
+const courseSuccessAlert = ref(false)
 const courseFailureAlert = ref(false)
 
-function handleCourseOutcome(outcome: "success" | "failure") {
-  if (outcome === "success") {
-    createCourseDialog.value = false
-    courseCreatedAlert.value = true
+function handleCourseOutcome(value: "success" | "failure") {
+  createCourseDialog.value = false
+  if (value === "success") {
+    courseSuccessAlert.value = true
   }
 
-  if (outcome === "failure") {
-    createCourseDialog.value = false
+  if (value === "failure") {
     courseFailureAlert.value = true
   }
 }
-
 const courses = ref([
   {
+    id: 1,
     title: "Baking 101",
     img: "https://images.pexels.com/photos/9095/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   },
   {
+    id: 2,
     title: "Math 101",
     img: "https://media.istockphoto.com/id/1219382595/vector/math-equations-written-on-a-blackboard.webp?s=1024x1024&w=is&k=20&c=FuAlO8n7UyfykyqpZMhWpQD66wIJuIbgXG7ZQPRgoPk=",
   },
@@ -30,7 +29,7 @@ const courses = ref([
 
 <template>
   <v-alert
-    v-model="courseCreatedAlert"
+    v-model="courseSuccessAlert"
     type="success"
     density="compact"
     title="Course Created"
@@ -54,6 +53,7 @@ const courses = ref([
         v-for="course in courses"
       >
         <Course
+          :id="course.id"
           :title="course.title"
           :img="course.img"
         />
@@ -66,7 +66,7 @@ const courses = ref([
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <CourseCreationForm
+        <FormCourseCreate
           @course-outcome="handleCourseOutcome"
           @close="createCourseDialog = false"
         />
