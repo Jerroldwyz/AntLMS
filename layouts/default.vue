@@ -8,8 +8,6 @@
                     <NuxtLink to="/home" class="text-button text-decoration-none text-black">AntLMS</NuxtLink>
                 </v-btn>
 
-                <!-- <v-spacer></v-spacer> -->
-
                 <v-responsive max-width="500" align-center justify-center>
                     <v-card-text >
                         <v-text-field
@@ -24,8 +22,6 @@
                         ></v-text-field>
                     </v-card-text>
                 </v-responsive>
-
-                <!-- <v-spacer></v-spacer> -->
 
                 <v-menu
                     min-width="200px"
@@ -77,25 +73,24 @@
         </v-app-bar>
 
         <v-navigation-drawer
+        @mouseenter="hovered = true"
+        @mouseleave="hovered = false"
         expand-on-hover
         rail
         permanent
         >
             <v-divider></v-divider>
             
-            <v-list nav rounded>
-            
+            <v-list nav rounded class="drawer-list">
                 <v-list-item 
-                    class="listItemFont" 
-                    prepend-icon="mdi-home" 
-                    title="Home" 
-                    value="home" 
-                    href="/home">
+                class="listItemFont" 
+                prepend-icon="mdi-home" 
+                title="Home" 
+                value="home" 
+                href="/home">
                 </v-list-item>
-            
-                <!-- <v-divider></v-divider> -->
-
-                <v-list-group class="listItemFont" value="Browse">
+        
+                <v-list-group class="listItemFont" :value="hovered ? 'Browse' : null">
                     <template v-slot:activator="{props}">
                         <v-list-item
                             v-bind="props"
@@ -113,14 +108,12 @@
                     </v-list-item>
                 </v-list-group>
 
-                <!-- <v-divider></v-divider> -->
-
-                <v-list-group class="listItemFont" value="Dashboard">
+                <v-list-group class="listItemFont" :value="hovered ? 'Courses' : null">
                     <template v-slot:activator="{props}">
                         <v-list-item
                             v-bind="props"
                             prepend-icon="mdi-view-dashboard"
-                            title="Dashboard">
+                            title="Courses">
                         </v-list-item>
                     </template>
 
@@ -132,17 +125,19 @@
                         href="?">
                     </v-list-item>
                 </v-list-group>
-                
-                <v-list-item
-                    class="listItemFont" 
-                    prepend-icon="mdi-cog"
-                    title="Settings"
-                    value="Settings"
-                    href="?"
-                    >
-                </v-list-item>
 
             </v-list>
+
+            <!-- <v-divider></v-divider> -->
+
+            <v-list-item
+            class="listItemFont" 
+            prepend-icon="mdi-cog"
+            title="Settings"
+            value="Settings"
+            href="?"
+            >
+            </v-list-item>
 
         </v-navigation-drawer>
         
@@ -171,11 +166,12 @@
     data: () => ({
       loaded: false,
       loading: false,
+      hovered: false,
       browse: [
-        "Creative", "Technology", "Business"
+        "Browse all", "Creative", "Technology", "Business"
       ],
       dashboard: [
-        "Math 101", "Business 101", "Baking 101"
+        "Dashboard", "Math 101", "Business 101", "Baking 101"
       ]
 
     }),
@@ -200,6 +196,16 @@
 
 .listItemFont .v-list-item-title{
     font-size: 15px;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.drawer-list {
+    display: flex;
+    flex-direction: column;
+    height: 91.75%;
 }
 
 </style>
