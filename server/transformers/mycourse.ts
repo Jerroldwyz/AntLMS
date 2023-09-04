@@ -1,3 +1,4 @@
+import { log } from "console"
 import { topicsTransformer } from "./topics"
 
 export const mycourseTransformer = (mycourse: any) => {

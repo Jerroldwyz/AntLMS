@@ -17,6 +17,8 @@ model users {
   contact_details Json?
   enrollments     enrollments[]
   courses         courses[]
+  progress        progress[]
+  quiz_score      quiz_score[]
 }
 
 model courses {
@@ -64,6 +66,7 @@ model content {
   topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
   topic_id       Int
   topic_position Int
+  progress       progress[]
 }
 
 enum content_type {
@@ -72,12 +75,13 @@ enum content_type {
 }
 
 model quizzes {
-  id             Int         @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   topic_id       Int
   title          String
-  topic          topics      @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
   questions      questions[]
   topic_position Int
+  quiz_score     quiz_score[]
 }
 
 model questions {
@@ -98,9 +102,37 @@ model choices {
 }
 
 model enrollments {
-  id        Int     @id @default(autoincrement())
-  user_id   String
-  course_id Int
-  user      users   @relation(fields: [user_id], references: [uid], onDelete: Cascade)
-  course    courses @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  id         Int          @id @default(autoincrement())
+  user_id    String
+  course_id  Int
+  user       users        @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+  course     courses      @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  progress   progress[]
+  quiz_score quiz_score[]
+
+  @@unique([user_id, course_id])
+}
+
+model progress {
+  id            Int         @id @default(autoincrement())
+  enrollment_id Int
+  enrollment    enrollments @relation(fields: [enrollment_id], references: [id], onDelete: Cascade)
+  content_id    Int
+  content       content     @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  user_id       String
+  user          users       @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+}
+
+model quiz_score {
+  id            Int         @id @default(autoincrement())
+  enrollment_id Int
+  score         Int
+  total_marks   Int
+  enrollment    enrollments @relation(fields: [enrollment_id], references: [id], onDelete: Cascade)
+  quiz_id       Int
+  quiz          quizzes     @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+  user_id       String
+  user          users       @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+
+  @@unique([user_id, quiz_id])
 }
