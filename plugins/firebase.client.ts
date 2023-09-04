@@ -7,15 +7,23 @@ export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig.firebase)
   const auth = getAuth(app)
 
-  const user = useUser()
+  const firebaseUser = useUser()
 
-  auth.onAuthStateChanged(async (firebaseUser) => {
-    if (firebaseUser) {
-      console.log("user signed in")
-    } else {
-      console.log("user signed out")
-      user.value = null
-    }
+  nuxtApp.hooks.hook("app:mounted", () => {
+    auth.onIdTokenChanged(async (user) => {
+      if (user) {
+        console.log("User signed in")
+        const token = await user.getIdToken()
+        setServerSession(token)
+        firebaseUser.value = formatUser(user)
+        navigateTo("/")
+      } else {
+        console.log("User signed out")
+        // clear cookie session and auth state
+        setServerSession("")
+        firebaseUser.value = null
+      }
+    })
   })
 
   return {

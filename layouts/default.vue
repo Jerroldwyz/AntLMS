@@ -86,7 +86,7 @@
                   variant="text"
                 >
                   <NuxtLink
-                    to="/auth/logout"
+                    to="/logout"
                     class="text-button text-decoration-none text-black"
                     >Logout</NuxtLink
                   >

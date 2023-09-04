@@ -1,18 +1,18 @@
 import { defineStore } from "pinia"
-import { IUser } from "~~/types"
+import { User } from "~~/types"
 
 const route = "/api/account"
 
 // store for user on client side
 export const useUserStore = defineStore("user-store", {
-  state: () => ({ users: [] as IUser[] }),
+  state: () => ({ users: [] as User[] }),
   actions: {
     // get all users
     async getAll() {
       try {
-        let data = await $fetch<IUser[]>(route)
+        let data = await $fetch<User[]>(route)
         this.users = data
-        return data as IUser[]
+        return data as User[]
       } catch (error) {
         console.error(error)
       }
