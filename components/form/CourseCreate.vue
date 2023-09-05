@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Course from "~~/types/Course"
+import { Course } from "~~/types"
 import { tags } from "~~/constants"
 
 const emit = defineEmits<{
@@ -27,13 +27,18 @@ const tagRules = [
   },
 ]
 
-// TODO: Fix hardcoding
+const user = useUser()
+
 const course = ref<Course>({
   title: "",
-  creatorId: 1,
   thumbnail: "",
   tags: [],
+  creator_id: "",
 })
+
+if (user.value?.uid != undefined) {
+  course.value.creator_id = user.value.uid
+}
 
 const loading = ref(false)
 const valid = ref(false)
