@@ -9,14 +9,36 @@
     >
       <div class="pa-7 pa-sm-10">
         <h2 class="font-weight-bold mt-4 text--darken-2">Sign in</h2>
+        <h6 class="text-subtitle-1 text-grey-darken-1">
+          Don't have an account?
+        </h6>
+        <NuxtLink
+          to="/auth/register"
+          class="text-primary text-decoration-none"
+          >Sign up</NuxtLink
+        >
+
         <v-form
           ref="form"
           v-model="valid"
           @submit.prevent="signIn"
         >
-          <FormEmailInput v-model:email="email" />
-
-          <FormPasswordInput v-model:password="password" />
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="E-mail"
+            class="mt-4"
+            required
+            variant="outlined"
+          ></v-text-field>
+          <v-text-field
+            v-model="password"
+            :rules="passwordRules"
+            label="Password"
+            type="password"
+            required
+            variant="outlined"
+          ></v-text-field>
 
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
             <v-checkbox
@@ -43,48 +65,16 @@
             >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
           >
         </v-form>
-        <h6 class="text-subtitle-1 text-grey-darken-1">
-          Don't have an account?
-          <NuxtLink
-            to="/auth/register"
-            class="text-primary text-decoration-none"
-            >Sign up</NuxtLink
-          >
-        </h6>
       </div>
     </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { signInWithEmailAndPassword } from "firebase/auth"
-
-definePageMeta({
-  layout: false,
-})
-
-const { $firebaseAuth } = useNuxtApp()
-const { signInUser } = useFirebase($firebaseAuth)
-const user = useUser()
-const token = useCookie("token")
-const valid = ref(true)
-const disabled = ref(false)
-const checkbox = ref(false)
-const router = useRouter()
-
-const email = ref("")
-const password = ref("")
-
-const signIn = async () => {
-  disabled.value = true
-  try {
-    await signInWithEmailAndPassword($firebaseAuth, email.value, password.value)
-    router.push("/")
-  } catch (error) {
-    alert(error)
-  }
-  disabled.value = false
-}
+const props = defineProps<{
+  email: string
+  password: string
+}>()
 </script>
 
 <style scoped></style>

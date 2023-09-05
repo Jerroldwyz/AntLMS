@@ -2,45 +2,39 @@
   <v-app id="inspire">
     <v-app-bar flat>
       <v-container
-        class="pa-8 d-flex align-center justify-center"
-        fluid="true"
+        class="d-flex align-center justify-space-between"
+        fluid
       >
-        <span class="text-button text-white bg-brown px-2 py-1 rounded-lg"
-          >AntLMS</span
+        <v-btn
+          prepend-icon="mdi-vuetify"
+          variant="text"
+          color="black"
+          size="large"
         >
-        <v-btn variant="text">
           <NuxtLink
-            to="/"
+            to="/home"
             class="text-button text-decoration-none text-black"
-            >Dashboard</NuxtLink
+            >AntLMS</NuxtLink
           >
         </v-btn>
-        <v-btn variant="text">
-          <NuxtLink
-            to="/mycourses"
-            class="text-button text-decoration-none text-black"
-            >My Courses</NuxtLink
-          >
-        </v-btn>
-        <v-btn variant="text">
-          <NuxtLink
-            to="/courses?search="
-            class="text-button text-decoration-none text-black"
-            >Browse</NuxtLink
-          >
-        </v-btn>
-        <v-spacer></v-spacer>
 
-        <v-responsive max-width="160">
-          <v-text-field
-            density="compact"
-            flat
-            hide-details
-            label="Course Search"
-            rounded="lg"
-            variant="filled"
-            single-line
-          ></v-text-field>
+        <v-responsive
+          max-width="500"
+          align-center
+          justify-center
+        >
+          <v-card-text>
+            <v-text-field
+              :loading="loading"
+              density="compact"
+              variant="solo"
+              label="Search for courses"
+              append-inner-icon="mdi-magnify"
+              single-line
+              hide-details
+              @click:append-inner="onClick"
+            ></v-text-field>
+          </v-card-text>
         </v-responsive>
 
         <v-menu
@@ -86,7 +80,7 @@
                   variant="text"
                 >
                   <NuxtLink
-                    to="/auth/logout"
+                    to="/logout"
                     class="text-button text-decoration-none text-black"
                     >Logout</NuxtLink
                   >
@@ -98,6 +92,100 @@
       </v-container>
     </v-app-bar>
 
+    <v-navigation-drawer
+      @mouseenter="hovered = true"
+      @mouseleave="hovered = false"
+      expand-on-hover
+      rail
+      permanent
+    >
+      <v-divider></v-divider>
+
+      <v-list
+        nav
+        rounded
+        class="drawer-list"
+      >
+        <v-list-item
+          class="listItemFont"
+          prepend-icon="mdi-home"
+          title="Home"
+          value="home"
+          href="/home"
+        >
+        </v-list-item>
+
+        <v-list-group
+          class="listItemFont"
+          :value="hovered ? 'Browse' : null"
+        >
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              prepend-icon="mdi-format-list-bulleted"
+              title="Browse"
+            >
+            </v-list-item>
+          </template>
+
+          <!-- <v-list-item
+            v-for="(browseTitle, i) in browse"
+            :key="i"
+            :title="browseTitle"
+            :value="title"
+            href="?"
+          > -->
+          <v-list-item
+            v-for="(browseTitle, i) in browse"
+            :key="i"
+            :title="browseTitle"
+            href="?"
+          >
+          </v-list-item>
+        </v-list-group>
+
+        <v-list-group
+          class="listItemFont"
+          :value="hovered ? 'Courses' : null"
+        >
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              prepend-icon="mdi-view-dashboard"
+              title="Courses"
+            >
+            </v-list-item>
+          </template>
+
+          <!-- <v-list-item
+            v-for="(courseTitle, i) in dashboard"
+            :key="i"
+            :title="courseTitle"
+            :value="title"
+            href="?"
+          > -->
+          <v-list-item
+            v-for="(courseTitle, i) in dashboard"
+            :key="i"
+            :title="courseTitle"
+            href="?"
+          >
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+
+      <!-- <v-divider></v-divider> -->
+
+      <v-list-item
+        class="listItemFont"
+        prepend-icon="mdi-cog"
+        title="Settings"
+        value="Settings"
+        href="?"
+      >
+      </v-list-item>
+    </v-navigation-drawer>
+
     <v-main class="bg-grey-lighten-3">
       <v-sheet
         min-height="80vh"
@@ -107,6 +195,7 @@
         <slot />
       </v-sheet>
     </v-main>
+
     <v-footer>
       <v-row
         justify="center"
@@ -116,13 +205,48 @@
           class="text-center mt-4"
           cols="12"
         >
-          {{ new Date().getFullYear() }} — <strong>AntLMS</strong>
+          AntLMS &copy {{ new Date().getFullYear() }}
         </v-col>
       </v-row>
     </v-footer>
   </v-app>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  data: () => ({
+    loaded: false,
+    loading: false,
+    hovered: false,
+    browse: ["Browse all", "Creative", "Technology", "Business"],
+    dashboard: ["Dashboard", "Math 101", "Business 101", "Baking 101"],
+  }),
 
-<style></style>
+  methods: {
+    onClick() {
+      this.loading = true
+
+      setTimeout(() => {
+        this.loading = false
+        this.loaded = true
+      }, 2000)
+    },
+  },
+}
+</script>
+
+<style>
+.v-footer {
+  font-size: small;
+}
+
+.listItemFont .v-list-item-title {
+  font-size: 15px;
+}
+
+.drawer-list {
+  display: flex;
+  flex-direction: column;
+  height: 91.75%;
+}
+</style>
