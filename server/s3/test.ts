@@ -1,5 +1,6 @@
-const { generatePresignedUrl } = require("./helpers")
+import { generatePresignedUrl } from "./helpers"
 
-console.log(
-  generatePresignedUrl("antlms", "prayer_pages/capital_sins.pdf", 3600)
-)
+;(async () =>
+  console.log(
+    await generatePresignedUrl("prayer_pages/capital_sins.pdf", 3600)
+  ))()
