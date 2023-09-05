@@ -1,9 +1,10 @@
+<!-- AccountSettingForm.vue -->
+
 <template>
-  <v-card width="40%">
+  <v-card width="90%">
     <form>
       <v-card-title class="text-h5"> Account Settings </v-card-title>
 
-      <!-- Additional form fields for account settings -->
       <v-text-field
         v-model="userData.id"
         label="ID"
@@ -19,9 +20,9 @@
         label="Gender"
       ></v-select>
 
-      <!-- Add a new input field for profile picture -->
+      <!-- profile picture -->
       <v-file-input
-        v-model="profilePicture"
+        v-model="newProfilePicture"
         label="Profile Picture"
         accept="image/*"
       ></v-file-input>
@@ -69,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue"
+import { ref, defineProps, onMounted } from "vue"
 
 const props = defineProps(["userData", "saveChangesCallback"])
 
@@ -77,14 +78,14 @@ const currentPassword = ref("")
 const newPassword = ref("")
 const confirmPassword = ref("")
 const errorMessage = ref("")
-const profilePicture = ref([] as File[]) // Initialize as an empty array of Files
+const newProfilePicture = ref([] as File[]) // Initialize as an empty array
 
 const closeDialog = () => {
   currentPassword.value = ""
   newPassword.value = ""
   confirmPassword.value = ""
   errorMessage.value = ""
-  profilePicture.value = [] // Reset the profile picture selection
+  newProfilePicture.value = [] // Reset the new profile picture selection
   props.saveChangesCallback(null) // Passing null to indicate cancel
 }
 
@@ -99,11 +100,18 @@ const saveChanges = () => {
 
   const updatedUserData = {
     ...props.userData,
-    profilePicture: profilePicture.value, // Store the uploaded picture
+    profilePicture: newProfilePicture.value, // Use the new profile picture
     newPassword: newPassword.value,
   }
   props.saveChangesCallback(updatedUserData)
 }
+
+// Watch for changes in the newProfilePicture and reset the error message
+onMounted(() => {
+  watch(newProfilePicture, () => {
+    errorMessage.value = ""
+  })
+})
 </script>
 
 <style scoped>
