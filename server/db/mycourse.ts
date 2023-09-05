@@ -60,6 +60,7 @@ export const getCourses = (creator_id: string) => {
       title: true,
       enabled: true,
       thumbnail: true,
+      creator_id: true,
     },
   })
 }

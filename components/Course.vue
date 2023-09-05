@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const props = defineProps(["id", "title", "img"])
+const props = defineProps<{
+  id: number
+  title: string
+  thumbnail: string | null
+}>()
 </script>
 
 <template>
@@ -11,9 +15,10 @@ const props = defineProps(["id", "title", "img"])
   >
     <v-img
       class="h-75"
-      :src="props.img"
+      src="https://images.pexels.com/photos/9095/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
       cover
-    ></v-img>
+    >
+    </v-img>
 
     <v-card-item>
       <v-card-title class="text-center">
