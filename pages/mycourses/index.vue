@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { courses } from "@prisma/client"
+
 const createCourseDialog = ref(false)
 const courseSuccessAlert = ref(false)
 const courseFailureAlert = ref(false)
@@ -7,24 +9,30 @@ function handleCourseOutcome(value: "success" | "failure") {
   createCourseDialog.value = false
   if (value === "success") {
     courseSuccessAlert.value = true
+    fetchCourses()
   }
 
   if (value === "failure") {
     courseFailureAlert.value = true
   }
 }
-const courses = ref([
-  {
-    id: 1,
-    title: "Baking 101",
-    img: "https://images.pexels.com/photos/9095/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  },
-  {
-    id: 2,
-    title: "Math 101",
-    img: "https://media.istockphoto.com/id/1219382595/vector/math-equations-written-on-a-blackboard.webp?s=1024x1024&w=is&k=20&c=FuAlO8n7UyfykyqpZMhWpQD66wIJuIbgXG7ZQPRgoPk=",
-  },
-])
+
+const courses = ref<courses[] | null>(null)
+
+const user = useUser()
+
+async function fetchCourses() {
+  const allCourses = await $fetch("/api/mycourses/all", {
+    method: "get",
+    query: { userId: user.value?.uid },
+  })
+
+  if (allCourses != null) {
+    courses.value = allCourses
+  }
+}
+
+fetchCourses()
 </script>
 
 <template>
@@ -46,23 +54,26 @@ const courses = ref([
     closable
     text="Something went wrong. Please try again later."
   ></v-alert>
+
   <v-container fluid>
     <v-row>
+      <v-col cols="2">
+        <CreateCourseBtn @click="createCourseDialog = true" />
+      </v-col>
       <v-col
         cols="2"
         v-for="course in courses"
       >
         <Course
+          :key="course.id"
           :id="course.id"
           :title="course.title"
-          :img="course.img"
+          :thumbnail="course.thumbnail"
         />
-      </v-col>
-      <v-col cols="2">
-        <CreateCourseBtn @click="createCourseDialog = true" />
       </v-col>
     </v-row>
   </v-container>
+
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
