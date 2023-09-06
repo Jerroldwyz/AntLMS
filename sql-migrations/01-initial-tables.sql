@@ -75,6 +75,26 @@ CREATE TABLE enrollments (
   user_id integer REFERENCES users(id),
   course_id integer REFERENCES courses(id)
   -- Other fields and constraints can be added here
+  UNIQUE (course_id, user_id)
+);
+
+CREATE TABLE progress (
+  id serial PRIMARY KEY,
+  user_id integer REFERENCES users(id),
+  content_id integer REFERENCES content(id),
+  enrollment_id integer REFERENCES enrollments(id)
+  -- Other fields and constraints can be added here
+);
+
+CREATE TABLE quiz_score (
+  id serial PRIMARY KEY,
+  user_id integer REFERENCES users(id),
+  quiz_id integer REFERENCES quizzes(id),
+  enrollment_id integer REFERENCES enrollments(id)
+  score integer NOT NULL,
+  total_marks integer NOT NULL,
+  -- Other fields and constraints can be added here
+  UNIQUE (course_id, user_id)
 );
 
 -- Create content_type enum type
