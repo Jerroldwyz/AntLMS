@@ -9,7 +9,7 @@ export type User = {
 
 export type Course = {
   title: string
-  creatorId: string
   thumbnail: string
   tags: string[]
+  creator_id: string
 }
