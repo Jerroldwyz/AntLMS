@@ -40,7 +40,7 @@
           />
           <img
             v-else
-            src="@/components/pp.png"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/1200px-Anonymous_emblem.svg.png"
             alt="Default Profile Picture"
             class="default-profile-picture"
           />
@@ -167,8 +167,8 @@ const profilePictureUrl = computed(() => {
 /* Profile picture styles with circular frame */
 .profile-picture {
   max-width: 100%;
-  width: 350px;
-  height: 350px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%; /* Creates a circular frame */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
