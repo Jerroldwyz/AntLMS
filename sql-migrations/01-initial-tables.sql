@@ -79,3 +79,4 @@ CREATE TABLE enrollments (
 
 -- Create content_type enum type
 CREATE TYPE content_type AS ENUM ('TEXT', 'VIDEO');
+
