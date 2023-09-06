@@ -1,0 +1,46 @@
+<script
+  setup
+  lang="ts"
+>
+  const selectedFile = ref<File[]>([])
+  const uploadFile = () => {
+    if (!selectedFile.value) {
+      // No file selected, handle this case as needed
+      console.log("no file??")
+      return
+    }
+
+    // console.log((selectedFile.value))
+
+    ;(async () => {
+      const presignedUrl = await $fetch("/api/getUploadUrl", {
+        method: "POST",
+        body: { fileName: selectedFile.value[0].name },
+      })
+
+      const data = await $fetch(presignedUrl, {
+        method: "PUT",
+        body: selectedFile.value[0],
+      })
+
+      console.log(data)
+    })()
+  }
+</script>
+
+<template>
+  <h1>Example index page</h1>
+  <NuxtLink to="/mycourses"> View Courses </NuxtLink>
+
+  <v-file-input
+    label="File input"
+    accept="image/*"
+    v-model="selectedFile"
+  ></v-file-input>
+  <v-btn
+    @click="uploadFile"
+    block
+    class="mt-2"
+    >Submit</v-btn
+  >
+</template>

@@ -54,3 +54,12 @@ export const generatePresignedUrl = (
 ) => {
   return minioClient.presignedGetObject(bucketName, objectName, expiresIn)
 }
+
+// Generate a presigned URL for accessing an object
+export const generatePresignedUrlPUT = (
+  bucketName: string,
+  objectName: string,
+  expiresIn: number
+) => {
+  return minioClient.presignedPutObject(bucketName, objectName, expiresIn)
+}
