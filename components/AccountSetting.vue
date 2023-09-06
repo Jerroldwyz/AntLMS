@@ -76,8 +76,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue"
-
 const props = defineProps(["userData", "updatePasswordCallback"])
 
 const currentPassword = ref("")
@@ -91,7 +89,7 @@ const closeDialog = () => {
   newPassword.value = ""
   confirmPassword.value = ""
   errorMessage.value = ""
-  profilePicture.value = []
+  profilePicture.value = [] // Reset the profile picture selection
   props.updatePasswordCallback(null) // Passing null to indicate cancel
 }
 

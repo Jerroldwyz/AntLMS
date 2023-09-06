@@ -70,8 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue"
-
 const props = defineProps(["userData", "saveChangesCallback"])
 
 const currentPassword = ref("")

@@ -27,6 +27,7 @@ const tagRules = [
   },
 ]
 
+// TODO: Fix hardcoding
 const course = ref<Course>({
   title: "",
   creatorId: 1,

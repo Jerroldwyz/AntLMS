@@ -66,7 +66,7 @@ const courses = ref([
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <FormCreateCourse
+        <FormCourseCreate
           @course-outcome="handleCourseOutcome"
           @close="createCourseDialog = false"
         />
