@@ -1,5 +1,7 @@
+<!-- AccountSetting.vue -->
+
 <template>
-  <v-card width="40%">
+  <v-card width="80%">
     <form>
       <v-card-title class="text-h5"> Account Settings </v-card-title>
 
@@ -110,7 +112,8 @@ const saveChanges = () => {
 
   const updatedUserData = {
     ...props.userData,
-    profilePicture: profilePicture.value, // Store the uploaded picture
+    profilePicture:
+      profilePicture.value.length > 0 ? profilePicture.value[0] : null, // Update with the new profile picture
     newPassword: newPassword.value,
   }
   props.updatePasswordCallback(updatedUserData)

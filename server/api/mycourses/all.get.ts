@@ -3,5 +3,5 @@ import { getCourses } from "~~/server/db/mycourse"
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event)
 
-  return await getCourses(parseInt(query.userId as string))
+  return await getCourses(query.userId as string)
 })
