@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user-store", {
         })
     },
     async register({ ...user }) {
-      await $fetch("/api/signin", {
+      await $fetch("/api/signup", {
         method: "POST",
         body: user,
       })

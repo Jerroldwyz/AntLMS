@@ -6,13 +6,14 @@
 </template>
 
 <script setup>
-import { signOut } from "firebase/auth"
+import { useAuthStore } from "~~/composables/useAuthStore"
 
 definePageMeta({
   layout: false,
 })
-const { $firebaseAuth } = useNuxtApp()
-await signOut($firebaseAuth)
+
+const authStore = useAuthStore()
+await authStore.logout()
 </script>
 
 <style lang="scss" scoped></style>

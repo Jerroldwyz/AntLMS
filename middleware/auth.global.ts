@@ -1,10 +1,13 @@
+import { useAuthStore } from "~~/composables/useAuthStore"
+
 export default defineNuxtRouteMiddleware((to, from) => {
   const allowedRoutes = ["/login", "/register"]
-  const user = useUser()
+  // const user = useUser()
+  const authStore = useAuthStore()
   const isValidRoute = checkPath(allowedRoutes, to.path)
-  if (isValidRoute && user.value) return navigateTo("/")
+  if (isValidRoute && authStore.user) return navigateTo("/")
 
-  if (!isValidRoute && !user.value) return navigateTo("/auth/login")
+  if (!isValidRoute && !authStore.user) return navigateTo("/auth/login")
 })
 
 const checkPath = (allowedRoutes: string[], target: string) => {
