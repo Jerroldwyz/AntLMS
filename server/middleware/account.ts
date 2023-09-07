@@ -2,21 +2,15 @@ import UrlPattern from "url-pattern"
 import * as yup from "yup"
 import { ValidationError } from "yup"
 import { stringRegex } from "../utils/validation/regex"
+import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
+import { validator } from "../utils/validation/validation"
 
 export default defineEventHandler(async (event) => {
   const endpoints = ["/api/account"]
 
-  const isHandledByThisMiddleware = endpoints.some((endopoint) => {
-    const pattern = new UrlPattern(endopoint)
-
-    return pattern.match(event.node.req.url as string)
-  })
-
-  if (!isHandledByThisMiddleware) {
+  if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
     return
   }
-
-  const body = await readBody(event)
 
   let userAccountSchema = yup.object().shape({
     uid: yup.string().strict(),
@@ -27,20 +21,5 @@ export default defineEventHandler(async (event) => {
     }),
   })
 
-  try {
-    userAccountSchema.validateSync(body, {
-      abortEarly: false,
-      stripUnknown: true,
-    })
-  } catch (e) {
-    const error = e as ValidationError
-
-    return sendError(
-      event,
-      createError({
-        statusCode: 422,
-        statusMessage: JSON.stringify(error.errors),
-      })
-    )
-  }
+  validator(userAccountSchema, event)
 })
