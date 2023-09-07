@@ -1,11 +1,16 @@
 import UrlPattern from "url-pattern"
 import * as yup from "yup"
 import { ValidationError } from "yup"
-import { stringRegex } from "../utils/validation/regex"
 import { content_type } from "@prisma/client"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = ["/api/content"]
+  const endpoints = [
+    "/api/content",
+    "/api/content/updateContent",
+    "/api/content/updateContentPosition",
+    "/api/content/updateTitle",
+    "/api/content/complete",
+  ]
 
   const isHandledByThisMiddleware = endpoints.some((endopoint) => {
     const pattern = new UrlPattern(endopoint)
