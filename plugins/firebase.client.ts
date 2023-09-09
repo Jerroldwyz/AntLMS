@@ -8,7 +8,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig.firebase)
   const auth = getAuth(app)
 
-  const firebaseUser = useUser()
   const authStore = useAuthStore()
 
   nuxtApp.hooks.hook("app:mounted", () => {

@@ -5,7 +5,6 @@ import app from "~~/utils/firebase-admin"
 // server side runtime
 export default defineNuxtPlugin(async (nuxtApp) => {
   const token = useFirebaseToken()
-  const firebaseUser = useUser()
   const auth = getAuth(app)
   const authStore = useAuthStore()
 

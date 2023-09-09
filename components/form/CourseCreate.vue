@@ -28,6 +28,7 @@ const tagRules = [
 ]
 
 const user = useUser()
+const authStore = useAuthStore()
 
 const course = ref<Course>({
   title: "",
@@ -36,8 +37,12 @@ const course = ref<Course>({
   creator_id: "",
 })
 
-if (user.value?.uid != undefined) {
-  course.value.creator_id = user.value.uid
+// if (user.value?.uid != undefined) {
+//   course.value.creator_id = user.value.uid
+// }
+
+if (authStore.user?.uid !== undefined) {
+  course.value.creator_id = authStore.user.uid
 }
 
 const loading = ref(false)

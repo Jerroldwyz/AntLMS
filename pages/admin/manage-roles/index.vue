@@ -3,6 +3,7 @@ const deleteDialog = ref({})
 const roleDialog = ref({})
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 })
 </script>
 

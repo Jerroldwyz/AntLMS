@@ -1,5 +1,10 @@
 import { JsonObject } from "@prisma/client/runtime/library"
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth"
 import { defineStore } from "pinia"
 import { User } from "~~/types"
 
@@ -12,7 +17,8 @@ export const useAuthStore = defineStore("authStore", {
     fullName: (state) => state.user?.name,
     email: (state) => state.user?.email,
     initials: (state) => {
-      const nameParts = state.user?.name.split(" ")
+      const userName = state.user?.name || ""
+      const nameParts = userName.split(" ")
       const initials = nameParts
         ?.map((part) => part.charAt(0).toUpperCase())
         .join("")
@@ -20,6 +26,34 @@ export const useAuthStore = defineStore("authStore", {
     },
   },
   actions: {
+    async register({ ...userData }) {
+      try {
+        const { $firebaseAuth } = useNuxtApp()
+        const firebaseUser = await (
+          await createUserWithEmailAndPassword(
+            $firebaseAuth,
+            userData.email,
+            userData.password
+          )
+        ).user
+        const userProps = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: `${userData.firstName} ${userData.lastName}`,
+          contact_details: {
+            phone_number: userData.phone_number,
+          },
+        }
+        await $fetch("/api/signup", {
+          method: "POST",
+          body: userProps,
+        })
+          .catch((error) => console.error(error))
+          .then(() => console.log("You have register"))
+      } catch (error) {
+        throw error
+      }
+    },
     async login(email: string, password: string) {
       try {
         const { $firebaseAuth } = useNuxtApp()

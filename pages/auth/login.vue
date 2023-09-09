@@ -57,9 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { useAuthStore } from "~~/composables/useAuthStore"
-
 definePageMeta({
   layout: false,
 })
