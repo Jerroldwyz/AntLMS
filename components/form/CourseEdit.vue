@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card
+    class="w-50"
+    height="fit-content"
+  >
     <v-container>
       <v-row>
         <v-col class="d-flex justify-start align-center">

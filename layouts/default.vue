@@ -192,7 +192,7 @@
         fluid
       >
         <v-card
-          class="fill-height"
+          class="fill-height pa-4"
           rounded="lg"
         >
           <slot />
