@@ -6,5 +6,5 @@ export default defineEventHandler(async (event) => {
   return await changeEnabled(
     parseInt(body.courseId as string),
     body.enabled as boolean
-  ) //req tags
+  )
 })

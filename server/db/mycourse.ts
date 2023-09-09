@@ -66,9 +66,6 @@ export const getCourses = (creator_id: string) => {
 }
 
 export const createCourse = async (course_data: Course) => {
-  // return prisma.courses.create({
-  //     data: course_data
-  // });
   return prisma.courses.create({
     data: {
       title: course_data.title,

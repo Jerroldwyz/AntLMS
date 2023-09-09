@@ -3,7 +3,7 @@ import * as yup from "yup"
 import { ValidationError } from "yup"
 import { stringRegex } from "../utils/validation/regex"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
-import { validator } from "../utils/validation/validation"
+import { validator } from "../utils/validation/validator"
 
 export default defineEventHandler(async (event) => {
   const endpoints = ["/api/account"]
