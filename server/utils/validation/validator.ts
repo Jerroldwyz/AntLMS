@@ -3,8 +3,13 @@ import { ValidationError } from "yup"
 
 export const validator = async (schema: any, event: H3Event) => {
   const body = await readBody(event)
+  const query = await getQuery(event)
   try {
     schema.validateSync(body, {
+      abortEarly: false,
+      stripUnknown: true,
+    })
+    schema.validateSync(query, {
       abortEarly: false,
       stripUnknown: true,
     })
