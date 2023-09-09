@@ -49,8 +49,6 @@ export const getCourseById = (course_id: number) => {
 }
 
 export const getCourses = (creator_id: string) => {
-  console.log(creator_id)
-
   return prisma.courses.findMany({
     where: {
       creator_id: creator_id,
@@ -72,7 +70,7 @@ export const createCourse = async (course_data: Course) => {
   return prisma.courses.create({
     data: {
       title: course_data.title,
-      creator_id: course_data.creator_id,
+      creator_id: course_data.creatorId,
       thumbnail: course_data.thumbnail,
       course_tags: {
         create: course_data.tags.map((tag: string) => ({

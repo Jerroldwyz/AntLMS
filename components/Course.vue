@@ -4,8 +4,6 @@ const props = defineProps<{
   title: string
   thumbnail: string | null
 }>()
-
-console.log(props.thumbnail)
 </script>
 
 <template>

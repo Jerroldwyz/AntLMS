@@ -1,43 +1,16 @@
 <script setup lang="ts">
-import { courses } from "@prisma/client"
+import useCourseStore from "~~/stores/useCourseStore"
 
 const createCourseDialog = ref(false)
-const courseSuccessAlert = ref(false)
-const courseFailureAlert = ref(false)
 
-function handleCourseOutcome(value: "success" | "failure") {
-  createCourseDialog.value = false
-  if (value === "success") {
-    courseSuccessAlert.value = true
-    fetchCourses()
-  }
+const courseStore = useCourseStore()
 
-  if (value === "failure") {
-    courseFailureAlert.value = true
-  }
-}
-
-const courses = ref<courses[] | null>(null)
-
-const user = useUser()
-
-async function fetchCourses() {
-  const allCourses = await $fetch("/api/mycourses/all", {
-    method: "get",
-    query: { userId: user.value?.uid },
-  })
-
-  if (allCourses != null) {
-    courses.value = allCourses
-  }
-}
-
-fetchCourses()
+onMounted(courseStore.fetchMyCourses)
 </script>
 
 <template>
   <v-alert
-    v-model="courseSuccessAlert"
+    v-model="courseStore.isCreated"
     type="success"
     density="compact"
     title="Course Created"
@@ -46,7 +19,7 @@ fetchCourses()
     text="Click on the course you just created in order to add further information."
   ></v-alert>
   <v-alert
-    v-model="courseFailureAlert"
+    v-model="courseStore.isError"
     type="error"
     density="compact"
     title="Course Not Created"
@@ -62,8 +35,11 @@ fetchCourses()
       </v-col>
       <v-col
         cols="2"
-        v-for="course in courses"
+        v-for="course in courseStore.courses"
       >
+        <!-- For whatever reason, Pinia creates a union of true and the course which
+             throws a type error, I have tried fixing it but I have no idea. It works perfectly fine.
+         -->
         <Course
           :key="course.id"
           :id="course.id"
@@ -77,10 +53,7 @@ fetchCourses()
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <FormCourseCreate
-          @course-outcome="handleCourseOutcome"
-          @close="createCourseDialog = false"
-        />
+        <FormCourseCreate @close="createCourseDialog = false" />
       </v-row>
     </v-container>
   </v-dialog>

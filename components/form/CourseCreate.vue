@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { Course } from "~~/types"
+import useCourseStore from "~~/stores/useCourseStore"
 import { tags } from "~~/constants"
+import { Course } from "~~/types"
 
-const emit = defineEmits<{
-  (e: "courseOutcome", status: "success" | "failure"): void
-}>()
+const courseStore = useCourseStore()
 
 const titleRules = [
   (value: string) => {
@@ -27,37 +26,21 @@ const tagRules = [
   },
 ]
 
-const user = useUser()
+const loading = ref(false)
+const valid = ref(false)
 
 const course = ref<Course>({
   title: "",
   thumbnail: "",
   tags: [],
-  creator_id: "",
+  creatorId: "",
 })
-
-if (user.value?.uid != undefined) {
-  course.value.creator_id = user.value.uid
-}
-
-const loading = ref(false)
-const valid = ref(false)
 
 async function createCourse() {
   if (valid.value === true) {
-    try {
-      loading.value = true
-      await $fetch("/api/mycourses", {
-        method: "post",
-        body: {
-          course: course.value,
-        },
-      })
-      loading.value = false
-      emit("courseOutcome", "success")
-    } catch (e) {
-      emit("courseOutcome", "failure")
-    }
+    loading.value = true
+    courseStore.createCourse(course.value)
+    loading.value = false
   }
 }
 </script>
@@ -66,7 +49,10 @@ async function createCourse() {
   <v-card class="w-50">
     <v-form
       v-model="valid"
-      @submit.prevent="createCourse"
+      @submit.prevent="
+        createCourse()
+        $emit('close')
+      "
     >
       <v-row>
         <v-col>
