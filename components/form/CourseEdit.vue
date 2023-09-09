@@ -31,19 +31,5 @@
         ></v-file-input>
       </v-form>
     </v-container>
-    <v-card color="grey-lighten-3">
-      <v-container>
-        <v-row justify="end">
-          <v-btn
-            class="text-capitalize"
-            variant="text"
-            @click="$emit('close')"
-          >
-            Cancel
-          </v-btn>
-          <v-btn class="text-capitalize bg-primary"> Save Changes </v-btn>
-        </v-row>
-      </v-container>
-    </v-card>
   </v-card>
 </template>

@@ -9,7 +9,7 @@ const route = useRoute()
       </v-col>
 
       <v-col>
-        <TopicList />
+        <ContentList />
       </v-col>
     </v-row>
   </v-container>
