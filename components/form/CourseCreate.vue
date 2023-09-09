@@ -3,7 +3,7 @@ import useCourseStore from "~~/stores/useCourseStore"
 import { tags } from "~~/constants"
 import { Course } from "~~/types"
 
-const courseStore = useCourseStore()
+const emit = defineEmits(["close"])
 
 const titleRules = [
   (value: string) => {
@@ -26,6 +26,8 @@ const tagRules = [
   },
 ]
 
+const courseStore = useCourseStore()
+
 const loading = ref(false)
 const valid = ref(false)
 
@@ -41,6 +43,7 @@ async function createCourse() {
     loading.value = true
     courseStore.createCourse(course.value)
     loading.value = false
+    emit("close")
   }
 }
 </script>
@@ -49,10 +52,7 @@ async function createCourse() {
   <v-card class="w-50">
     <v-form
       v-model="valid"
-      @submit.prevent="
-        createCourse()
-        $emit('close')
-      "
+      @submit.prevent="createCourse()"
     >
       <v-row>
         <v-col>
@@ -60,7 +60,7 @@ async function createCourse() {
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <v-btn
-            @click="$emit('close')"
+            @click="emit('close')"
             icon="mdi-close"
             flat
           ></v-btn>
@@ -92,7 +92,7 @@ async function createCourse() {
             <v-btn
               class="text-capitalize"
               variant="text"
-              @click="$emit('close')"
+              @click="emit('close')"
             >
               Cancel
             </v-btn>

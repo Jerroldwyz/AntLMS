@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
-import { Course } from "~~/types"
 import { courses } from "@prisma/client"
+import { Course } from "~~/types"
 
 export default defineStore("course-store", () => {
   const isCreated = ref(false)
