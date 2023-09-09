@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
     <v-app-bar flat>
       <v-container
         class="d-flex align-center justify-space-between"
@@ -186,28 +186,27 @@
       </v-list-item>
     </v-navigation-drawer>
 
-    <v-main class="bg-grey-lighten-3">
-      <v-sheet
-        min-height="80vh"
-        rounded="lg"
-        class="ma-4 pa-4"
+    <v-main class="bg-main">
+      <v-container
+        class="fill-height"
+        fluid
       >
-        <slot />
-      </v-sheet>
+        <v-card
+          class="fill-height"
+          rounded="lg"
+        >
+          <slot />
+        </v-card>
+      </v-container>
     </v-main>
 
-    <v-footer>
-      <v-row
-        justify="center"
-        no-gutters
-      >
-        <v-col
-          class="text-center mt-4"
-          cols="12"
-        >
-          AntLMS &copy {{ new Date().getFullYear() }}
-        </v-col>
-      </v-row>
+    <v-footer
+      app
+      height="50"
+    >
+      <p class="text-center w-100">
+        AntLMS &copy {{ new Date().getFullYear() }}
+      </p>
     </v-footer>
   </v-app>
 </template>
