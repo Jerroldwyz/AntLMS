@@ -1,6 +1,5 @@
-import UrlPattern from "url-pattern"
 import * as yup from "yup"
-import { content_type } from "@prisma/client"
+
 import { validator } from "../utils/validation/validator"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 
