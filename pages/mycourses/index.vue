@@ -9,9 +9,9 @@ const alertError = ref(false)
 
 const courses = await fetchAllUserCourses()
 
-async function handleCourseSubmitted(status: boolean) {
+async function handleAlert(status: boolean) {
   status ? (alertError.value = status) : (alertSuccess.value = status)
-  courses.value = await fetchAllUserCourses()
+  courses.value = (await fetchAllUserCourses()).value
 }
 </script>
 
@@ -58,7 +58,7 @@ async function handleCourseSubmitted(status: boolean) {
     <v-container fluid>
       <v-row justify="center">
         <FormCourseCreate
-          @submitted="handleCourseSubmitted"
+          @success="handleAlert"
           @close="createCourseDialog = false"
         />
       </v-row>

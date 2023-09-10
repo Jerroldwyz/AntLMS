@@ -4,7 +4,7 @@ import type { Course } from "~~/types"
 
 const emit = defineEmits<{
   (e: "close", value: void): void
-  (e: "submitted", value: boolean): void
+  (e: "success", value: boolean): void
 }>()
 
 const titleRules = [
@@ -47,9 +47,9 @@ async function submitCourse() {
       await createCourse(course.value)
       loading.value = false
       emit("close")
-      emit("submitted", true)
+      emit("success", true)
     } catch (e) {}
-    emit("submitted", false)
+    emit("success", false)
   }
 }
 </script>
