@@ -68,7 +68,10 @@ const topics = ref([
       </v-row>
       <v-divider></v-divider>
 
-      <v-list max-height="400">
+      <v-list
+        max-height="100%"
+        height="400"
+      >
         <draggable
           v-model="topics"
           group="topics"
