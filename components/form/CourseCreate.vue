@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import useCourseStore from "~~/stores/useCourseStore"
 import { tags } from "~~/constants"
-import { Course } from "~~/types"
+import type { Course } from "~~/types"
 
-const emit = defineEmits(["close"])
+const emit = defineEmits<{
+  (e: "close", value: void): void
+  (e: "submitted", value: boolean): void
+}>()
 
 const titleRules = [
   (value: string) => {
@@ -26,7 +28,7 @@ const tagRules = [
   },
 ]
 
-const courseStore = useCourseStore()
+const { createCourse } = useCourse()
 
 const loading = ref(false)
 const valid = ref(false)
@@ -38,12 +40,16 @@ const course = ref<Course>({
   creatorId: "",
 })
 
-async function createCourse() {
+async function submitCourse() {
   if (valid.value === true) {
     loading.value = true
-    courseStore.createCourse(course.value)
-    loading.value = false
-    emit("close")
+    try {
+      await createCourse(course.value)
+      loading.value = false
+      emit("close")
+      emit("submitted", true)
+    } catch (e) {}
+    emit("submitted", false)
   }
 }
 </script>
@@ -52,7 +58,7 @@ async function createCourse() {
   <v-card class="w-50">
     <v-form
       v-model="valid"
-      @submit.prevent="createCourse()"
+      @submit.prevent="submitCourse()"
     >
       <v-row>
         <v-col>

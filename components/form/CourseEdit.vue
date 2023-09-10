@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { tags } from "~~/constants"
+
+const route = useRoute()
+const { fetchUserCourse } = useCourse()
+
+const course = await fetchUserCourse(route.params.id)
+</script>
+
 <template>
   <v-card
     class="w-50"
@@ -18,20 +27,19 @@
       </v-row>
       <v-divider class="mb-2"></v-divider>
       <v-form>
-        <v-text-field
-          label="Title"
-          variant="outlined"
-        ></v-text-field>
+        <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
-          label="Tag(s)"
           multiple
+          :value="course.tags"
+          :items="tags"
           variant="outlined"
           chips
         ></v-select>
         <v-file-input
           label="Thumbnail"
           variant="outlined"
-        ></v-file-input>
+          >{{ course.thumbnail }}</v-file-input
+        >
       </v-form>
     </v-container>
   </v-card>

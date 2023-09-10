@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import useCourseStore from "~~/stores/useCourseStore"
+import useCourse from "~~/composables/useCourse"
+
+const { fetchAllUserCourses } = useCourse()
 
 const createCourseDialog = ref(false)
+const alertSuccess = ref(false)
+const alertError = ref(false)
 
-const courseStore = useCourseStore()
+const courses = await fetchAllUserCourses()
 
-onMounted(courseStore.fetchMyCourses)
+async function handleCourseSubmitted(status: boolean) {
+  status ? (alertError.value = status) : (alertSuccess.value = status)
+  courses.value = await fetchAllUserCourses()
+}
 </script>
 
 <template>
   <v-alert
-    v-model="courseStore.isCreated"
+    v-model="alertError"
     type="success"
     density="compact"
     title="Course Created"
@@ -19,7 +26,7 @@ onMounted(courseStore.fetchMyCourses)
     text="Click on the course you just created in order to add further information."
   ></v-alert>
   <v-alert
-    v-model="courseStore.isError"
+    v-model="alertSuccess"
     type="error"
     density="compact"
     title="Course Not Created"
@@ -35,13 +42,10 @@ onMounted(courseStore.fetchMyCourses)
       </v-col>
       <v-col
         cols="2"
-        v-for="course in courseStore.courses"
+        v-for="course in courses"
+        :key="course.id"
       >
-        <!-- For whatever reason, Pinia creates a union of true and the course which
-             throws a type error, I have tried fixing it but I have no idea. It works perfectly fine.
-         -->
         <Course
-          :key="course.id"
           :id="course.id"
           :title="course.title"
           :thumbnail="course.thumbnail"
@@ -53,7 +57,10 @@ onMounted(courseStore.fetchMyCourses)
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <FormCourseCreate @close="createCourseDialog = false" />
+        <FormCourseCreate
+          @submitted="handleCourseSubmitted"
+          @close="createCourseDialog = false"
+        />
       </v-row>
     </v-container>
   </v-dialog>
