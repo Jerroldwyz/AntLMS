@@ -55,7 +55,7 @@ async function submitCourse() {
 </script>
 
 <template>
-  <v-card class="w-50">
+  <v-card width="40%">
     <v-form
       v-model="valid"
       @submit.prevent="submitCourse()"
@@ -64,7 +64,7 @@ async function submitCourse() {
         <v-col>
           <v-card-title class="text-h5"> Create A New Course </v-card-title>
         </v-col>
-        <v-col class="d-flex justify-end align-center">
+        <v-col class="d-flex justify-end">
           <v-btn
             @click="emit('close')"
             icon="mdi-close"
@@ -75,11 +75,13 @@ async function submitCourse() {
       <v-card-text>
         <v-text-field
           v-model="course.title"
+          variant="outlined"
           label="Title"
           :rules="titleRules"
         ></v-text-field>
         <v-select
           v-model="course.tags"
+          variant="outlined"
           label="Tag(s)"
           :items="tags"
           :rules="tagRules"
@@ -88,29 +90,26 @@ async function submitCourse() {
         ></v-select>
         <v-file-input
           v-model="course.thumbnail"
+          variant="outlined"
           label="Thumbnail"
         ></v-file-input>
       </v-card-text>
 
-      <v-card color="grey-lighten-3">
-        <v-container>
-          <v-row justify="end">
-            <v-btn
-              class="text-capitalize"
-              variant="text"
-              @click="emit('close')"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              class="text-capitalize bg-primary"
-              type="submit"
-              :loading="loading"
-            >
-              Create Course
-            </v-btn>
-          </v-row>
-        </v-container>
+      <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">
+        <v-btn
+          class="text-capitalize"
+          variant="text"
+          @click="emit('close')"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          class="text-capitalize bg-primary"
+          type="submit"
+          :loading="loading"
+        >
+          Create Course
+        </v-btn>
       </v-card>
     </v-form>
   </v-card>

@@ -22,7 +22,7 @@ const route = useRoute()
         <v-btn
           class="text-capitalize"
           variant="text"
-          @click="changed = false"
+          @click="navigateTo('/mycourses')"
         >
           Cancel
         </v-btn>
