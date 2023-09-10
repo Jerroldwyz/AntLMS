@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
     "/api/question",
     "/api/question/updateChoices",
     "/api/question/updateQuestion",
+    "/api/question/dummy",
   ]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
@@ -22,5 +23,5 @@ export default defineEventHandler(async (event) => {
     choices: yup.array(),
   })
 
-  validator(questionSchema, event)
+  await validator(questionSchema, event)
 })

@@ -4,7 +4,7 @@ import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 import { validator } from "../utils/validation/validator"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = ["/api/account"]
+  const endpoints = ["/api/account", "/api/account/dummy"]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
     return
@@ -19,5 +19,5 @@ export default defineEventHandler(async (event) => {
     }),
   })
 
-  validator(userAccountSchema, event)
+  await validator(userAccountSchema, event)
 })

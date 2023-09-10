@@ -5,7 +5,7 @@ import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 import UrlPattern from "url-pattern"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = ["/api/topic"]
+  const endpoints = ["/api/topic", "/api/topic/dummy"]
 
   if (
     !isHandledByThisMiddleware(endpoints, event.node.req.url as string) ||
@@ -22,5 +22,5 @@ export default defineEventHandler(async (event) => {
     courseId: yup.string().strict(),
   })
 
-  validator(topicSchema, event)
+  await validator(topicSchema, event)
 })

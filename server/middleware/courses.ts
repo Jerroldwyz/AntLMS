@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     "/api/courses/enroll",
     "/api/courses/getEnrollment",
     "/api/courses/unenroll",
+    "/api/courses/dummy",
   ]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
@@ -20,5 +21,5 @@ export default defineEventHandler(async (event) => {
     userId: yup.string().strict(),
   })
 
-  validator(contentSchema, event)
+  await validator(contentSchema, event)
 })

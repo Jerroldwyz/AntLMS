@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
     "/api/mycourses/changeEnabled",
     "/api/mycourses/all",
     "/api/mycourses/quiz",
+    "/api/mycourses/dummy",
   ]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
@@ -28,5 +29,5 @@ export default defineEventHandler(async (event) => {
     tags: yup.array(),
   })
 
-  validator(myCourseSchema, event)
+  await validator(myCourseSchema, event)
 })

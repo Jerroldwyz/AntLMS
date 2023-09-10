@@ -1,4 +1,3 @@
-import UrlPattern from "url-pattern"
 import * as yup from "yup"
 import { content_type } from "@prisma/client"
 import { validator } from "../utils/validation/validator"
@@ -11,6 +10,7 @@ export default defineEventHandler(async (event) => {
     "/api/content/updateContentPosition",
     "/api/content/updateTitle",
     "/api/content/complete",
+    "/api/content/dummy",
   ]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
@@ -29,5 +29,5 @@ export default defineEventHandler(async (event) => {
     userId: yup.string().strict(),
   })
 
-  validator(contentSchema, event)
+  await validator(contentSchema, event)
 })

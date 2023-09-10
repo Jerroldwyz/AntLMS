@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     "/api/quiz/getResult",
     "/api/quiz/updateQuizPosition",
     "/api/quiz/updateQuizTitle",
+    "/api/quiz/dummy",
   ]
 
   if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
@@ -27,5 +28,5 @@ export default defineEventHandler(async (event) => {
     topicPosition: yup.number().strict(),
   })
 
-  validator(quizSchema, event)
+  await validator(quizSchema, event)
 })
