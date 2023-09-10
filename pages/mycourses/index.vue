@@ -35,23 +35,19 @@ async function handleAlert(status: boolean) {
     text="Something went wrong. Please try again later."
   ></v-alert>
 
-  <v-container fluid>
-    <v-row>
-      <v-col cols="2">
-        <CreateCourseBtn @click="createCourseDialog = true" />
-      </v-col>
-      <v-col
-        cols="2"
-        v-for="course in courses"
-        :key="course.id"
-      >
-        <Course
-          :id="course.id"
-          :title="course.title"
-          :thumbnail="course.thumbnail"
-        />
-      </v-col>
-    </v-row>
+  <v-container
+    fluid
+    class="d-flex flex-wrap"
+    style="gap: 2em"
+  >
+    <CreateCourseBtn @click="createCourseDialog = true" />
+    <Course
+      v-for="course in courses"
+      :key="course.id"
+      :id="course.id"
+      :title="course.title"
+      :thumbnail="course.thumbnail"
+    />
   </v-container>
 
   <v-dialog v-model="createCourseDialog">
