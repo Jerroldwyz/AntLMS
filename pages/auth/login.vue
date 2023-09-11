@@ -14,9 +14,11 @@
           v-model="valid"
           @submit.prevent="signIn"
         >
-          <FormEmailInput v-model:email="email" />
+          <v-text-field label="Label"></v-text-field>
 
-          <FormPasswordInput v-model:password="password" />
+          <FormEmailInput v-model="email" />
+
+          <FormPasswordInput v-model="password" />
 
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
             <v-checkbox
