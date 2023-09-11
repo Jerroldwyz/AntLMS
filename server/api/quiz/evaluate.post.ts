@@ -1,10 +1,3 @@
-import {
-  evaluateQuiz,
-  storeQuizResult,
-  storeExistingQuizResult,
-} from "~~/server/db/quiz"
-import { resultTransformer } from "~~/server/transformers/quizResult"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 

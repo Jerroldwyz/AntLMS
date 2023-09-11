@@ -1,5 +1,3 @@
-import { getEnrollment } from "~~/server/db/enrollment"
-
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event)
 

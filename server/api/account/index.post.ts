@@ -1,4 +1,3 @@
-import { createAccount } from "~~/server/db/account"
 import { User } from "~~/types"
 
 export default defineEventHandler(async (event) => {

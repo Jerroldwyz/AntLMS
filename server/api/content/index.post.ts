@@ -1,6 +1,4 @@
 import { content_type } from "@prisma/client"
-import { createContent } from "~~/server/db/content"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
