@@ -35,6 +35,20 @@ export const getCourseById = (course_id: number) => {
               id: true,
               title: true,
               topic_position: true,
+              questions: {
+                select: {
+                  id: true,
+                  question_text: true,
+                  explanation: true,
+                  choices: {
+                    select: {
+                      id: true,
+                      choice_text: true,
+                    },
+                  },
+                },
+              },
+              quiz_score: true,
             },
           },
         },
