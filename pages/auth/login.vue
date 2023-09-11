@@ -14,10 +14,7 @@
           v-model="valid"
           @submit.prevent="signIn"
         >
-          <v-text-field label="Label"></v-text-field>
-
           <FormEmailInput v-model="email" />
-
           <FormPasswordInput v-model="password" />
 
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
