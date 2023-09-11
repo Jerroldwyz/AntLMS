@@ -33,7 +33,7 @@ useHead({
   height: 100%;
   width: 100%;
   background-repeat: no-repeat;
-  background: url("/images/background/error-bg.jpg");
+  // background: url("/images/background/error-bg.jpg");
   background-size: cover;
   display: flex;
   height: 100vh;
