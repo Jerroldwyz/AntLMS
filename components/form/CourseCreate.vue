@@ -5,7 +5,7 @@ import useCourse from "~~/composables/useCourse"
 
 const emit = defineEmits<{
   (e: "close", value: void): void
-  (e: "success", value: boolean): void
+  (e: "submit", status: boolean): void
 }>()
 
 const titleRules = [
@@ -48,9 +48,9 @@ async function submitCourse() {
       await createCourse(course.value)
       loading.value = false
       emit("close")
-      emit("success", true)
+      emit("submit", true)
     } catch (e) {}
-    emit("success", false)
+    emit("submit", false)
   }
 }
 </script>
