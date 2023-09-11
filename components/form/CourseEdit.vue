@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { tags } from "~~/constants"
 
-const route = useRoute()
-const { fetchUserCourse } = useCourse()
-
-const course = await fetchUserCourse(route.params.id)
+// TODO: change any to real type
+const { course } = defineProps<{
+  course: any
+}>()
 </script>
 
 <template>

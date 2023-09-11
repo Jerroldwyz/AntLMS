@@ -3,7 +3,7 @@
     <v-app-bar flat>
       <v-container
         class="d-flex align-center justify-space-between"
-        fluid="true"
+        fluid
       >
         <v-btn
           prepend-icon="mdi-vuetify"
@@ -180,7 +180,7 @@
         fluid
       >
         <v-card
-          class="fill-height pa-4"
+          class="pa-4 w-100 fill-height"
           rounded="lg"
         >
           <slot />

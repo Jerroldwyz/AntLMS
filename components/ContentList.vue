@@ -3,53 +3,22 @@ import draggable from "vuedraggable"
 const drag = ref(false)
 const changed = ref(false)
 
-const topics = ref([
-  {
-    title: "Introduction to HTML",
-    subtopics: [
-      {
-        title: "What is HTML?",
-        complete: true,
-        icon: "mdi-text-box-outline",
-      },
-      {
-        title: "Basic HTML elements",
-        complete: false,
-        icon: "mdi-text-box-outline",
-      },
-    ],
-  },
-  {
-    title: "Introduction to CSS",
-    subtopics: [
-      {
-        title: "What is CSS?",
-        complete: true,
-        icon: "mdi-text-box-outline",
-      },
-      {
-        title: "Quiz 1",
-        complete: true,
-        icon: "mdi-pencil-circle",
-      },
-    ],
-  },
-  {
-    title: "Introduction to CSS",
-    subtopics: [
-      {
-        title: "What is CSS?",
-        complete: true,
-        icon: "mdi-text-box-outline",
-      },
-      {
-        title: "Quiz 1",
-        complete: true,
-        icon: "mdi-pencil-circle",
-      },
-    ],
-  },
-])
+// TODO: change any to real type
+const { course } = defineProps<{
+  course: any
+}>()
+
+//TODO: add proper type
+function getIcon(content: any): string {
+  switch (content.type) {
+    case "TEXT":
+      return "mdi-text-box-outline"
+    case "VIDEO":
+      return "mdi-video-box"
+    default:
+      return "mdi-pencil-circle"
+  }
+}
 </script>
 
 <template>
@@ -73,7 +42,7 @@ const topics = ref([
         height="400"
       >
         <draggable
-          v-model="topics"
+          v-model="course.topics"
           group="topics"
           item-key="id"
           animation="200"
@@ -83,7 +52,7 @@ const topics = ref([
         >
           <template #item="{ element: topic }">
             <v-list-group>
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-list-item
                   v-bind="props"
                   prepend-icon="mdi-brain"
@@ -105,19 +74,20 @@ const topics = ref([
               </template>
 
               <draggable
-                v-model="topic.subtopics"
-                group="subtopics"
+                v-model="topic.content"
+                group="content"
                 item-key="id"
                 animation="200"
                 @change="changed = true"
                 @start="drag = true"
                 @end="drag = false"
               >
-                <template #item="{ element: subtopic }">
-                  <v-list-item :prepend-icon="subtopic.icon">
-                    {{ subtopic.title }}
+                <template #item="{ element: content }">
+                  <v-list-item :prepend-icon="getIcon(content)">
+                    {{ content.title }}
                     <template #append>
                       <v-btn
+                        @click="deleteContent(content)"
                         icon="mdi-delete"
                         flat
                       >

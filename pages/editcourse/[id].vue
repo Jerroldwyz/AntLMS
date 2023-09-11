@@ -1,18 +1,19 @@
 <script setup lang="ts">
+import useCourse from "~~/composables/useCourse"
 const route = useRoute()
+const { fetchUserCourse } = useCourse()
+
+const course = await fetchUserCourse(route.params.id)
 </script>
 <template>
-  <v-container
-    class="d-flex flex-column fill-height"
-    fluid
-  >
+  <v-container fluid>
     <v-container
-      class="d-flex justify-around fill-height"
+      class="d-flex"
       style="gap: 2em"
       fluid
     >
-      <FormCourseEdit />
-      <ContentList />
+      <FormCourseEdit :course="course" />
+      <ContentList :course="course" />
     </v-container>
     <v-container
       class="d-flex align-end"
