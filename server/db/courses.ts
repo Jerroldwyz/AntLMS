@@ -18,6 +18,7 @@ export const getCourseById = (course_id: number) => {
           title: true,
           content: {
             select: {
+              id: true,
               title: true,
               type: true,
               topic_position: true,
