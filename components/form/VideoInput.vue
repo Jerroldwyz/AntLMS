@@ -1,27 +1,34 @@
 <script setup lang="ts">
-const selectedVideoFile = ref<File[]>([])
+const props = defineProps(["label", "accept"])
+const emit = defineEmits(["upload-status"])
 
-const uploadVideoFile = () => {
-  if (!selectedVideoFile) {
+const label = props.label ?? "Video Input"
+const mimeAccept = props.accept ?? "video/*"
+
+const selectedFile = ref<File[]>([])
+
+const uploadFile = async () => {
+  if (!selectedFile) {
     // No file selected, handle this case as needed
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
-    uploadFileToS3(selectedVideoFile.value[0], "video")
+    const path = await uploadFileToS3(selectedFile.value[0], "video")
+    emit("upload-status", path)
   }
 }
 </script>
 
 <template>
   <v-file-input
-    label="Video Test input"
-    accept="video/*"
+    :label="label"
+    :accept="mimeAccept"
     class="mt-4"
-    v-model="selectedVideoFile"
+    v-model="selectedFile"
   ></v-file-input>
   <v-btn
-    @click="uploadVideoFile"
+    @click="uploadFile"
     block
-    >Upload Video File</v-btn
+    >Upload File</v-btn
   >
 </template>
