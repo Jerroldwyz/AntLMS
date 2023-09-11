@@ -1,11 +1,11 @@
-import app from "~~/utils/firebase-admin"
 import { getAuth } from "firebase-admin/auth"
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const authStore = useAuthStore()
   const currentUser = authStore.user?.uid || ""
+  console.log(currentUser)
   let isAdmin
-  getAuth(app)
+  getAuth()
     .getUser(currentUser)
     .then((userRecord) => {
       isAdmin =

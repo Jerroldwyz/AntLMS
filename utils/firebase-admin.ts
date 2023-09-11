@@ -11,7 +11,7 @@ const app = initializeApp({
 // config admin privilage
 const auth = getAuth(app)
 
-const uid = "fJceDbsIczSZoIfJ2pp08TqwHsn2"
+const uid = "1RGmKw2HwGe0qcwNOSFpylWUBg22"
 
 auth
   .getUser(uid)

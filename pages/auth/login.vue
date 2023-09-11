@@ -74,7 +74,7 @@ const signIn = async () => {
   disabled.value = true
   try {
     await authStore.login(email.value, password.value)
-    router.push("/")
+    // router.push("/")
   } catch (error) {
     alert(error)
   }

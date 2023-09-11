@@ -17,7 +17,14 @@ export default defineNuxtPlugin((nuxtApp) => {
         const token = await user.getIdToken()
         setServerSession(token)
         authStore.user = await formatUser(user)
-        navigateTo("/")
+        user.getIdTokenResult().then((idTokenResult) => {
+          if (!!idTokenResult.claims.admin) {
+            console.log("you are an admin")
+            navigateTo("/admin")
+          } else {
+            navigateTo("/")
+          }
+        })
       } else {
         console.log("User signed out")
         setServerSession("")
