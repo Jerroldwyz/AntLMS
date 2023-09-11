@@ -87,7 +87,6 @@ function getIcon(content: any): string {
                     {{ content.title }}
                     <template #append>
                       <v-btn
-                        @click="deleteContent(content)"
                         icon="mdi-delete"
                         flat
                       >
