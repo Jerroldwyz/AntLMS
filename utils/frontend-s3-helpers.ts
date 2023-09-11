@@ -41,7 +41,7 @@ export const getFileUrlFromS3 = async (path: string): Promise<string> => {
   return presignedUrl
 }
 
-export const deleteFileFromS3 = async (path: string): Promise<string> => {
+export const deleteFileFromS3 = async (path: string): Promise<boolean> => {
   const { success } = await $fetch("/api/s3/deleteFile", {
     method: "DELETE",
     body: {
