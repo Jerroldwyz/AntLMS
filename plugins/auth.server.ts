@@ -1,11 +1,19 @@
 import { getAuth } from "firebase-admin/auth"
-import app from "~~/utils/firebase-admin"
+
+import { initializeApp, cert } from "firebase-admin/app"
+
+const serviceCredentials = process.env.FIREBASE_ADMIN_CREDENTIALS || ""
+
+export const firebaseApp = initializeApp({
+  credential: cert(JSON.parse(serviceCredentials)),
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+})
 
 // server side runtime
 export default defineNuxtPlugin(async (nuxtApp) => {
   const token = useFirebaseToken()
   const firebaseUser = useUser()
-  const auth = getAuth(app)
+  const auth = getAuth(firebaseApp)
 
   if (!token.value) return
 
