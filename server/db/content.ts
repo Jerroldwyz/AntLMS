@@ -40,7 +40,9 @@ export const updateContent = (content_id: number, content_data: any) => {
     where: {
       id: content_id,
     },
-    data: content_data,
+    data: {
+      content: content_data,
+    },
   })
 }
 
