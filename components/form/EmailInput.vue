@@ -1,6 +1,5 @@
 <template>
   <v-text-field
-    :value="email"
     :rules="emailRules"
     @input="$emit('update:email', $event.target.value)"
     label="E-mail"
@@ -10,11 +9,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps(["email"])
 defineEmits(["update:email"])
 
-const emailRules = ref([
+const emailRules = [
   (v: string) => !!v || "E-mail is required",
   (v: string) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-])
+]
 </script>
