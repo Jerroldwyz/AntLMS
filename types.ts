@@ -11,5 +11,5 @@ export type Course = {
   title: string
   thumbnail: string
   tags: string[]
-  creator_id: string
+  creatorId: string
 }

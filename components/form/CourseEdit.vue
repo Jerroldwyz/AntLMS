@@ -1,5 +1,17 @@
+<script setup lang="ts">
+import { tags } from "~~/constants"
+
+// TODO: change any to real type
+const { course } = defineProps<{
+  course: any
+}>()
+</script>
+
 <template>
-  <v-card>
+  <v-card
+    class="w-50"
+    height="fit-content"
+  >
     <v-container>
       <v-row>
         <v-col class="d-flex justify-start align-center">
@@ -15,35 +27,20 @@
       </v-row>
       <v-divider class="mb-2"></v-divider>
       <v-form>
-        <v-text-field
-          label="Title"
-          variant="outlined"
-        ></v-text-field>
+        <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
-          label="Tag(s)"
           multiple
+          :value="course.tags"
+          :items="tags"
           variant="outlined"
           chips
         ></v-select>
         <v-file-input
           label="Thumbnail"
           variant="outlined"
-        ></v-file-input>
+          >{{ course.thumbnail }}</v-file-input
+        >
       </v-form>
     </v-container>
-    <v-card color="grey-lighten-3">
-      <v-container>
-        <v-row justify="end">
-          <v-btn
-            class="text-capitalize"
-            variant="text"
-            @click="$emit('close')"
-          >
-            Cancel
-          </v-btn>
-          <v-btn class="text-capitalize bg-primary"> Save Changes </v-btn>
-        </v-row>
-      </v-container>
-    </v-card>
   </v-card>
 </template>
