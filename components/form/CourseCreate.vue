@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { tags } from "~~/constants"
 import type { Course } from "~~/types"
-import useCourse from "~~/composables/useCourse"
 
 const emit = defineEmits<{
   (e: "close", value: void): void
@@ -59,7 +58,7 @@ async function submitCourse() {
   <v-card width="40%">
     <v-form
       v-model="valid"
-      @submit.prevent="submitCourse()"
+      @submit.prevent="submitCourse"
     >
       <v-row>
         <v-col>

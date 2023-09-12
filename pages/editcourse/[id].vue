@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useCourse from "~~/composables/useCourse"
 const route = useRoute()
 const { fetchUserCourse } = useCourse()
 

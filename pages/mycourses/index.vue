@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import useCourse from "~~/composables/useCourse"
-
 const { fetchAllUserCourses } = useCourse()
 
 const createCourseDialog = ref(false)
