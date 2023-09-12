@@ -3,7 +3,7 @@
     <v-app-bar flat>
       <v-container
         class="d-flex align-center justify-space-between"
-        fluid="true"
+        fluid
       >
         <v-btn
           prepend-icon="mdi-vuetify"
@@ -132,7 +132,6 @@
             v-for="(browseTitle, i) in browse"
             :key="i"
             :title="browseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>
@@ -155,7 +154,6 @@
             v-for="(courseTitle, i) in dashboard"
             :key="i"
             :title="courseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>

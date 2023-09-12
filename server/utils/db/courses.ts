@@ -51,7 +51,7 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getCourses = () => {
+export const getAllCourses = () => {
   return prisma.courses.findMany({
     select: {
       id: true,
