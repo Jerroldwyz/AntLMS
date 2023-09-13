@@ -1,5 +1,3 @@
-import { completeContent } from "~~/server/db/progress"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 

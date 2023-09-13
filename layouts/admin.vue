@@ -1,57 +1,63 @@
 <template>
   <v-app id="inspire">
     <v-app-bar flat>
-      <v-container class="mx-auto d-flex align-center justify-center">
-        <span class="text-button text-white bg-red px-2 me-1 py-1 rounded-lg"
-          >AntLMS ADMIN</span
+      <v-container
+        class="d-flex align-center justify-space-between"
+        fluid
+      >
+        <v-btn
+          prepend-icon="mdi-vuetify"
+          variant="text"
+          color="black"
+          size="large"
         >
+          <NuxtLink
+            to="/home"
+            class="text-button text-decoration-none text-black"
+            >AntLMS</NuxtLink
+          >
+        </v-btn>
+
+        <span class="text-button text-white bg-red px-2 me-1 py-1 rounded-lg"
+          >ADMIN</span
+        >
+
         <v-btn variant="text">
           <NuxtLink
-            to="/admin/manage-site-admins"
+            to="/admin/managers"
             class="text-button text-decoration-none text-black"
-            >Admins</NuxtLink
+            >Managers</NuxtLink
           >
         </v-btn>
         <v-btn variant="text">
           <NuxtLink
-            to="/admin/manage-roles"
+            to="/admin/roles"
             class="text-button text-decoration-none text-black"
             >Modify Roles</NuxtLink
           >
         </v-btn>
         <v-btn variant="text">
           <NuxtLink
-            to="/admin/manage-courses"
+            to="/admin/courses"
             class="text-button text-decoration-none text-black"
             >Courses</NuxtLink
           >
         </v-btn>
         <v-btn variant="text">
           <NuxtLink
-            to="/admin/manage-users"
+            to="/admin/users"
             class="text-button text-decoration-none text-black"
             >Users</NuxtLink
           >
         </v-btn>
-        <v-spacer></v-spacer>
 
-        <v-responsive max-width="160">
-          <v-text-field
-            density="compact"
-            flat
-            hide-details
-            label="Course Search"
-            rounded="lg"
-            variant="filled"
-            single-line
-          ></v-text-field>
-        </v-responsive>
+        <v-spacer></v-spacer>
 
         <v-menu
           min-width="200px"
           rounded
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               icon
               v-bind="props"
@@ -103,16 +109,15 @@
     </v-app-bar>
 
     <v-main class="bg-grey-lighten-3">
-      <v-container>
-        <v-sheet
-          min-height="80vh"
-          rounded="lg"
-          class="pa-4"
-        >
-          <slot />
-        </v-sheet>
-      </v-container>
+      <v-sheet
+        min-height="80vh"
+        rounded="lg"
+        class="ma-4 pa-4"
+      >
+        <slot />
+      </v-sheet>
     </v-main>
+
     <v-footer>
       <v-row
         justify="center"
@@ -122,13 +127,27 @@
           class="text-center mt-4"
           cols="12"
         >
-          {{ new Date().getFullYear() }} — <strong>AntLMS</strong>
+          AntLMS &copy; {{ new Date().getFullYear() }}
         </v-col>
       </v-row>
     </v-footer>
   </v-app>
 </template>
 
-<script setup></script>
+<script setup lang="ts"></script>
 
-<style></style>
+<style>
+.v-footer {
+  font-size: small;
+}
+
+.listItemFont .v-list-item-title {
+  font-size: 15px;
+}
+
+.drawer-list {
+  display: flex;
+  flex-direction: column;
+  height: 91.75%;
+}
+</style>

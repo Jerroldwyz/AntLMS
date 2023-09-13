@@ -7,7 +7,7 @@
   "extends": [
     "@nuxtjs/eslint-config-typescript",
     "plugin:nuxt/recommended",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
 
   "rules": {
@@ -15,6 +15,9 @@
     "vue/no-multiple-template-root": 0,
     "vue/require-default-prop": 0,
     "vue/no-v-html": 0,
-    "prettier/prettier": ["error", { "singleQuote": true, "semi": false, "endOfLine": "auto" }]
+    "camelcase": 0,
+    "import/default": 1,
+    "@typescript-eslint/no-unused-vars": 1,
+    "no-empty": 1
   }
 }

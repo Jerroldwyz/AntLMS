@@ -84,6 +84,7 @@
 </template>
 
 <script setup lang="ts">
+import { createUserWithEmailAndPassword } from "firebase/auth"
 definePageMeta({
   layout: false,
 })

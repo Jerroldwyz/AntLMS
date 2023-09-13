@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
-import { useAuthStore } from "~~/composables/useAuthStore"
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
@@ -18,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         setServerSession(token)
         authStore.user = await formatUser(user)
         user.getIdTokenResult().then((idTokenResult) => {
-          if (!!idTokenResult.claims.admin) {
+          if (idTokenResult.claims.admin) {
             console.log("you are an admin")
             navigateTo("/admin")
           } else {

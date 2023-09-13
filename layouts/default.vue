@@ -1,9 +1,9 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
     <v-app-bar flat>
       <v-container
         class="d-flex align-center justify-space-between"
-        fluid="true"
+        fluid
       >
         <v-btn
           prepend-icon="mdi-vuetify"
@@ -41,7 +41,7 @@
           min-width="200px"
           rounded
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               icon
               v-bind="props"
@@ -95,11 +95,11 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      @mouseenter="hovered = true"
-      @mouseleave="hovered = false"
       expand-on-hover
       rail
       permanent
+      @mouseenter="hovered = true"
+      @mouseleave="hovered = false"
     >
       <v-divider></v-divider>
 
@@ -121,7 +121,7 @@
           class="listItemFont"
           :value="hovered ? 'Browse' : null"
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-list-item
               v-bind="props"
               prepend-icon="mdi-format-list-bulleted"
@@ -134,7 +134,6 @@
             v-for="(browseTitle, i) in browse"
             :key="i"
             :title="browseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>
@@ -144,7 +143,7 @@
           class="listItemFont"
           :value="hovered ? 'Courses' : null"
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-list-item
               v-bind="props"
               prepend-icon="mdi-view-dashboard"
@@ -157,7 +156,6 @@
             v-for="(courseTitle, i) in dashboard"
             :key="i"
             :title="courseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>
@@ -176,28 +174,27 @@
       </v-list-item>
     </v-navigation-drawer>
 
-    <v-main class="bg-grey-lighten-3">
-      <v-sheet
-        min-height="80vh"
-        rounded="lg"
-        class="ma-4 pa-4"
+    <v-main class="bg-main">
+      <v-container
+        class="fill-height"
+        fluid
       >
-        <slot />
-      </v-sheet>
+        <v-card
+          class="pa-4 w-100 fill-height"
+          rounded="lg"
+        >
+          <slot />
+        </v-card>
+      </v-container>
     </v-main>
 
-    <v-footer>
-      <v-row
-        justify="center"
-        no-gutters
-      >
-        <v-col
-          class="text-center mt-4"
-          cols="12"
-        >
-          AntLMS &copy {{ new Date().getFullYear() }}
-        </v-col>
-      </v-row>
+    <v-footer
+      app
+      height="50"
+    >
+      <p class="text-center w-100">
+        AntLMS &copy; {{ new Date().getFullYear() }}
+      </p>
     </v-footer>
   </v-app>
 </template>
@@ -213,6 +210,18 @@ export default {
     dashboard: ["Dashboard", "Math 101", "Business 101", "Baking 101"],
   }),
 
+  computed: {
+    isAuthenticated() {
+      return authStore.isAuthenticated
+    },
+    currentUser() {
+      return authStore.user
+    },
+    initials() {
+      return authStore.initials
+    },
+  },
+
   methods: {
     onClick() {
       this.loading = true
@@ -225,18 +234,6 @@ export default {
     async signOut() {
       await authStore.logout()
       navigateTo("/auth/login")
-    },
-  },
-
-  computed: {
-    isAuthenticated() {
-      return authStore.isAuthenticated
-    },
-    currentUser() {
-      return authStore.user
-    },
-    initials() {
-      return authStore.initials
     },
   },
 }

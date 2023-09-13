@@ -7,6 +7,7 @@ import * as directives from "vuetify/directives"
 const myTheme = {
   dark: false,
   colors: {
+    main: "#EEEEEE",
     primary: "#224466",
   },
 }

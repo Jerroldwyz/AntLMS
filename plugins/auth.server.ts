@@ -1,5 +1,4 @@
 import { getAuth } from "firebase-admin/auth"
-
 import { initializeApp, cert } from "firebase-admin/app"
 
 const serviceCredentials = process.env.FIREBASE_ADMIN_CREDENTIALS || ""

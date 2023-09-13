@@ -6,8 +6,6 @@
 </template>
 
 <script setup>
-import { useAuthStore } from "~~/composables/useAuthStore"
-
 definePageMeta({
   layout: false,
 })

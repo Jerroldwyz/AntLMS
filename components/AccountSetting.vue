@@ -7,21 +7,21 @@
 
       <!-- Additional form fields for account settings -->
       <v-text-field
-        v-model="userData.id"
+        v-model="newUserData.id"
         label="ID"
         disabled
       ></v-text-field>
       <v-text-field
-        v-model="userData.name"
+        v-model="newUserData.name"
         label="Full Name"
       ></v-text-field>
       <v-text-field
-        v-model="userData.email"
+        v-model="newUserData.email"
         label="Email"
         disabled
       ></v-text-field>
       <v-select
-        v-model="userData.gender"
+        v-model="newUserData.gender"
         :items="['Male', 'Female', 'Other']"
         label="Gender"
       ></v-select>
@@ -76,7 +76,11 @@
 </template>
 
 <script setup lang="ts">
+import { UserData } from "~/types"
+
 const props = defineProps(["userData", "updatePasswordCallback"])
+
+const newUserData: UserData = props.userData
 
 const currentPassword = ref("")
 const newPassword = ref("")
@@ -111,7 +115,7 @@ const saveChanges = () => {
   errorMessage.value = ""
 
   const updatedUserData = {
-    ...props.userData,
+    ...newUserData,
     profilePicture:
       profilePicture.value.length > 0 ? profilePicture.value[0] : null, // Update with the new profile picture
     newPassword: newPassword.value,

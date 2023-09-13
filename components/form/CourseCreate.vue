@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Course } from "~~/types"
 import { tags } from "~~/constants"
+import type { Course } from "~~/types"
 
 const emit = defineEmits<{
-  (e: "courseOutcome", status: "success" | "failure"): void
+  (e: "close", value: void): void
+  (e: "submit", status: boolean): void
 }>()
 
 const titleRules = [
@@ -27,72 +28,60 @@ const tagRules = [
   },
 ]
 
-const user = useUser()
-const authStore = useAuthStore()
+const { createCourse } = useCourse()
+
+const loading = ref(false)
+const valid = ref(false)
 
 const course = ref<Course>({
   title: "",
   thumbnail: "",
   tags: [],
-  creator_id: "",
+  creatorId: "",
 })
 
-// if (user.value?.uid != undefined) {
-//   course.value.creator_id = user.value.uid
-// }
-
-if (authStore.user?.uid !== undefined) {
-  course.value.creator_id = authStore.user.uid
-}
-
-const loading = ref(false)
-const valid = ref(false)
-
-async function createCourse() {
+async function submitCourse() {
   if (valid.value === true) {
+    loading.value = true
     try {
-      loading.value = true
-      await $fetch("/api/mycourses", {
-        method: "post",
-        body: {
-          course: course.value,
-        },
-      })
+      await createCourse(course.value)
       loading.value = false
-      emit("courseOutcome", "success")
-    } catch (e) {
-      emit("courseOutcome", "failure")
-    }
+      emit("close")
+      emit("submit", true)
+    } catch (e) {}
+    emit("submit", false)
   }
 }
 </script>
 
 <template>
-  <v-card class="w-50">
+  <v-card width="40%">
     <v-form
       v-model="valid"
-      @submit.prevent="createCourse"
+      @submit.prevent="submitCourse"
     >
       <v-row>
         <v-col>
           <v-card-title class="text-h5"> Create A New Course </v-card-title>
         </v-col>
-        <v-col class="d-flex justify-end align-center">
+        <v-col class="d-flex justify-end">
           <v-btn
-            @click="$emit('close')"
             icon="mdi-close"
             flat
+            @click="emit('close')"
           ></v-btn>
         </v-col>
       </v-row>
       <v-card-text>
         <v-text-field
           v-model="course.title"
+          variant="outlined"
           label="Title"
           :rules="titleRules"
         ></v-text-field>
         <v-select
           v-model="course.tags"
+          variant="outlined"
           label="Tag(s)"
           :items="tags"
           :rules="tagRules"
@@ -101,29 +90,26 @@ async function createCourse() {
         ></v-select>
         <v-file-input
           v-model="course.thumbnail"
+          variant="outlined"
           label="Thumbnail"
         ></v-file-input>
       </v-card-text>
 
-      <v-card color="grey-lighten-3">
-        <v-container>
-          <v-row justify="end">
-            <v-btn
-              class="text-capitalize"
-              variant="text"
-              @click="$emit('close')"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              class="text-capitalize bg-primary"
-              type="submit"
-              :loading="loading"
-            >
-              Create Course
-            </v-btn>
-          </v-row>
-        </v-container>
+      <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">
+        <v-btn
+          class="text-capitalize"
+          variant="text"
+          @click="emit('close')"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          class="text-capitalize bg-primary"
+          type="submit"
+          :loading="loading"
+        >
+          Create Course
+        </v-btn>
       </v-card>
     </v-form>
   </v-card>

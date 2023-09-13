@@ -49,7 +49,9 @@ useHead({
 .error-title {
   font-size: 15rem;
   font-weight: 900;
-  text-shadow: 4px 4px 0 #fff, 6px 6px 0 #343a40;
+  text-shadow:
+    4px 4px 0 #fff,
+    6px 6px 0 #343a40;
   line-height: auto;
 }
 
