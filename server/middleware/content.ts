@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  let contentSchema = yup.object().shape({
+  const contentSchema = yup.object().shape({
     title: yup.string().strict(),
     type: yup.mixed<content_type>().oneOf(Object.values(content_type)),
     content: yup.string(),

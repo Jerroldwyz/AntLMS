@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  let questionSchema = yup.object().shape({
+  const questionSchema = yup.object().shape({
     questionId: yup.number().strict(),
     quizId: yup.number().strict(),
     questionText: yup.string().strict(),
