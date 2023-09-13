@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { fetchAllUserCourses } = useCourse()
-
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)

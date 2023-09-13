@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { id } = event.context.params
+  const { id } = getRouterParam(event, "id")
   const query = getQuery(event)
 
   const course = await getCourseById(parseInt(id))
