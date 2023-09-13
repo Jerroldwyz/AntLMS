@@ -3,8 +3,8 @@ import { prisma } from "."
 export const enrollUser = (course_id: number, user_id: string) => {
   return prisma.enrollments.create({
     data: {
-      user_id: user_id,
-      course_id: course_id,
+      user_id,
+      course_id,
     },
   })
 }
@@ -12,8 +12,8 @@ export const enrollUser = (course_id: number, user_id: string) => {
 export const unenrollUser = (course_id: number, user_id: string) => {
   return prisma.enrollments.deleteMany({
     where: {
-      course_id: course_id,
-      user_id: user_id,
+      course_id,
+      user_id,
     },
   })
 }
@@ -21,7 +21,7 @@ export const unenrollUser = (course_id: number, user_id: string) => {
 export const getEnrollment = (user_id: string) => {
   return prisma.enrollments.findMany({
     where: {
-      user_id: user_id,
+      user_id,
     },
     select: {
       id: true,

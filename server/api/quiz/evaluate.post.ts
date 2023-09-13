@@ -1,10 +1,3 @@
-import {
-  evaluateQuiz,
-  storeQuizResult,
-  storeExistingQuizResult,
-} from "~~/server/db/quiz"
-import { resultTransformer } from "~~/server/transformers/quizResult"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -17,7 +10,7 @@ export default defineEventHandler(async (event) => {
       result,
       parseInt(body.enrollmentId),
       body.userId as string,
-      parseInt(body.quizId)
+      parseInt(body.quizId),
     )
   }
 

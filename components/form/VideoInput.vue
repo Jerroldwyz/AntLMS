@@ -21,14 +21,14 @@ const uploadFile = async () => {
 
 <template>
   <v-file-input
+    v-model="selectedFile"
     :label="label"
     :accept="mimeAccept"
     class="mt-4"
-    v-model="selectedFile"
   ></v-file-input>
   <v-btn
-    @click="uploadFile"
     block
+    @click="uploadFile"
     >Upload File</v-btn
   >
 </template>

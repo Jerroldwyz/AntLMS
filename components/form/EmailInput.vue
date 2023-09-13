@@ -1,10 +1,10 @@
 <template>
   <v-text-field
     :rules="emailRules"
-    @input="$emit('update:email', $event.target.value)"
     label="E-mail"
     class="mt-4"
     required
+    @input="$emit('update:email', $event.target.value)"
   ></v-text-field>
 </template>
 

@@ -16,7 +16,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         const token = await user.getIdToken()
         setServerSession(token)
         firebaseUser.value = formatUser(user)
-        navigateTo("/")
       } else {
         console.log("User signed out")
         // clear cookie session and auth state

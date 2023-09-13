@@ -1,6 +1,6 @@
 import UrlPattern from "url-pattern"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
   const endpoints = /\/api\/course\/.+/
 
   const url = event.node.req.url as string
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       createError({
         statusCode: 422,
         statusMessage: "Not a valid course id",
-      })
+      }),
     )
   }
 })

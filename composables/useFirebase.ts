@@ -8,7 +8,7 @@ import {
 } from "firebase/auth"
 
 export default (firebaseAuth: Auth) => {
-  const createUser = async <User>(email: string, password: string) => {
+  const createUser = <User>(email: string, password: string) => {
     return new Promise<User>((resolve, reject) => {
       createUserWithEmailAndPassword(firebaseAuth, email, password)
         .then((userCredentials) => {
@@ -18,7 +18,7 @@ export default (firebaseAuth: Auth) => {
     })
   }
 
-  const signInUser = async (email: string, password: string) => {
+  const signInUser = (email: string, password: string) => {
     return new Promise<UserCredential>((resolve, reject) => {
       signInWithEmailAndPassword(firebaseAuth, email, password)
         .then((userCredentials) => {

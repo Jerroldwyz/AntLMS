@@ -1,5 +1,5 @@
-import * as Minio from "minio"
 import { Readable } from "stream"
+import * as Minio from "minio"
 
 const localConfig = {
   endPoint: "localhost", // Replace with your Minio server's endpoint
@@ -17,7 +17,7 @@ const prodConfig: Minio.ClientOptions = {
   secretKey: process.env.AWS_SECRET_ACCESS_KEY!,
 }
 
-const config = process.env.NODE_ENV == "production" ? prodConfig : localConfig
+const config = process.env.NODE_ENV === "production" ? prodConfig : localConfig
 
 // Initialize the Minio client
 const minioClient = new Minio.Client(config)
@@ -27,7 +27,7 @@ export const uploadFile = async (
   bucketName: string,
   objectName: string,
   fileStream: Readable,
-  contentType: Minio.ItemBucketMetadata
+  contentType: Minio.ItemBucketMetadata,
 ) => {
   await minioClient.putObject(bucketName, objectName, fileStream, contentType)
 }
@@ -36,7 +36,7 @@ export const uploadFile = async (
 export const downloadFile = async (
   bucketName: string,
   objectName: string,
-  filePath: string
+  filePath: string,
 ) => {
   await minioClient.fGetObject(bucketName, objectName, filePath)
 }
@@ -50,7 +50,7 @@ export const deleteFile = async (bucketName: string, objectName: string) => {
 export const generatePresignedUrl = (
   bucketName: string,
   objectName: string,
-  expiresIn: number
+  expiresIn: number,
 ) => {
   return minioClient.presignedGetObject(bucketName, objectName, expiresIn)
 }
@@ -59,7 +59,7 @@ export const generatePresignedUrl = (
 export const generatePresignedUrlPUT = (
   bucketName: string,
   objectName: string,
-  expiresIn: number
+  expiresIn: number,
 ) => {
   return minioClient.presignedPutObject(bucketName, objectName, expiresIn)
 }

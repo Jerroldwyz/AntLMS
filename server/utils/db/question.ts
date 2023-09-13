@@ -18,7 +18,7 @@ export const getQuestionById = (question_id: number) => {
   })
 }
 
-export const createQuestion = async (question_data: any) => {
+export const createQuestion = (question_data: any) => {
   return prisma.questions.create({
     data: question_data,
   })
@@ -27,15 +27,15 @@ export const createQuestion = async (question_data: any) => {
 export const updateQuestion = (
   question_id: number,
   question_text: string,
-  explanation: string
+  explanation: string,
 ) => {
   return prisma.questions.update({
     where: {
       id: question_id,
     },
     data: {
-      question_text: question_text,
-      explanation: explanation,
+      question_text,
+      explanation,
     },
   })
 }

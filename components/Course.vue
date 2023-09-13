@@ -8,11 +8,11 @@ const props = defineProps<{
 
 <template>
   <v-card
-    @click="navigateTo(`/editcourse/${props.id}`)"
     elevation="2"
     rounded="lg"
     width="175"
     height="175"
+    @click="navigateTo(`/editcourse/${props.id}`)"
   >
     <v-img
       cover

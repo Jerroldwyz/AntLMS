@@ -1,73 +1,51 @@
 <script setup>
-const viewDialog = ref({})
-const editDialog = ref({})
 const disableDialog = ref({})
 const deleteDialog = ref({})
+const roleDialog = ref({})
+const dialogm1 = ref("")
+
 definePageMeta({
   layout: "admin",
 })
 </script>
 
 <template>
-  <h1 class="mb-4">Admin Panel - Users</h1>
+  <h1 class="mb-4">Admin Panel - Site Admins</h1>
   <v-text-field
     clearable
     label="Search"
     type="text"
     variant="outlined"
   >
-    <template v-slot:prepend>
-      <v-tooltip location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-icon
-            v-bind="props"
-            icon="mdi-help-circle-outline"
-          ></v-icon>
-        </template>
-        Filter users
-      </v-tooltip>
-    </template>
   </v-text-field>
 
   <div>
     <v-table fixed-header>
       <thead>
         <tr>
-          <th class="text-left">Thumbnail</th>
           <th class="text-left">User Name</th>
           <th class="text-left">Email</th>
+          <th class="text-left">Role</th>
           <th class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="n in 9">
-          <td>
-            <v-avatar
-              class="ma-2"
-              color="grey-darken-1"
-              size="large"
-            >
-              <span class="text-h6">AN</span>
-            </v-avatar>
-          </td>
+        <tr
+          v-for="n in 9"
+          :key="n"
+        >
           <td>USER NAME</td>
           <td>EMAIL</td>
+          <td>ROLE</td>
           <td class="text-right">
             <v-btn
               class="ms-2"
               variant="outlined"
               size="small"
             >
-              View
-            </v-btn>
-            <v-btn
-              class="ms-2"
-              variant="outlined"
-              size="small"
-            >
-              Edit
+              Edit Role
               <v-dialog
-                v-model="editDialog[n]"
+                v-model="roleDialog[n]"
                 activator="parent"
                 scrollable
                 width="auto"
@@ -99,14 +77,14 @@ definePageMeta({
                     <v-btn
                       color="green-darken-1"
                       variant="text"
-                      @click="editDialog[n] = false"
+                      @click="roleDialog[n] = false"
                     >
                       Save
                     </v-btn>
                     <v-btn
                       color="black"
                       variant="text"
-                      @click="editDialog[n] = false"
+                      @click="roleDialog[n] = false"
                     >
                       Close
                     </v-btn>
@@ -122,8 +100,8 @@ definePageMeta({
             >
               Disable
               <v-dialog
-                activator="parent"
                 v-model="disableDialog[n]"
+                activator="parent"
                 width="auto"
               >
                 <v-card>
@@ -156,8 +134,8 @@ definePageMeta({
             >
               Delete
               <v-dialog
-                activator="parent"
                 v-model="deleteDialog[n]"
+                activator="parent"
                 width="auto"
               >
                 <v-card>

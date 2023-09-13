@@ -1,5 +1,3 @@
-import { updateCourseTitle } from "~~/server/db/mycourse"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -7,6 +5,6 @@ export default defineEventHandler(async (event) => {
 
   return await updateCourseTitle(
     parseInt(body.courseId as string),
-    body.title as string
+    body.title as string,
   )
 })

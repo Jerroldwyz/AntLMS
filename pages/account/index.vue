@@ -5,8 +5,8 @@
     <v-row>
       <v-col cols="6">
         <AccountSetting
-          :userData="userData"
-          :updatePasswordCallback="updatePasswordCallback"
+          :user-data="userData"
+          :update-password-callback="updatePasswordCallback"
         />
       </v-col>
       <v-col cols="6">
@@ -14,8 +14,8 @@
           <v-container fluid>
             <v-row justify="center">
               <FormAccountSettingForm
-                :userData="userData"
-                :saveChangesCallback="updatePasswordCallback"
+                :user-data="userData"
+                :save-changes-callback="updatePasswordCallback"
               />
             </v-row>
           </v-container>
@@ -51,14 +51,7 @@
 </template>
 
 <script setup lang="ts">
-interface UserData {
-  id: number
-  name: string
-  email: string
-  gender: string
-  // Add profilePicture field
-  profilePicture: File | null
-}
+import { UserData } from "~/types"
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)

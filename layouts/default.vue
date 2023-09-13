@@ -41,7 +41,7 @@
           min-width="200px"
           rounded
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               icon
               v-bind="props"
@@ -93,11 +93,11 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      @mouseenter="hovered = true"
-      @mouseleave="hovered = false"
       expand-on-hover
       rail
       permanent
+      @mouseenter="hovered = true"
+      @mouseleave="hovered = false"
     >
       <v-divider></v-divider>
 
@@ -119,7 +119,7 @@
           class="listItemFont"
           :value="hovered ? 'Browse' : null"
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-list-item
               v-bind="props"
               prepend-icon="mdi-format-list-bulleted"
@@ -132,7 +132,6 @@
             v-for="(browseTitle, i) in browse"
             :key="i"
             :title="browseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>
@@ -142,7 +141,7 @@
           class="listItemFont"
           :value="hovered ? 'Courses' : null"
         >
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-list-item
               v-bind="props"
               prepend-icon="mdi-view-dashboard"
@@ -155,7 +154,6 @@
             v-for="(courseTitle, i) in dashboard"
             :key="i"
             :title="courseTitle"
-            :value="title"
             href="?"
           >
           </v-list-item>
@@ -193,7 +191,7 @@
       height="50"
     >
       <p class="text-center w-100">
-        AntLMS &copy {{ new Date().getFullYear() }}
+        AntLMS &copy; {{ new Date().getFullYear() }}
       </p>
     </v-footer>
   </v-app>
