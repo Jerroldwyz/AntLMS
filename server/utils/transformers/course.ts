@@ -43,7 +43,7 @@ const contentTransformer = (content: any, user_id?: string) => {
 
   if (content.progress !== undefined) {
     val.complete = content.progress.some(
-      (item: any) => item.user_id === user_id
+      (item: any) => item.user_id === user_id,
     )
   }
 

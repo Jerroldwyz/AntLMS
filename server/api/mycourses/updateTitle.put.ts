@@ -5,6 +5,6 @@ export default defineEventHandler(async (event) => {
 
   return await updateCourseTitle(
     parseInt(body.courseId as string),
-    body.title as string
+    body.title as string,
   )
 })

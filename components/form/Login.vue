@@ -24,7 +24,7 @@
           @submit.prevent="signIn"
         >
           <v-text-field
-            v-model="email"
+            v-model="newEmail"
             :rules="emailRules"
             label="E-mail"
             class="mt-4"
@@ -32,7 +32,7 @@
             variant="outlined"
           ></v-text-field>
           <v-text-field
-            v-model="password"
+            v-model="newPassword"
             :rules="passwordRules"
             label="Password"
             type="password"
@@ -75,6 +75,9 @@ const props = defineProps<{
   email: string
   password: string
 }>()
+
+const newEmail = props.email
+const newPassword = props.password
 </script>
 
 <style scoped></style>

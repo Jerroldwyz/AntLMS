@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 
   const question = await updateChoice(
     parseInt(body.questionId as string),
-    body.choices
+    body.choices,
   )
 
   return questionsTransformer(question)

@@ -84,10 +84,10 @@
 </template>
 
 <script setup lang="ts">
+import { createUserWithEmailAndPassword } from "firebase/auth"
 definePageMeta({
   layout: false,
 })
-import { createUserWithEmailAndPassword } from "firebase/auth"
 
 const { $firebaseAuth } = useNuxtApp()
 const router = useRouter()
@@ -128,7 +128,7 @@ const signUp = async () => {
       await createUserWithEmailAndPassword(
         $firebaseAuth,
         email.value,
-        password.value
+        password.value,
       )
     ).user
     const userProps = {

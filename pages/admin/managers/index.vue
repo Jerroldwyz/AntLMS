@@ -16,9 +16,9 @@ definePageMeta({
     type="text"
     variant="outlined"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <v-tooltip location="bottom">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-icon
             v-bind="props"
             icon="mdi-help-circle-outline"
@@ -40,7 +40,10 @@ definePageMeta({
         </tr>
       </thead>
       <tbody>
-        <tr v-for="n in 9">
+        <tr
+          v-for="n in 9"
+          :key="n"
+        >
           <td>USER NAME</td>
           <td>EMAIL</td>
           <td>ROLE</td>
@@ -107,8 +110,8 @@ definePageMeta({
             >
               Disable
               <v-dialog
-                activator="parent"
                 v-model="disableDialog[n]"
+                activator="parent"
                 width="auto"
               >
                 <v-card>
@@ -141,8 +144,8 @@ definePageMeta({
             >
               Delete
               <v-dialog
-                activator="parent"
                 v-model="deleteDialog[n]"
+                activator="parent"
                 width="auto"
               >
                 <v-card>

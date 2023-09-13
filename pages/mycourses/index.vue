@@ -41,8 +41,8 @@ async function handleSubmit(status: boolean) {
     <CreateCourseBtn @click="createCourseDialog = true" />
     <Course
       v-for="course in courses"
-      :key="course.id"
       :id="course.id"
+      :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
     />

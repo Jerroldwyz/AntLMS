@@ -1,9 +1,9 @@
-import { User } from "~~/types"
 import { prisma } from "."
+import { User } from "~~/types"
 
 // TODO create account
 export const createAccount = async (user: User) => {
-  var newUser = null
+  let newUser = null
   try {
     newUser = await prisma.users.create({
       data: {
@@ -42,7 +42,7 @@ export const updateAccount = (account_id: string, contact_details = {}) => {
       uid: account_id,
     },
     data: {
-      contact_details: contact_details,
+      contact_details,
     },
   })
 }

@@ -31,14 +31,14 @@ export default function useCourses() {
   async function createCourse(course: Course): Promise<any> {
     const user = useUser()
 
-    if (user.value?.uid != undefined) {
+    if (user.value?.uid !== undefined) {
       course.creatorId = user.value.uid
     }
 
     await $fetch("/api/mycourses", {
       method: "post",
       body: {
-        course: course,
+        course,
       },
     })
   }

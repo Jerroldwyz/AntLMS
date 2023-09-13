@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       result,
       parseInt(body.enrollmentId),
       body.userId as string,
-      parseInt(body.quizId)
+      parseInt(body.quizId),
     )
   }
 

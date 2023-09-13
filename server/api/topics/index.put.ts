@@ -3,6 +3,6 @@ export default defineEventHandler(async (event) => {
 
   return await updateTopicTitle(
     parseInt(body.topicId as string),
-    body.title as string
+    body.title as string,
   )
 })

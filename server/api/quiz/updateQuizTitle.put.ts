@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 
   const quiz = await updateQuizTitle(
     parseInt(body.quizId as string),
-    body.title as string
+    body.title as string,
   )
 
   return quizTransformer(quiz)

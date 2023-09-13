@@ -66,9 +66,9 @@ async function submitCourse() {
         </v-col>
         <v-col class="d-flex justify-end">
           <v-btn
-            @click="emit('close')"
             icon="mdi-close"
             flat
+            @click="emit('close')"
           ></v-btn>
         </v-col>
       </v-row>

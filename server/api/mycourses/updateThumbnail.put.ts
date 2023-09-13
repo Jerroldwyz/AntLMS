@@ -3,6 +3,6 @@ export default defineEventHandler(async (event) => {
 
   return await updateCourseThumbnail(
     parseInt(body.courseId as string),
-    body.thumbnail as string
+    body.thumbnail as string,
   )
 })

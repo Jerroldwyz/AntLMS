@@ -57,9 +57,10 @@ definePageMeta({
 })
 
 const { $firebaseAuth } = useNuxtApp()
-const { signInUser } = useFirebase($firebaseAuth)
-const user = useUser()
-const token = useCookie("token")
+// TODO: Vars are unused
+// const { signInUser } = useFirebase($firebaseAuth)
+// const user = useUser()
+// const token = useCookie("token")
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)

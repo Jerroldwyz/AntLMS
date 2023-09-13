@@ -3,6 +3,6 @@ export default defineEventHandler(async (event) => {
 
   return await getQuizResult(
     query.userId as string,
-    parseInt(query.quizId as string)
+    parseInt(query.quizId as string),
   )
 })
