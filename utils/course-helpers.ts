@@ -43,3 +43,10 @@ export async function createCourse(course: Course): Promise<any> {
     },
   })
 }
+
+export async function deleteCourse(id: number): Promise<any> {
+  // TODO: Is validation needed here? Or in the backend?
+  await $fetch(`/api/courses/${id}/delete`, {
+    method: "DELETE",
+  })
+}

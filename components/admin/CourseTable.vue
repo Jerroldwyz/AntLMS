@@ -16,6 +16,8 @@ const props = defineProps(["courses"])
       <AdminCourseTableItem
         v-for="course in courses"
         :key="course.id"
+        :course="course"
+        @update-courses="updateCourses"
       ></AdminCourseTableItem>
     </tbody>
   </v-table>
