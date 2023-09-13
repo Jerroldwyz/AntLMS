@@ -15,17 +15,6 @@ definePageMeta({
     type="text"
     variant="outlined"
   >
-    <template #prepend>
-      <v-tooltip location="bottom">
-        <template #activator="{ props }">
-          <v-icon
-            v-bind="props"
-            icon="mdi-help-circle-outline"
-          ></v-icon>
-        </template>
-        Filter users
-      </v-tooltip>
-    </template>
   </v-text-field>
 
   <div>
