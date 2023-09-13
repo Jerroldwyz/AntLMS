@@ -1,7 +1,7 @@
 import { prisma } from "."
 import { Course } from "~~/types"
 
-export const getMyCourseById = (course_id: number) => {
+export const getCreatorCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
     where: {
       id: course_id,
@@ -48,7 +48,7 @@ export const getMyCourseById = (course_id: number) => {
   })
 }
 
-export const getCourses = (creator_id: string) => {
+export const getCreatorCourses = (creator_id: string) => {
   return prisma.courses.findMany({
     where: {
       creator_id,
