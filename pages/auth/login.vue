@@ -29,7 +29,7 @@
               <a
                 href="javascript:void(0)"
                 class="text-primary text-decoration-none"
-                >Forgot pwd?</a
+                >Forgot password?</a
               >
             </div>
           </div>

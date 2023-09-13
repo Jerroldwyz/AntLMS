@@ -2,9 +2,11 @@
 
 <template>
   <v-card
-    class="d-flex justify-center align-center fill-height"
+    class="d-flex justify-center align-center"
     elevation="2"
     rounded="lg"
+    width="175"
+    height="175"
   >
     <v-icon
       icon="mdi-plus"
