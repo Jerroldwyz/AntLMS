@@ -1,4 +1,9 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  return await deleteTopic(parseInt(body.topicId as string))
+
+  try {
+    return await deleteTopic(parseInt(body.topicId as string))
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })
