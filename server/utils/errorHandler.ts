@@ -1,4 +1,7 @@
 export const primsaErrorHandler = (err: any) => {
+  if (!err.code) {
+    return customError("Unknown error occurred", 500)
+  }
   switch (err.code) {
     case "P2001":
       return customError(
