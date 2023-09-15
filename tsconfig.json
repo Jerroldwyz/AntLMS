@@ -1,4 +1,10 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "target": "es2022"
+    }
+  },
 }
