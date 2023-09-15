@@ -13,9 +13,10 @@ import {
   enrollments,
   progress,
 } from ".prisma/client"
+import _ from "lodash"
 import { createTempDir, cleanupTempDir } from "./fileHelpers"
 import { createUser } from "./createUser"
-import { createCourse } from "./createCourse"
+import { createCoursePromise } from "./createCourse"
 import { createTag } from "./createTag"
 import { createCoursetag } from "./createCoursetag"
 import { createTopic } from "./createTopic"
@@ -26,37 +27,42 @@ import { createChoice } from "./createChoice"
 import { createEnrollment } from "./createEnrollment"
 import { createProgress } from "./createProgress"
 import { createQuizscore } from "./createQuizscore"
+import quiz from "~/server/middleware/quiz"
 
 export const generateData = async (prisma: PrismaClient, amount: number) => {
   createTempDir()
 
-  const users: users[] = []
+  let users: users[] = []
   const coursePromises: Promise<courses>[] = []
   let courses: courses[] = []
-  const tags: tags[] = []
-  const courses_tags: courses_tags[] = []
+  let tags: tags[] = []
+  let courses_tags: courses_tags[] = []
   const topics: topics[] = []
+  let enrollments: enrollments[] = []
   const content: content[] = []
   const quizzes: quizzes[] = []
   const questions: questions[] = []
-  const choices: choices[] = []
-  const enrollments: enrollments[] = []
   const progress: progress[] = []
-  const quiz_score: quiz_score[] = []
+  let quiz_score: quiz_score[] = []
+  const choices: choices[] = []
 
   for (let i = 0; i < amount; i++) {
     users.push(createUser())
+    users = _.uniqBy(users, "email")
   }
   for (let i = 0; i < amount; i++) {
-    coursePromises.push(createCourse(users))
+    coursePromises.push(createCoursePromise(users))
     tags.push(createTag())
+    tags = _.uniqBy(tags, "name")
   }
   courses = await Promise.all(coursePromises)
 
   for (let i = 0; i < amount; i++) {
     courses_tags.push(createCoursetag(courses, tags))
+    courses_tags = _.uniqBy(courses_tags, (x) => `${x.course_id}${x.tag_id}`)
     topics.push(createTopic(courses))
     enrollments.push(createEnrollment(users, courses))
+    enrollments = _.uniqBy(enrollments, (x) => `${x.course_id}${x.user_id}`)
   }
   for (let i = 0; i < amount; i++) {
     content.push(createContent(topics))
@@ -66,6 +72,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
     progress.push(createProgress(users, enrollments, content))
     questions.push(createQuestion(quizzes))
     quiz_score.push(createQuizscore(enrollments, quizzes, users))
+    quiz_score = _.uniqBy(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
   }
   for (let i = 0; i < amount; i++) {
     choices.push(createChoice(questions))
@@ -78,53 +85,39 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
         contact_details: JSON.stringify(user.contact_details),
       }
     }),
-    skipDuplicates: true,
   })
-
   await prisma.courses.createMany({
     data: courses,
-    skipDuplicates: true,
   })
-
   await prisma.tags.createMany({
     data: tags,
-    skipDuplicates: true,
   })
   await prisma.courses_tags.createMany({
     data: courses_tags,
-    skipDuplicates: true,
   })
   await prisma.topics.createMany({
     data: topics,
-    skipDuplicates: true,
-  })
-  await prisma.content.createMany({
-    data: content,
-    skipDuplicates: true,
-  })
-  await prisma.quizzes.createMany({
-    data: quizzes,
-    skipDuplicates: true,
-  })
-  await prisma.questions.createMany({
-    data: questions,
-    skipDuplicates: true,
-  })
-  await prisma.choices.createMany({
-    data: choices,
-    skipDuplicates: true,
   })
   await prisma.enrollments.createMany({
     data: enrollments,
-    skipDuplicates: true,
+  })
+  await prisma.content.createMany({
+    data: content,
+  })
+  await prisma.quizzes.createMany({
+    data: quizzes,
   })
   await prisma.progress.createMany({
     data: progress,
-    skipDuplicates: true,
+  })
+  await prisma.questions.createMany({
+    data: questions,
   })
   await prisma.quiz_score.createMany({
     data: quiz_score,
-    skipDuplicates: true,
+  })
+  await prisma.choices.createMany({
+    data: choices,
   })
 
   cleanupTempDir()
