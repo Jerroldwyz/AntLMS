@@ -7,7 +7,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   createTempDir()
 
   const users: users[] = []
-  const coursePromises: Promise<Omit<courses, "id">>[] = []
+  const coursePromises: Promise<courses>[] = []
 
   for (let i = 0; i < amount; i++) {
     users.push(createUser())
@@ -16,7 +16,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
     coursePromises.push(createCourse(users))
   }
 
-  const courses: Omit<courses, "id">[] = await Promise.all(coursePromises)
+  const courses: courses[] = await Promise.all(coursePromises)
 
   await prisma.users.createMany({
     data: users.map((user) => {
