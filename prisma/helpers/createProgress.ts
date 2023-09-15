@@ -7,7 +7,7 @@ export const createProgress = (
   contents: content[],
 ): progress => {
   return {
-    id: faker.number.int(),
+    id: faker.number.int(2147483647),
     user_id: users[Math.floor(Math.random() * users.length)].uid,
     content_id: contents[Math.floor(Math.random() * contents.length)].id,
     enrollment_id:

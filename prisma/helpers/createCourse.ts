@@ -4,7 +4,7 @@ import { createCourseImage } from "./imageHelpers"
 
 export const createCourse = async (users: users[]): Promise<courses> => {
   return {
-    id: faker.number.int(),
+    id: faker.number.int(2147483647),
     title: faker.company.buzzPhrase(),
     enabled: faker.datatype.boolean(),
     thumbnail: await createCourseImage(),

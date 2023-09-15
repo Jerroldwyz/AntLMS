@@ -6,7 +6,7 @@ export const createEnrollment = (
   courses: courses[],
 ): enrollments => {
   return {
-    id: faker.number.int(),
+    id: faker.number.int(2147483647),
     user_id: users[Math.floor(Math.random() * users.length)].uid,
     course_id: courses[Math.floor(Math.random() * courses.length)].id,
   }
