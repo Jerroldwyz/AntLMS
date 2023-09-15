@@ -8,12 +8,12 @@ const course = prop.course
 const disableCourseNow = async () => {
   await disableCourse(course.id)
   disableDialog.value = false
-  emit("update-courses")
+  emits("update-courses")
 }
 const deleteCourseNow = async () => {
   await deleteCourse(course.id)
   deleteDialog.value = false
-  emit("update-courses")
+  emits("update-courses")
 }
 </script>
 

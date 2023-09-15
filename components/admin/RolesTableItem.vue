@@ -1,9 +1,17 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps(["role"])
 const role = props.role
 
 const deleteDialog = ref(false)
 const roleDialog = ref(false)
+
+const saveNewPermissions = () => {
+  roleDialog.value = false
+}
+
+const deleteRoleNow = () => {
+  deleteDialog.value = false
+}
 </script>
 
 <template>

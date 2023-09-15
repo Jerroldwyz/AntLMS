@@ -3,15 +3,6 @@ const { roles } = defineProps(["roles"])
 </script>
 
 <template>
-  <h1 class="mb-4">Admin Panel - Manage admin roles</h1>
-  <v-text-field
-    clearable
-    label="Search"
-    type="text"
-    variant="outlined"
-  >
-  </v-text-field>
-
   <div>
     <v-table fixed-header>
       <thead>
@@ -25,7 +16,7 @@ const { roles } = defineProps(["roles"])
         <AdminRolesTableItem
           v-for="role in roles"
           :key="role.id"
-          roles="role"
+          :role="role"
         >
         </AdminRolesTableItem>
       </tbody>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const props = defineProps(["courses"])
+const courses = props.courses
+const updateCourses = () => {}
 </script>
 
 <template>
