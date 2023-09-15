@@ -13,7 +13,7 @@ import {
   enrollments,
   progress,
 } from ".prisma/client"
-import _ from "lodash"
+import * as _ from "radash"
 import { createTempDir, cleanupTempDir } from "./fileHelpers"
 import { createUser } from "./createUser"
 import { createCoursePromise } from "./createCourse"
@@ -27,7 +27,6 @@ import { createChoice } from "./createChoice"
 import { createEnrollment } from "./createEnrollment"
 import { createProgress } from "./createProgress"
 import { createQuizscore } from "./createQuizscore"
-import quiz from "~/server/middleware/quiz"
 
 export const generateData = async (prisma: PrismaClient, amount: number) => {
   createTempDir()
@@ -48,21 +47,21 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
 
   for (let i = 0; i < amount; i++) {
     users.push(createUser())
-    users = _.uniqBy(users, "email")
+    users = _.unique(users, (x) => x.email)
   }
   for (let i = 0; i < amount; i++) {
     coursePromises.push(createCoursePromise(users))
     tags.push(createTag())
-    tags = _.uniqBy(tags, "name")
+    tags = _.unique(tags, (x) => x.name)
   }
   courses = await Promise.all(coursePromises)
 
   for (let i = 0; i < amount; i++) {
     courses_tags.push(createCoursetag(courses, tags))
-    courses_tags = _.uniqBy(courses_tags, (x) => `${x.course_id}${x.tag_id}`)
+    courses_tags = _.unique(courses_tags, (x) => `${x.course_id}${x.tag_id}`)
     topics.push(createTopic(courses))
     enrollments.push(createEnrollment(users, courses))
-    enrollments = _.uniqBy(enrollments, (x) => `${x.course_id}${x.user_id}`)
+    enrollments = _.unique(enrollments, (x) => `${x.course_id}${x.user_id}`)
   }
   for (let i = 0; i < amount; i++) {
     content.push(createContent(topics))
@@ -72,7 +71,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
     progress.push(createProgress(users, enrollments, content))
     questions.push(createQuestion(quizzes))
     quiz_score.push(createQuizscore(enrollments, quizzes, users))
-    quiz_score = _.uniqBy(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
+    quiz_score = _.unique(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
   }
   for (let i = 0; i < amount; i++) {
     choices.push(createChoice(questions))
