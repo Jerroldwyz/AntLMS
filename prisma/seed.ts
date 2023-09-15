@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
-import { generateData } from "./helpers"
+import { generateData } from "./helpers/index"
 
 const prisma = new PrismaClient()
 
