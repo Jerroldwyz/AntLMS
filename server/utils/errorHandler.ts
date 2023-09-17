@@ -1,4 +1,4 @@
-export const primsaErrorHandler = (err: any) => {
+export const prismaErrorHandler = (err: any) => {
   if (!err.code) {
     return customError("Unknown error occurred", 500)
   }
