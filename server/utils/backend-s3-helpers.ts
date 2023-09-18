@@ -24,25 +24,28 @@ const minioClient = new Minio.Client(config)
 
 // Upload a file to the Minio bucket
 export const uploadFile = async (
-  bucketName: string,
   objectName: string,
   fileStream: Readable,
   contentType: Minio.ItemBucketMetadata,
+  bucketName: string = "antlms",
 ) => {
   await minioClient.putObject(bucketName, objectName, fileStream, contentType)
 }
 
 // Download a file from the Minio bucket
 export const downloadFile = async (
-  bucketName: string,
   objectName: string,
   filePath: string,
+  bucketName: string = "antlms",
 ) => {
   await minioClient.fGetObject(bucketName, objectName, filePath)
 }
 
 // Delete a file from the Minio bucket
-export const deleteFile = async (bucketName: string, objectName: string) => {
+export const deleteFile = async (
+  objectName: string,
+  bucketName: string = "antlms",
+) => {
   await minioClient.removeObject(bucketName, objectName)
 }
 
@@ -57,9 +60,9 @@ export const generatePresignedUrl = (
 
 // Generate a presigned URL for accessing an object
 export const generatePresignedUrlPUT = (
-  bucketName: string,
   objectName: string,
-  expiresIn: number,
+  bucketName: string = "antlms",
+  expiresIn: number = 3600,
 ) => {
   return minioClient.presignedPutObject(bucketName, objectName, expiresIn)
 }

@@ -1,5 +1,8 @@
 export default defineEventHandler(async (event) => {
-  // TODO: This line is never used
-  // const query = await getQuery(event)
-  return await getAllCourses()
+  const query = getQuery(event)
+
+  // all, enabled, disabled
+  const status = query.status ?? "all"
+
+  return await getAllCourses(status)
 })

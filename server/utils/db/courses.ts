@@ -66,18 +66,39 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = () => {
-  return prisma.courses.findMany({
-    select: {
-      id: true,
-      title: true,
-      enabled: true,
-      thumbnail: true,
-      creator: {
-        select: {
-          name: true,
-        },
+type Status = "all" | "enabled" | "disabled"
+
+export const getAllCourses = (status: Status = "all") => {
+  const select = {
+    id: true,
+    title: true,
+    enabled: true,
+    thumbnail: true,
+    creator: {
+      select: {
+        name: true,
       },
     },
+  }
+  let where
+
+  switch (status) {
+    case "all":
+      where = {}
+      break
+    case "enabled":
+      where = { enabled: { equals: true } }
+      break
+    case "disabled":
+      where = { enabled: { equals: false } }
+      break
+
+    default:
+      break
+  }
+
+  return prisma.courses.findMany({
+    where,
+    select,
   })
 }
