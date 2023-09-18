@@ -4,7 +4,7 @@ type fileType = "image" | "video"
 
 export const uploadFileToS3 = async (
   file: File,
-  type: fileType
+  type: fileType,
 ): Promise<string> => {
   if (!file) {
     // No file selected, handle this case as needed
@@ -32,13 +32,11 @@ export const uploadFileToS3 = async (
 }
 
 export const getFileUrlFromS3 = async (path: string): Promise<string> => {
-  const { presignedUrl } = await $fetch("/api/s3/getViewUrl", {
-    method: "POST",
-    body: {
-      path,
-    },
+  const { data } = await useFetch("/api/s3/getViewUrl", {
+    method: "GET",
+    params: { path },
   })
-  return presignedUrl
+  return data.value?.presignedUrl
 }
 
 export const deleteFileFromS3 = async (path: string): Promise<boolean> => {

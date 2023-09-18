@@ -28,8 +28,6 @@ const tagRules = [
   },
 ]
 
-const { createCourse } = useCourse()
-
 const loading = ref(false)
 const valid = ref(false)
 

@@ -48,9 +48,9 @@ export const deleteFile = async (bucketName: string, objectName: string) => {
 
 // Generate a presigned URL for accessing an object
 export const generatePresignedUrl = (
-  bucketName: string,
   objectName: string,
-  expiresIn: number,
+  bucketName: string = "antlms",
+  expiresIn: number = 3600,
 ) => {
   return minioClient.presignedGetObject(bucketName, objectName, expiresIn)
 }

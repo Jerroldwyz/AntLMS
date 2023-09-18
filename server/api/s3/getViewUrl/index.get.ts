@@ -1,6 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const { path } = await readBody(event)
+  const query = await getQuery(event)
+  const path = query.path
   // TODO, fix hardcoded bucket name
-  const presignedUrl = await generatePresignedUrl("antlms", path, 3600)
+  const presignedUrl = await generatePresignedUrl(path)
   return { success: true, presignedUrl }
 })

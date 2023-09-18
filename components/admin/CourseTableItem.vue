@@ -5,6 +5,8 @@ const disableDialog = ref(false)
 const deleteDialog = ref(false)
 const course = prop.course
 
+const presignedUrl = await getFileUrlFromS3(course.thumbnail)
+
 const disableCourseNow = async () => {
   await disableCourse(course.id)
   disableDialog.value = false
@@ -25,7 +27,7 @@ const deleteCourseNow = async () => {
         size="64"
         rounded="lg"
       >
-        <v-img :src="course.thumbnail"></v-img>
+        <v-img :src="presignedUrl"></v-img>
       </v-avatar>
     </td>
     <td>{{ course.title }}</td>

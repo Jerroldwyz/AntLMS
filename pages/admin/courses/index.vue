@@ -3,7 +3,7 @@ definePageMeta({
   layout: "admin",
 })
 
-const courses = await fetchAllUserCourses()
+const courses = await fetchAllCourses()
 </script>
 
 <template>

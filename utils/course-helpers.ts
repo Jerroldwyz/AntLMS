@@ -1,12 +1,20 @@
 import { Course } from "~~/types"
 
+export async function fetchAllCourses(): Promise<any> {
+  // TODO: add type
+  const { data } = await useFetch("/api/courses", {
+    method: "get",
+  })
+
+  return data
+}
+
 // TODO: change any to proper type
 export async function fetchAllUserCourses(): Promise<any> {
   const user = useUser()
 
   // TODO: add type
-  const allCourses = ref<any>([])
-  allCourses.value = await $fetch("/api/mycourses/all", {
+  const allCourses = await $fetch("/api/mycourses/all", {
     method: "get",
     query: { userId: user.value?.uid },
   })
@@ -19,9 +27,7 @@ export async function fetchUserCourse(
   courseId: string | string[],
 ): Promise<any> {
   // TODO: add type
-  const course = ref<any>({})
-
-  course.value = await $fetch("/api/mycourses", {
+  const course = await $fetch("/api/mycourses", {
     method: "get",
     query: { courseId },
   })
