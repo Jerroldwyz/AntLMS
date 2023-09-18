@@ -6,8 +6,8 @@ type Result = {
 }
 
 export const resultTransformer = (result: Result[]) => {
-  var correctAnswer = 0,
-    totalQuestion = 0
+  let correctAnswer = 0
+  let totalQuestion = 0
   return {
     result: result.map((r) => {
       totalQuestion++
@@ -20,7 +20,7 @@ export const resultTransformer = (result: Result[]) => {
         isCorrect: r.is_correct,
       }
     }),
-    correctAnswer: correctAnswer,
-    totalQuestion: totalQuestion,
+    correctAnswer,
+    totalQuestion,
   }
 }

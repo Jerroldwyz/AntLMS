@@ -14,7 +14,7 @@ export const getTopicById = (topic_id: number) => {
 export const getTopics = (course_id: number) => {
   return prisma.topics.findMany({
     where: {
-      course_id: course_id,
+      course_id,
     },
     select: {
       id: true,

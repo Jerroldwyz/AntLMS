@@ -1,7 +1,7 @@
 import { prisma } from "."
 import { Course } from "~~/types"
 
-export const getCourseById = (course_id: number) => {
+export const getCreatorCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
     where: {
       id: course_id,
@@ -48,10 +48,10 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getCourses = (creator_id: string) => {
+export const getCreatorCourses = (creator_id: string) => {
   return prisma.courses.findMany({
     where: {
-      creator_id: creator_id,
+      creator_id,
     },
     select: {
       id: true,
@@ -63,7 +63,7 @@ export const getCourses = (creator_id: string) => {
   })
 }
 
-export const createCourse = async (course_data: Course) => {
+export const createCourse = (course_data: Course) => {
   return prisma.courses.create({
     data: {
       title: course_data.title,
@@ -103,7 +103,7 @@ export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
       id: course_id,
     },
     data: {
-      thumbnail: thumbnail,
+      thumbnail,
     },
   })
 }
@@ -114,7 +114,7 @@ export const changeEnabled = (course_id: number, enabled: boolean) => {
       id: course_id,
     },
     data: {
-      enabled: enabled,
+      enabled,
     },
   })
 }

@@ -4,11 +4,13 @@ const drag = ref(false)
 const changed = ref(false)
 
 // TODO: change any to real type
-const { course } = defineProps<{
+const props = defineProps<{
   course: any
 }>()
 
-//TODO: add proper type
+const course = ref(props.course)
+
+// TODO: add proper type
 function getIcon(content: any): string {
   switch (content.type) {
     case "TEXT":

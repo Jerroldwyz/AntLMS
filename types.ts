@@ -1,5 +1,14 @@
 import { JsonObject } from "@prisma/client/runtime/library"
 
+export type UserData = {
+  id: number
+  name: string
+  email: string
+  gender: string
+  // Add profilePicture field
+  profilePicture: File | null
+}
+
 export type User = {
   uid: string
   name: string

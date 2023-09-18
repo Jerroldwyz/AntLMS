@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
       console.error(error)
       res.statusCode = 400
       res.end(
-        "You must be signed in to view the protected content on this page"
+        "You must be signed in to view the protected content on this page",
       )
     }
   }

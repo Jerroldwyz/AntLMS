@@ -17,7 +17,7 @@ export const getContentById = (content_id: number) => {
 export const getContents = (topic_id: number) => {
   return prisma.content.findMany({
     where: {
-      topic_id: topic_id,
+      topic_id,
     },
     select: {
       id: true,
@@ -48,7 +48,7 @@ export const updateContent = (content_id: number, content_data: any) => {
 
 export const updateContentPosition = (
   content_id: number,
-  content_position: number
+  content_position: number,
 ) => {
   return prisma.content.update({
     where: {

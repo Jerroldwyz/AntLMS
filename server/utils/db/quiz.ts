@@ -51,7 +51,7 @@ export const getMyCourseQuizById = (quiz_id: number) => {
   })
 }
 
-export const createQuiz = async (quiz_data: any) => {
+export const createQuiz = (quiz_data: any) => {
   return prisma.quizzes.create({
     data: quiz_data,
   })
@@ -99,13 +99,13 @@ export const storeQuizResult = (
   result: any,
   enrollment_id: number,
   user_id: string,
-  quiz_id: number
+  quiz_id: number,
 ) => {
   return prisma.quiz_score.create({
     data: {
-      enrollment_id: enrollment_id,
-      user_id: user_id,
-      quiz_id: quiz_id,
+      enrollment_id,
+      user_id,
+      quiz_id,
       score: result.correctAnswer,
       total_marks: result.totalQuestion,
     },
@@ -127,8 +127,8 @@ export const storeExistingQuizResult = (result: any, quiz_score_id: number) => {
 export const getQuizResult = (user_id: string, quiz_id: number) => {
   return prisma.quiz_score.findMany({
     where: {
-      user_id: user_id,
-      quiz_id: quiz_id,
+      user_id,
+      quiz_id,
     },
     select: {
       id: true,

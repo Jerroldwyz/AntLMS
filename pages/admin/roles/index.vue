@@ -14,17 +14,6 @@ definePageMeta({
     type="text"
     variant="outlined"
   >
-    <template v-slot:prepend>
-      <v-tooltip location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-icon
-            v-bind="props"
-            icon="mdi-help-circle-outline"
-          ></v-icon>
-        </template>
-        Filter users
-      </v-tooltip>
-    </template>
   </v-text-field>
 
   <div>
@@ -37,7 +26,10 @@ definePageMeta({
         </tr>
       </thead>
       <tbody>
-        <tr v-for="n in 9">
+        <tr
+          v-for="n in 9"
+          :key="n"
+        >
           <td>Admin</td>
           <td>
             EditUser,DisableUser,DeleteUser,CreateSiteAdmin,EditSiteAdmin,DisableSiteAdmin,DeleteSiteAdmin,DisableCourse,DeleteCourse
@@ -151,8 +143,8 @@ definePageMeta({
             >
               Delete
               <v-dialog
-                activator="parent"
                 v-model="deleteDialog[n]"
+                activator="parent"
                 width="auto"
               >
                 <v-card>

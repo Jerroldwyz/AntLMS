@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  let userAccountSchema = yup.object().shape({
+  const userAccountSchema = yup.object().shape({
     uid: yup.string().strict(),
     name: yup.string().matches(stringRegex),
     email: yup.string().email(),

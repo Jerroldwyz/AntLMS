@@ -10,7 +10,7 @@ export const useUserStore = defineStore("user-store", {
     // get all users
     async getAll() {
       try {
-        let data = await $fetch<User[]>(route)
+        const data = await $fetch<User[]>(route)
         this.users = data
         return data as User[]
       } catch (error) {
