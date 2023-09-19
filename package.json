@@ -7,7 +7,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "migrate": "prisma generate && prisma migrate dev --name init",
+    "migrate": "prisma generate && prisma migrate dev",
+    "reset": "prisma generate && prisma migrate reset",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -28,10 +29,12 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/node": "^20.4.10",
     "@types/uuid": "^9.0.3",
     "@types/yup": "^0.32.0",
+    "axios": "^1.5.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-nuxt": "^4.0.0",
@@ -40,6 +43,8 @@
     "nuxt": "^3.7.1",
     "prettier": "^3.0.3",
     "prisma": "^5.1.1",
+    "radash": "^11.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   },
   "lint-staged": {
@@ -47,5 +52,8 @@
       "eslint --fix",
       "prettier --write"
     ]
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
