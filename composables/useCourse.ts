@@ -38,7 +38,7 @@ export default function useCourses() {
     await $fetch("/api/mycourses", {
       method: "post",
       body: {
-        course,
+        ...course,
       },
     })
   }

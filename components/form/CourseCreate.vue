@@ -33,6 +33,8 @@ const { createCourse } = useCourse()
 const loading = ref(false)
 const valid = ref(false)
 
+const file = ref<File[]>([])
+
 const course = ref<Course>({
   title: "",
   thumbnail: "",
@@ -40,10 +42,21 @@ const course = ref<Course>({
   creatorId: "",
 })
 
+const uploadFile = async () => {
+  if (!file) {
+    // No file selected, handle this case as needed
+    console.log("No file to upload")
+    throw new Error("No file to upload")
+  } else {
+    course.value.thumbnail = await uploadFileToS3(file.value[0], "image")
+  }
+}
+
 async function submitCourse() {
   if (valid.value === true) {
     loading.value = true
     try {
+      await uploadFile()
       await createCourse(course.value)
       loading.value = false
       emit("close")
@@ -88,11 +101,7 @@ async function submitCourse() {
           multiple
           chips
         ></v-select>
-        <v-file-input
-          v-model="course.thumbnail"
-          variant="outlined"
-          label="Thumbnail"
-        ></v-file-input>
+        <FormImageInput v-model="file" />
       </v-card-text>
 
       <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">

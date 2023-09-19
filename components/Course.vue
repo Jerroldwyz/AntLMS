@@ -4,6 +4,14 @@ const props = defineProps<{
   title: string
   thumbnail: string | null
 }>()
+
+const thumbnailUrl = ref<string | null>(null)
+
+onMounted(async () => {
+  if (props.thumbnail) {
+    thumbnailUrl.value = await getFileUrlFromS3(props.thumbnail)
+  }
+})
 </script>
 
 <template>
@@ -18,8 +26,8 @@ const props = defineProps<{
       cover
       height="125"
       :src="
-        props.thumbnail != null && props.thumbnail != ''
-          ? props.thumbnail
+        thumbnailUrl
+          ? thumbnailUrl
           : 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
       "
     >
