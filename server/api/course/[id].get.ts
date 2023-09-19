@@ -4,5 +4,9 @@ export default defineEventHandler(async (event) => {
 
   const course = await getCourseById(parseInt(id))
 
-  return courseTransformer(course, query.userId as string)
+  try {
+    return courseTransformer(course, query.userId as string)
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })
