@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       "process.env.DEBUG": false,
     },
   },
-  ssr: false,
+  ssr: true,
   runtimeConfig: {
     firebaseApiKey: process.env.FIREBASE_API_KEY,
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
