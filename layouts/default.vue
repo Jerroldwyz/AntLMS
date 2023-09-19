@@ -6,7 +6,7 @@
 
     <v-main class="bg-main">
       <v-container
-        class="fill-height"
+        class="h-screen fill-height"
         fluid
       >
         <v-card

@@ -1,10 +1,10 @@
 <template>
   <v-navigation-drawer
-    @mouseenter="hovered = true"
-    @mouseleave="hovered = false"
     expand-on-hover
     rail
     permanent
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false"
   >
     <v-divider></v-divider>
 
@@ -16,9 +16,7 @@
       <v-list-item
         class="listItemFont"
         prepend-icon="mdi-home"
-        title="Home"
         value="home"
-        href="/home"
       >
       </v-list-item>
 
@@ -26,11 +24,10 @@
         class="listItemFont"
         :value="hovered ? 'Browse' : null"
       >
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-list-item
             v-bind="props"
             prepend-icon="mdi-format-list-bulleted"
-            title="Browse"
           >
           </v-list-item>
         </template>
@@ -39,7 +36,6 @@
           v-for="(browseTitle, i) in browse"
           :key="i"
           :title="browseTitle"
-          :value="title"
           href="?"
         >
         </v-list-item>
@@ -49,7 +45,7 @@
         class="listItemFont"
         :value="hovered ? 'Courses' : null"
       >
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-list-item
             v-bind="props"
             prepend-icon="mdi-view-dashboard"
@@ -62,7 +58,6 @@
           v-for="(courseTitle, i) in dashboard"
           :key="i"
           :title="courseTitle"
-          :value="title"
           href="?"
         >
         </v-list-item>
@@ -75,7 +70,6 @@
       class="listItemFont"
       prepend-icon="mdi-cog"
       title="Settings"
-      value="Settings"
       href="?"
     >
     </v-list-item>
