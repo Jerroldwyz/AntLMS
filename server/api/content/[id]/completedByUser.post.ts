@@ -7,5 +7,9 @@ export default defineEventHandler(async (event) => {
     user_id: body.userId,
   }
 
-  return await completeContent(prismaData)
+  try {
+    return await completeContent(prismaData)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -7,7 +7,11 @@ export default defineEventHandler(async (event) => {
     topic_position: parseInt(body.topicPosition as string),
   }
 
-  const quiz = await createQuiz(prismaData)
+  try {
+    const quiz = await createQuiz(prismaData)
 
-  return quizTransformer(quiz)
+    return quizTransformer(quiz)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -3,5 +3,9 @@ export default defineEventHandler(async (event) => {
 
   const course = await getCreatorCourseById(parseInt(query.courseId as string))
 
-  return mycourseTransformer(course)
+  try {
+    return mycourseTransformer(course)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

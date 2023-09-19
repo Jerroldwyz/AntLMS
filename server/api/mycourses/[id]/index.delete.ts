@@ -1,4 +1,8 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  return await deleteCourse(parseInt(body.courseId as string))
+  try {
+    return await deleteCourse(parseInt(body.courseId as string))
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

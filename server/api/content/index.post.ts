@@ -10,5 +10,9 @@ export default defineEventHandler(async (event) => {
     topic_position: body.topicPosition as number,
   }
 
-  return await createContent(prismaData)
+  try {
+    return await createContent(prismaData)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

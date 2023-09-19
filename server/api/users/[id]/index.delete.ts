@@ -1,5 +1,9 @@
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, "id")
 
-  return await deleteUser(userId as string)
+  try {
+    return await deleteUser(userId as string)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

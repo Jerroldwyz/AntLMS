@@ -11,12 +11,12 @@ export async function fetchAllCourses(): Promise<any> {
 
 // TODO: change any to proper type
 export async function fetchAllUserCourses(): Promise<any> {
-  const user = useUser()
+  const authStore = useAuthStore()
 
   // TODO: add type
   const allCourses = await $fetch("/api/mycourses", {
     method: "get",
-    query: { userId: user.value?.uid },
+    query: { userId: authStore.user?.uid },
   })
 
   return allCourses
@@ -36,10 +36,10 @@ export async function fetchUserCourse(
 }
 
 export async function createCourse(course: Course): Promise<any> {
-  const user = useUser()
+  const authStore = useAuthStore()
 
-  if (user.value?.uid !== undefined) {
-    course.creatorId = user.value.uid
+  if (authStore.user?.uid !== undefined) {
+    course.creatorId = authStore.user.uid
   }
 
   await $fetch("/api/mycourses", {

@@ -1,10 +1,14 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const quiz = await updateQuizTitle(
-    parseInt(body.quizId as string),
-    body.title as string,
-  )
+  try {
+    const quiz = await updateQuizTitle(
+      parseInt(body.quizId as string),
+      body.title as string,
+    )
 
-  return quizTransformer(quiz)
+    return quizTransformer(quiz)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["user"],
+})
+
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)

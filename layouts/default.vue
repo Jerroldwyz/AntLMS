@@ -37,58 +37,7 @@
           </v-card-text>
         </v-responsive>
 
-        <v-menu
-          min-width="200px"
-          rounded
-        >
-          <template #activator="{ props }">
-            <v-btn
-              icon
-              v-bind="props"
-            >
-              <v-avatar
-                class="ms-4"
-                color="grey-darken-1"
-                size="large"
-              >
-                <span class="text-h6">AN</span>
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-text>
-              <div class="mx-auto text-center">
-                <v-avatar color="grey-darken-1">
-                  <span class="text-h5">AN</span>
-                </v-avatar>
-                <h3>ANONYMOUS TODO</h3>
-                <p class="text-caption mt-1">ANONYMOUS@TODO.COM</p>
-                <v-divider class="my-3"></v-divider>
-                <v-btn
-                  rounded
-                  variant="text"
-                >
-                  <NuxtLink
-                    to="/account"
-                    class="text-button text-decoration-none text-black"
-                    >Account Settings</NuxtLink
-                  >
-                </v-btn>
-                <v-divider class="my-3"></v-divider>
-                <v-btn
-                  rounded
-                  variant="text"
-                >
-                  <NuxtLink
-                    to="/logout"
-                    class="text-button text-decoration-none text-black"
-                    >Logout</NuxtLink
-                  >
-                </v-btn>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+        <UserProfileMenu />
       </v-container>
     </v-app-bar>
 
@@ -198,6 +147,7 @@
 </template>
 
 <script>
+const authStore = useAuthStore()
 export default {
   data: () => ({
     loaded: false,
@@ -207,6 +157,18 @@ export default {
     dashboard: ["Dashboard", "Math 101", "Business 101", "Baking 101"],
   }),
 
+  computed: {
+    isAuthenticated() {
+      return authStore.isAuthenticated
+    },
+    currentUser() {
+      return authStore.user
+    },
+    initials() {
+      return authStore.initials
+    },
+  },
+
   methods: {
     onClick() {
       this.loading = true
@@ -215,6 +177,10 @@ export default {
         this.loading = false
         this.loaded = true
       }, 2000)
+    },
+    async signOut() {
+      await authStore.logout()
+      navigateTo("/auth/login")
     },
   },
 }

@@ -1,6 +1,17 @@
 import { DecodedIdToken } from "firebase-admin/auth"
 import { User as FirebaseUser } from "firebase/auth"
 
-export const formatUser = <TypeUser>(user: FirebaseUser | DecodedIdToken) => {
-  return <TypeUser>{ uid: user.uid, email: user.email || "" }
+export const formatUser = async <TypeUser>(
+  user: FirebaseUser | DecodedIdToken,
+) => {
+  const { data } = await useFetch("/api/signin", {
+    query: { userId: user.uid },
+  })
+
+  return <TypeUser>{
+    uid: user.uid,
+    email: user.email,
+    name: data.value?.name,
+    contact_details: data.value?.contact_details,
+  }
 }

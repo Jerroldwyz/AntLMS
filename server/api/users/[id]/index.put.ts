@@ -3,5 +3,9 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const contactDetails = body.contactDetails
 
-  return await updateUser(userId as string, contactDetails)
+  try {
+    return await updateUser(userId as string, contactDetails)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

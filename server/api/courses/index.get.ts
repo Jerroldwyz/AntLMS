@@ -1,8 +1,10 @@
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-
-  // all, enabled, disabled
-  const status = query.status ?? "all"
-
-  return await getAllCourses(status)
+  try {
+    const query = getQuery(event)
+    // all, enabled, disabled
+    const status = query.status ?? "all"
+    return await getAllCourses(status)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

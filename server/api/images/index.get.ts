@@ -1,7 +1,10 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
-  // TODO fix hardcoded jpg
-  const path = query.path
-  const presignedUrl = await generatePresignedUrl(path)
-  return { success: true, presignedUrl }
+  try {
+    const path = query.path
+    const presignedUrl = await generatePresignedUrl(path)
+    return { success: true, presignedUrl }
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

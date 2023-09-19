@@ -1,5 +1,9 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
-  return await getCreatorCourses(query.userId as string)
+  try {
+    return await getCreatorCourses(query.userId as string)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })
