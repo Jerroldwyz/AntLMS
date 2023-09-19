@@ -2,5 +2,9 @@ export default defineEventHandler(async (event) => {
   const query = await getQuery(event)
   const { userId } = query
 
-  return await getAccountById(userId as string)
+  try {
+    return await getAccountById(userId as string)
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })

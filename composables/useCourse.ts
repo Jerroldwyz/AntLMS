@@ -3,13 +3,13 @@ import { Course } from "~~/types"
 export default function useCourses() {
   // TODO: change any to proper type
   async function fetchAllUserCourses(): Promise<any> {
-    const user = useUser()
+    const authStore = useAuthStore()
 
     // TODO: add type
     const allCourses = ref<any>([])
     allCourses.value = await $fetch("/api/mycourses/all", {
       method: "get",
-      query: { userId: user.value?.uid },
+      query: { userId: authStore.user?.uid },
     })
 
     return allCourses
@@ -29,10 +29,10 @@ export default function useCourses() {
   }
 
   async function createCourse(course: Course): Promise<any> {
-    const user = useUser()
+    const authStore = useAuthStore()
 
-    if (user.value?.uid !== undefined) {
-      course.creatorId = user.value.uid
+    if (authStore.user?.uid !== undefined) {
+      course.creatorId = authStore.user.uid
     }
 
     await $fetch("/api/mycourses", {

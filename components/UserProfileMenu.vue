@@ -1,0 +1,75 @@
+<template>
+  <v-menu
+    min-width="200px"
+    rounded
+  >
+    <template #activator="{ props }">
+      <v-btn
+        icon
+        v-bind="props"
+      >
+        <v-avatar
+          class="ms-4"
+          color="grey-darken-1"
+          size="large"
+        >
+          <span class="text-h6">AN</span>
+        </v-avatar>
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-text>
+        <div class="mx-auto text-center">
+          <v-avatar color="grey-darken-1">
+            <span class="text-h5">{{ initials }}</span>
+          </v-avatar>
+          <h3>{{ currentUser?.name }}</h3>
+          <p class="text-caption mt-1">{{ currentUser?.email }}</p>
+          <v-divider class="my-3"></v-divider>
+          <v-btn
+            rounded
+            variant="text"
+          >
+            <NuxtLink
+              to="/account"
+              class="text-button text-decoration-none text-black"
+              >Account Settings</NuxtLink
+            >
+          </v-btn>
+          <v-divider class="my-3"></v-divider>
+          <v-btn
+            rounded
+            variant="text"
+            @click="signOut"
+          >
+            <!-- <NuxtLink
+              to="/logout"
+              class="text-button text-decoration-none text-black"
+              >Logout</NuxtLink
+            > -->
+            Logout
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-menu>
+</template>
+
+<script setup lang="ts">
+const authStore = useAuthStore()
+const isAuthenticated = computed(() => {
+  return authStore.isAuthenticated
+})
+const currentUser = computed(() => {
+  return authStore.user
+})
+const initials = computed(() => {
+  return authStore.initials
+})
+
+const signOut = async () => {
+  await authStore.logout()
+  navigateTo("/auth/login")
+}
+</script>
+<style scoped></style>

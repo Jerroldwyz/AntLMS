@@ -18,7 +18,11 @@ export default defineEventHandler(async (event) => {
     },
   }
 
-  const question = await createQuestion(prismaData)
+  try {
+    const question = await createQuestion(prismaData)
 
-  return questionsTransformer(question)
+    return questionsTransformer(question)
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })

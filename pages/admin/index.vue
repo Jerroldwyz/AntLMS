@@ -1,11 +1,10 @@
 <template>
-  <div>G'day admin</div>
+  <div>Only admin can access this content</div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 })
 </script>
-
-<style scoped></style>

@@ -1,10 +1,14 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const question = await updateChoice(
-    parseInt(body.questionId as string),
-    body.choices,
-  )
+  try {
+    const question = await updateChoice(
+      parseInt(body.questionId as string),
+      body.choices,
+    )
 
-  return questionsTransformer(question)
+    return questionsTransformer(question)
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })

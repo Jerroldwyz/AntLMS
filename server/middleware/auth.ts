@@ -5,7 +5,11 @@ export default defineEventHandler(async (event) => {
   const { req, res } = event.node
   const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
 
-  if (req.url?.includes("/api/signin") || req.url?.includes("/api/session")) {
+  if (
+    req.url?.includes("/api/signin") ||
+    req.url?.includes("/api/session") ||
+    req.url?.includes("/api/signup")
+  ) {
     return
   }
 

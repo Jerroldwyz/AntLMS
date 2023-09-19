@@ -1,7 +1,11 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  return await updateContent(
-    parseInt(body.contentId as string),
-    body.content as string,
-  )
+  try {
+    return await updateContent(
+      parseInt(body.contentId as string),
+      body.content as string,
+    )
+  } catch (e) {
+    return sendError(event, primsaErrorHandler(e))
+  }
 })
