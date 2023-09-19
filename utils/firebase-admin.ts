@@ -1,15 +1,21 @@
-import { initializeApp, cert } from "firebase-admin/app"
+import { initializeApp, cert, getApps } from "firebase-admin/app"
 import { getAuth } from "firebase-admin/auth"
 
 const serviceCredentials = process.env.FIREBASE_ADMIN_CREDENTIALS || ""
 
-const app = initializeApp({
-  credential: cert(JSON.parse(serviceCredentials)),
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-})
+export const getFirebaseAdmin = () => {
+  if (getApps().length) {
+    return getApps()[0]
+  }
+
+  return initializeApp({
+    credential: cert(JSON.parse(serviceCredentials)),
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
+  })
+}
 
 // config admin privilage
-const auth = getAuth(app)
+const auth = getAuth(getFirebaseAdmin())
 
 const uid = "1RGmKw2HwGe0qcwNOSFpylWUBg22"
 
@@ -30,8 +36,6 @@ auth
         })
     }
   })
-  .catch((error) => {
+  .catch(() => {
     console.error("User does not exist:", uid)
   })
-
-export default app

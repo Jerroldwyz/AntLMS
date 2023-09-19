@@ -18,9 +18,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         authStore.user = await formatUser(user)
         user.getIdTokenResult().then((idTokenResult) => {
           if (idTokenResult.claims.admin) {
-            console.log("you are an admin")
+            authStore.isAdmin = true
             navigateTo("/admin")
           } else {
+            authStore.isAdmin = false
             navigateTo("/")
           }
         })

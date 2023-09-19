@@ -87,6 +87,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth"
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 const router = useRouter()
 const authStore = useAuthStore()

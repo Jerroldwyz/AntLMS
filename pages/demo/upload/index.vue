@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["user"],
+})
 let imagePath: string = ""
 let videoPath: string = ""
 

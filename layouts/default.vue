@@ -37,60 +37,7 @@
           </v-card-text>
         </v-responsive>
 
-        <v-menu
-          min-width="200px"
-          rounded
-        >
-          <template #activator="{ props }">
-            <v-btn
-              icon
-              v-bind="props"
-            >
-              <v-avatar
-                class="ms-4"
-                color="grey-darken-1"
-                size="large"
-              >
-                <span class="text-h6">AN</span>
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-text>
-              <div class="mx-auto text-center">
-                <v-avatar color="grey-darken-1">
-                  <span class="text-h5">{{ initials }}</span>
-                </v-avatar>
-                <h3>{{ currentUser?.name }}</h3>
-                <p class="text-caption mt-1">{{ currentUser?.email }}</p>
-                <v-divider class="my-3"></v-divider>
-                <v-btn
-                  rounded
-                  variant="text"
-                >
-                  <NuxtLink
-                    to="/account"
-                    class="text-button text-decoration-none text-black"
-                    >Account Settings</NuxtLink
-                  >
-                </v-btn>
-                <v-divider class="my-3"></v-divider>
-                <v-btn
-                  rounded
-                  variant="text"
-                  @click="signOut"
-                >
-                  <!-- <NuxtLink
-                    to="/logout"
-                    class="text-button text-decoration-none text-black"
-                    >Logout</NuxtLink
-                  > -->
-                  Logout
-                </v-btn>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+        <UserProfileMenu />
       </v-container>
     </v-app-bar>
 
@@ -113,7 +60,7 @@
           prepend-icon="mdi-home"
           title="Home"
           value="home"
-          href="/home"
+          to="/home"
         >
         </v-list-item>
 

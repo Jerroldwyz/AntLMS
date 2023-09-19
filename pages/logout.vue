@@ -8,6 +8,7 @@
 <script setup>
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 
 const authStore = useAuthStore()
