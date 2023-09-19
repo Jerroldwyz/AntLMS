@@ -111,7 +111,7 @@
           prepend-icon="mdi-home"
           title="Home"
           value="home"
-          href="/home"
+          to="/home"
         >
         </v-list-item>
 

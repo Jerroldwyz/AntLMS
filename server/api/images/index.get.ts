@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const uuid = getRouterParam(event, "uuid")
+  const query = getQuery(event)
   // TODO fix hardcoded jpg
-  const path = `images/${uuid}.jpg`
+  const path = query.path
   const presignedUrl = await generatePresignedUrl(path)
   return { success: true, presignedUrl }
 })

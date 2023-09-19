@@ -14,7 +14,7 @@ export async function fetchAllUserCourses(): Promise<any> {
   const user = useUser()
 
   // TODO: add type
-  const allCourses = await $fetch("/api/mycourses/all", {
+  const allCourses = await $fetch("/api/mycourses", {
     method: "get",
     query: { userId: user.value?.uid },
   })
@@ -52,7 +52,7 @@ export async function createCourse(course: Course): Promise<any> {
 
 export async function deleteCourse(id: number): Promise<any> {
   // TODO: Is validation needed here? Or in the backend?
-  await $fetch(`/api/courses/${id}/delete`, {
+  await $fetch(`/api/courses/${id}`, {
     method: "DELETE",
   })
 }
