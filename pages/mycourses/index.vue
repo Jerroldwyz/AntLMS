@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["user"],
+})
 const { fetchAllUserCourses } = useCourse()
 
 const createCourseDialog = ref(false)

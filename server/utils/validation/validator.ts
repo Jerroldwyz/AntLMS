@@ -17,7 +17,7 @@ export const validator = async (schema: any, event: H3Event) => {
       createError({
         statusCode: 422,
         statusMessage: JSON.stringify(error.errors),
-      })
+      }),
     )
   }
 }

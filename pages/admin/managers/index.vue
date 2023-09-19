@@ -6,6 +6,7 @@ const dialogm1 = ref("")
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 })
 </script>
 

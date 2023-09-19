@@ -52,6 +52,15 @@
 
 <script setup lang="ts">
 import { UserData } from "~/types"
+const authStore = useAuthStore()
+
+if (authStore.isAdmin) setPageLayout("admin")
+else setPageLayout("default")
+
+definePageMeta({
+  middleware: ["user"],
+  layout: false,
+})
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)

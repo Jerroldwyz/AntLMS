@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["user"],
+})
 const route = useRoute()
 const { fetchUserCourse } = useCourse()
 
