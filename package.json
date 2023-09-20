@@ -4,6 +4,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "lint": "eslint . --fix --ext .ts,.vue",
+    "compile": "vue-tsc --noEmit",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

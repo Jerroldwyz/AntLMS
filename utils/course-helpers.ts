@@ -27,9 +27,8 @@ export async function fetchUserCourse(
   courseId: string | string[],
 ): Promise<any> {
   // TODO: add type
-  const course = await $fetch("/api/mycourses", {
+  const course = await $fetch(`/api/mycourses/${courseId}`, {
     method: "get",
-    query: { courseId },
   })
 
   return course

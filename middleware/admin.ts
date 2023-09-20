@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   console.log("isAdmin: ", authStore.isAdmin)
 
-  // if (!authStore.isAdmin) {
-  //   return navigateTo("/auth/login")
-  // }
+  if (!authStore.isAdmin) {
+    return navigateTo("/auth/login")
+  }
 })
