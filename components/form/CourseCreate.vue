@@ -28,8 +28,6 @@ const tagRules = [
   },
 ]
 
-const { createCourse } = useCourse()
-
 const loading = ref(false)
 const valid = ref(false)
 
@@ -39,6 +37,10 @@ const course = ref<Course>({
   tags: [],
   creatorId: "",
 })
+
+// TODO v-model on <v-file-input is incorrect
+
+const files = ref<File[]>()
 
 async function submitCourse() {
   if (valid.value === true) {
@@ -67,7 +69,7 @@ async function submitCourse() {
         <v-col class="d-flex justify-end">
           <v-btn
             icon="mdi-close"
-            flat
+            variant="flat"
             @click="emit('close')"
           ></v-btn>
         </v-col>
@@ -89,7 +91,7 @@ async function submitCourse() {
           chips
         ></v-select>
         <v-file-input
-          v-model="course.thumbnail"
+          v-model="files"
           variant="outlined"
           label="Thumbnail"
         ></v-file-input>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { Course } from "~/types"
 import { tags } from "~~/constants"
 
 // TODO: change any to real type
-const { course } = defineProps<{
-  course: any
+const props = defineProps<{
+  course: Course
 }>()
+
+// TODO is this suppose to emit anything back to the parent??
+const course = props.course
 </script>
 
 <template>
@@ -21,7 +25,7 @@ const { course } = defineProps<{
           <v-btn
             class="mb-2"
             icon="mdi-dots-vertical"
-            flat
+            variant="flat"
           ></v-btn>
         </v-col>
       </v-row>
@@ -29,8 +33,8 @@ const { course } = defineProps<{
       <v-form>
         <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
+          v-model="course.tags"
           multiple
-          :value="course.tags"
           :items="tags"
           variant="outlined"
           chips

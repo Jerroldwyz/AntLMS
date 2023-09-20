@@ -4,6 +4,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await getEnrollment(query.userId as string)
   } catch (e) {
-    return sendError(event, primsaErrorHandler(e))
+    return sendError(event, prismaErrorHandler(e))
   }
 })

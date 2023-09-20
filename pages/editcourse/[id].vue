@@ -3,8 +3,6 @@ definePageMeta({
   middleware: ["user"],
 })
 const route = useRoute()
-const { fetchUserCourse } = useCourse()
-
 const course = await fetchUserCourse(route.params.id)
 </script>
 <template>

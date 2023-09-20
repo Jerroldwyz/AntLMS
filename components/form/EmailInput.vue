@@ -4,12 +4,12 @@
     label="E-mail"
     class="mt-4"
     required
-    @input="$emit('update:email', $event.target.value)"
+    @update:model-value="emit('update:email', $event)"
   ></v-text-field>
 </template>
 
 <script setup lang="ts">
-defineEmits(["update:email"])
+const emit = defineEmits(["update:email"])
 
 const emailRules = [
   (v: string) => !!v || "E-mail is required",
