@@ -1,9 +1,18 @@
 <script setup lang="ts">
-// const props = defineProps<{
-//   id: number
-//   title: string
-//   thumbnail: string | null
-// }>()
+const data = defineProps<{
+  id: number
+  title: string
+  thumbnail: string | null
+}>()
+
+const thumbnail = computed(() => {
+  if (data.thumbnail) {
+    console.log(getImage(data.thumbnail))
+    return getImage(data.thumbnail)
+  } else {
+    return "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+  }
+})
 </script>
 
 <template>
@@ -22,11 +31,7 @@
           <v-img
             cover
             height="170"
-            :src="
-              props.thumbnail != null && props.thumbnail != ''
-                ? props.thumbnail
-                : 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
-            "
+            :src="thumbnail"
           >
             <v-toolbar color="rgba(0,0,0,0)">
               <template #append>
@@ -48,7 +53,7 @@
 
           <v-container>
             <v-card-title class="text-h6 text-left font-weight-medium">{{
-              props.title
+              data.title
             }}</v-card-title>
           </v-container>
         </v-card>

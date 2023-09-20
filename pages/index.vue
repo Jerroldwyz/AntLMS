@@ -1,17 +1,28 @@
 <script setup lang="ts">
-// const courses = await fetchAllUserCourses()
-//
+const courses = await fetchAllCourses()
+// const { id } = courses.value
+console.log()
 </script>
 
 <template>
   <v-row>
-    <CourseTile />
+    <CourseTile
+      v-for="course in courses"
+      :id="course.id"
+      :key="course.id"
+      :title="course.title"
+      :thumbnail="course.thumbnail"
+    />
+
+    <!-- <CourseTile></CourseTile>
     <CourseTile></CourseTile>
     <CourseTile></CourseTile>
-    <CourseTile></CourseTile>
-    <CourseTile></CourseTile>
+    <CourseTile></CourseTile> -->
   </v-row>
 </template>
 
-// v-for="course in courses" // :id="course.id" // :key="course.id" //
-:title="course.title" // :thumbnail="course.thumbnail"
+<!-- v-for="course in courses" 
+:id="course.id" 
+:key="course.id" 
+:title="course.title" 
+:thumbnail="course.thumbnail" -->

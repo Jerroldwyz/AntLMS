@@ -1,8 +1,11 @@
 import { Course } from "~~/types"
 
-export async function fetchAllCourses(): Promise<any> {
+export async function fetchAllCourses() {
   // TODO: add type
-  const { data } = await useFetch("/api/courses", {
+  // const authStore = useAuthStore()
+  // const uid = authStore.user.uid;
+  const uid = "9d93ed2d-f55e-47ba-b4f5-75b563152a43	"
+  const { data } = await useFetch("/api/courses/", {
     method: "get",
   })
 
