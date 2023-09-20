@@ -1,5 +1,11 @@
 import { JsonObject } from "@prisma/client/runtime/library"
 
+export enum CourseQueryStatus {
+  all,
+  enabled,
+  disabled,
+}
+
 export type UserData = {
   id: number
   name: string

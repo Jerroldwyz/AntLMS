@@ -4,7 +4,7 @@
     label="E-mail"
     class="mt-4"
     required
-    @input="$emit('update:email', $event.target.value)"
+    @update:model-value="$emit('update:email', $event.target.value)"
   ></v-text-field>
 </template>
 

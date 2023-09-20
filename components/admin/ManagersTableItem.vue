@@ -34,10 +34,7 @@ const disableManagerNow = () => {}
             <v-card-title>Select Role</v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-radio-group
-                v-model="dialogm1"
-                column
-              >
+              <v-radio-group v-model="dialogm1">
                 <v-radio
                   label="Admin"
                   value="admin"

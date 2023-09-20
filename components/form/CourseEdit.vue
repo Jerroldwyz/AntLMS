@@ -21,7 +21,7 @@ const { course } = defineProps<{
           <v-btn
             class="mb-2"
             icon="mdi-dots-vertical"
-            flat
+            variant="flat"
           ></v-btn>
         </v-col>
       </v-row>
@@ -30,7 +30,7 @@ const { course } = defineProps<{
         <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
           multiple
-          :value="course.tags"
+          :model-value="course.tags"
           :items="tags"
           variant="outlined"
           chips

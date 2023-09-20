@@ -4,7 +4,7 @@
     label="Password"
     type="password"
     required
-    @input="$emit('update:password', $event.target.value)"
+    @update:model-value="$emit('update:password', $event.target.value)"
   ></v-text-field>
 </template>
 
