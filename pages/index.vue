@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// const { fetchAllUserCourses } = useCourse()
 // const courses = await fetchAllUserCourses()
 //
 </script>

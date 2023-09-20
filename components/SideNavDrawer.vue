@@ -17,6 +17,7 @@
         class="listItemFont"
         prepend-icon="mdi-home"
         title="Home"
+        to="/"
       >
       </v-list-item>
 
