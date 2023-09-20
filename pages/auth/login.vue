@@ -73,8 +73,12 @@ const password = ref("")
 const signIn = async () => {
   disabled.value = true
   try {
-    await authStore.login(email.value, password.value)
-    router.push("/")
+    const message = await authStore.login(email.value, password.value)
+
+    if (message.mesasge === "verified") {
+      router.push("/")
+    } else {
+    }
   } catch (error) {
     alert(error)
   }

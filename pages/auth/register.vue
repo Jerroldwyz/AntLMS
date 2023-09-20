@@ -6,9 +6,14 @@
     <v-card
       width="35%"
       elevation="10"
+      class="pa-7 pa-sm-10"
     >
-      <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4 text--darken-2">Sign up</h2>
+      <h2 class="font-weight-bold mt-4 text--darken-2">Sign up</h2>
+      <div v-if="isRegistered">
+        We have sent you a verification to your email, please check the email
+        <NuxtLink to="/auth/login"></NuxtLink>
+      </div>
+      <div v-else>
         <h6 class="text-subtitle-1 text-grey-darken-1">
           Already have an account?
           <NuxtLink
@@ -84,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { sendEmailVerification } from "firebase/auth"
 definePageMeta({
   layout: false,
   middleware: "guest",
@@ -100,6 +105,9 @@ const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
 const phoneNumber = ref()
+
+const emailVerified = ref(false)
+const isRegistered = ref(false)
 
 const nameRules = ref([(v: string) => !!v || "Name is required"])
 
@@ -130,8 +138,13 @@ const signUp = async () => {
         phone_number: phoneNumber.value,
       },
     }
-    await authStore.register(userProps)
-    router.push("/auth/login")
+    const firebaseUser = await authStore.register(userProps)
+
+    if (firebaseUser) isRegistered.value = true
+
+    await sendEmailVerification(firebaseUser).then(() => {
+      emailVerified.value = firebaseUser.emailVerified
+    })
   } catch (error) {
     alert(error)
   }

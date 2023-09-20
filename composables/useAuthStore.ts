@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth"
@@ -27,13 +28,14 @@ export const useAuthStore = defineStore("authStore", {
   actions: {
     async register({ ...userData }) {
       const { $firebaseAuth } = useNuxtApp()
-      const firebaseUser = await (
-        await createUserWithEmailAndPassword(
-          $firebaseAuth,
-          userData.email,
-          userData.password,
-        )
-      ).user
+      const userCredentials = await createUserWithEmailAndPassword(
+        $firebaseAuth,
+        userData.email,
+        userData.password,
+      )
+
+      const firebaseUser = userCredentials.user
+
       const userProps = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
@@ -48,14 +50,32 @@ export const useAuthStore = defineStore("authStore", {
       })
         .catch((error) => console.error(error))
         .then(() => console.log("You have register"))
+
+      return firebaseUser
     },
     async login(email: string, password: string) {
       const { $firebaseAuth } = useNuxtApp()
-      await signInWithEmailAndPassword($firebaseAuth, email, password).catch(
-        (error) => {
-          throw error
-        },
+      const message = await signInWithEmailAndPassword(
+        $firebaseAuth,
+        email,
+        password,
       )
+        .then((userCredentials) => {
+          if (userCredentials.user.emailVerified) {
+            return {
+              message: "verified",
+            }
+          } else {
+            return {
+              mesasge: "unverified",
+            }
+          }
+        })
+        .catch((error) => {
+          throw error
+        })
+
+      return message
     },
     async logout() {
       const { $firebaseAuth } = useNuxtApp()
