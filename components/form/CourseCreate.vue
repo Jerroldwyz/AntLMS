@@ -38,6 +38,10 @@ const course = ref<Course>({
   creatorId: "",
 })
 
+// TODO v-model on <v-file-input is incorrect
+
+const files = ref<File[]>()
+
 async function submitCourse() {
   if (valid.value === true) {
     loading.value = true
@@ -87,7 +91,7 @@ async function submitCourse() {
           chips
         ></v-select>
         <v-file-input
-          v-model="course.thumbnail"
+          v-model="files"
           variant="outlined"
           label="Thumbnail"
         ></v-file-input>
