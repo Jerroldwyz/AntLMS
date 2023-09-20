@@ -5,12 +5,28 @@ const data = defineProps<{
   thumbnail: string | null
 }>()
 
+const fetchedThumbnail = ref<string | null>(
+  "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+)
+
 const thumbnail = computed(() => {
   if (data.thumbnail) {
-    console.log(getImage(data.thumbnail))
-    return getImage(data.thumbnail)
-  } else {
-    return "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    getImage(data.thumbnail).then((url) => (fetchedThumbnail.value = url))
+  }
+
+  return fetchedThumbnail.value
+})
+
+onMounted(async () => {
+  if (data.thumbnail) {
+    try {
+      const url = await getImage(data.thumbnail)
+      fetchedThumbnail.value = url
+    } catch (error) {
+      console.error("Error fetching thumbnail:", error)
+      fetchedThumbnail.value =
+        "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    }
   }
 })
 </script>
