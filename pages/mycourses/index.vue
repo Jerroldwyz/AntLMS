@@ -2,7 +2,6 @@
 definePageMeta({
   middleware: ["user"],
 })
-const { fetchAllUserCourses } = useCourse()
 
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)

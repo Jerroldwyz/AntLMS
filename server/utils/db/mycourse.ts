@@ -108,7 +108,29 @@ export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
   })
 }
 
-export const changeEnabled = (course_id: number, enabled: boolean) => {
+export const disableCourse = (course_id: number) => {
+  return prisma.courses.update({
+    where: {
+      id: course_id,
+    },
+    data: {
+      enabled: false,
+    },
+  })
+}
+
+export const enableCourse = (course_id: number) => {
+  return prisma.courses.update({
+    where: {
+      id: course_id,
+    },
+    data: {
+      enabled: true,
+    },
+  })
+}
+
+export const setCourseEnabled = (course_id: number, enabled: boolean) => {
   return prisma.courses.update({
     where: {
       id: course_id,
