@@ -1,124 +1,119 @@
 <template>
-  <h1 class="mb-4">Admin Panel - Users</h1>
-  <v-text-field
-    clearable
-    label="Search"
-    type="text"
-    variant="outlined"
-  >
-    <template v-slot:prepend>
-      <v-tooltip location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-icon
-            v-bind="props"
-            icon="mdi-help-circle-outline"
-          ></v-icon>
-        </template>
-        Filter users
-      </v-tooltip>
-    </template>
-  </v-text-field>
-
   <div>
-    <v-table fixed-header>
-      <thead>
-        <tr>
-          <th class="text-left">Profile Picture</th>
-          <th class="text-left">User Name</th>
-          <th class="text-left">Email</th>
-          <th class="text-left">First Name</th>
-          <th class="text-left">Last Name</th>
-          <th class="text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="user in users"
-          :key="user.id"
-        >
-          <td>
-            <v-avatar
-              class="ma-2"
-              color="grey-darken-1"
-              size="large"
-            >
-              <span class="text-h6">{{ user.username[0] }}</span>
-            </v-avatar>
-          </td>
-          <td>
-            <span v-if="!editDialog[user.id]">{{ user.username }}</span>
-            <v-text-field
-              v-else
-              v-model="user.username"
-              label="Username"
-              outlined
-              dense
-              autofocus
-            ></v-text-field>
-          </td>
-          <td>
-            <span v-if="!editDialog[user.id]">{{ user.email }}</span>
-            <v-text-field
-              v-else
-              v-model="user.email"
-              label="Email"
-              outlined
-              dense
-              autofocus
-            ></v-text-field>
-          </td>
-          <td>
-            <span v-if="!editDialog[user.id]">{{ user.firstName }}</span>
-            <v-text-field
-              v-else
-              v-model="user.firstName"
-              label="First Name"
-              outlined
-              dense
-              autofocus
-            ></v-text-field>
-          </td>
-          <td>
-            <span v-if="!editDialog[user.id]">{{ user.lastName }}</span>
-            <v-text-field
-              v-else
-              v-model="user.lastName"
-              label="Last Name"
-              outlined
-              dense
-              autofocus
-            ></v-text-field>
-          </td>
+    <h1 class="mb-4">Admin Panel - Users</h1>
+    <v-text-field
+      clearable
+      label="Search"
+      type="text"
+      v-model="searchQuery"
+      variant="outlined"
+    >
+      <template v-slot:prepend>
+        <v-tooltip location="bottom"> Filter users </v-tooltip>
+      </template>
+    </v-text-field>
 
-          <td class="text-right">
-            <v-btn
-              class="ms-2"
-              variant="outlined"
-              size="small"
-              @click="toggleEditDialog(user.id)"
-              :color="editDialog[user.id] ? 'success' : ''"
-            >
-              {{ editDialog[user.id] ? "Save" : "Edit" }}
-            </v-btn>
+    <div>
+      <v-table fixed-header>
+        <thead>
+          <tr>
+            <th class="text-left">Profile Picture</th>
+            <th class="text-left">User Name</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">First Name</th>
+            <th class="text-left">Last Name</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in filteredUsers"
+            :key="user.id"
+          >
+            <td>
+              <v-avatar
+                class="ma-2"
+                color="grey-darken-1"
+                size="large"
+              >
+                <span class="text-h6">{{ user.username[0] }}</span>
+              </v-avatar>
+            </td>
+            <td>
+              <span v-if="!editDialog[user.id]">{{ user.username }}</span>
+              <v-text-field
+                v-else
+                v-model="user.username"
+                label="Username"
+                outlined
+                dense
+                autofocus
+              ></v-text-field>
+            </td>
+            <td>
+              <span v-if="!editDialog[user.id]">{{ user.email }}</span>
+              <v-text-field
+                v-else
+                v-model="user.email"
+                label="Email"
+                outlined
+                dense
+                autofocus
+              ></v-text-field>
+            </td>
+            <td>
+              <span v-if="!editDialog[user.id]">{{ user.firstName }}</span>
+              <v-text-field
+                v-else
+                v-model="user.firstName"
+                label="First Name"
+                outlined
+                dense
+                autofocus
+              ></v-text-field>
+            </td>
+            <td>
+              <span v-if="!editDialog[user.id]">{{ user.lastName }}</span>
+              <v-text-field
+                v-else
+                v-model="user.lastName"
+                label="Last Name"
+                outlined
+                dense
+                autofocus
+              ></v-text-field>
+            </td>
 
-            <v-btn
-              class="ms-2"
-              variant="outlined"
-              size="small"
-              @click="confirmDeleteUser(user)"
-              color="red"
-            >
-              Delete
-            </v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+            <td class="text-right">
+              <v-btn
+                class="ms-2"
+                variant="outlined"
+                size="small"
+                @click="toggleEditDialog(user.id)"
+                :color="editDialog[user.id] ? 'success' : ''"
+              >
+                {{ editDialog[user.id] ? "Save" : "Edit" }}
+              </v-btn>
+
+              <v-btn
+                class="ms-2"
+                variant="outlined"
+                size="small"
+                @click="confirmDeleteUser(user)"
+                color="red"
+              >
+                Delete
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 
 export default {
   setup() {
@@ -143,6 +138,8 @@ export default {
       },
     ]
 
+    const searchQuery = ref("") // Added to track the search input
+
     const toggleEditDialog = (userId) => {
       editDialog.value[userId] = !editDialog.value[userId]
     }
@@ -159,11 +156,50 @@ export default {
       }
     }
 
+    // Compute the filtered users based on the search query
+    const filteredUsers = computed(() => {
+      const query = searchQuery.value.trim().toLowerCase()
+      if (query === "") {
+        return users
+      } else {
+        return users.filter(
+          (user) =>
+            user.username.toLowerCase().includes(query) ||
+            user.firstName.toLowerCase().includes(query) ||
+            user.lastName.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query)
+        )
+      }
+    })
+
+    const searchUsers = () => {
+      // This function can be used to trigger the search action.
+      // In this example, it's a simple method that updates the filteredUsers computed property based on the searchQuery.
+      // You can further customize this function to make API requests or perform other actions.
+      filteredUsers.value = computed(() => {
+        const query = searchQuery.value.trim().toLowerCase()
+        if (query === "") {
+          return users
+        } else {
+          return users.filter(
+            (user) =>
+              user.username.toLowerCase().includes(query) ||
+              user.firstName.toLowerCase().includes(query) ||
+              user.lastName.toLowerCase().includes(query) ||
+              user.email.toLowerCase().includes(query)
+          )
+        }
+      })
+    }
+
     return {
       editDialog,
       users,
       toggleEditDialog,
       confirmDeleteUser,
+      searchQuery,
+      filteredUsers,
+      searchUsers,
     }
   },
 }
