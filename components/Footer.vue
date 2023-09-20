@@ -8,7 +8,7 @@
         class="text-center mt-4"
         cols="12"
       >
-        AntLMS &copy {{ new Date().getFullYear() }}
+        AntLMS &copy; {{ new Date().getFullYear() }}
       </v-col>
     </v-row>
   </v-footer>
