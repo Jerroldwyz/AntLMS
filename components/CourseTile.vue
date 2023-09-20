@@ -20,8 +20,8 @@
           :elevation="isHovering ? 5 : undefined"
         >
           <v-img
-            height="170"
             cover
+            height="170"
             :src="
               props.thumbnail != null && props.thumbnail != ''
                 ? props.thumbnail

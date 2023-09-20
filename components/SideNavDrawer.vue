@@ -16,13 +16,14 @@
       <v-list-item
         class="listItemFont"
         prepend-icon="mdi-home"
-        value="home"
+        title="Home"
       >
       </v-list-item>
 
       <v-list-group
         class="listItemFont"
         :value="hovered ? 'Browse' : null"
+        title="Browse"
       >
         <template #activator="{ props }">
           <v-list-item
@@ -63,8 +64,6 @@
         </v-list-item>
       </v-list-group>
     </v-list>
-
-    <!-- <v-divider></v-divider> -->
 
     <v-list-item
       class="listItemFont"
