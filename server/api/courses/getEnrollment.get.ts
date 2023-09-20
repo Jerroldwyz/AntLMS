@@ -1,7 +1,9 @@
-import { getEnrollment } from "~~/server/db/enrollment"
-
 export default defineEventHandler(async (event) => {
   const query = await getQuery(event)
 
-  return await getEnrollment(query.userId as string)
+  try {
+    return await getEnrollment(query.userId as string)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

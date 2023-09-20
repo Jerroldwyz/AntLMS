@@ -8,7 +8,7 @@
       elevation="10"
     >
       <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4 text--darken-2">Sign in as Admin</h2>
+        <h2 class="font-weight-bold mt-4">Sign in as Admin</h2>
         <NuxtLink to="/auth/login">Sign in as user</NuxtLink>
         <v-form
           ref="form"
@@ -50,16 +50,11 @@
 </template>
 
 <script setup lang="ts">
-import { signInWithEmailAndPassword } from "firebase/auth"
-
 definePageMeta({
   layout: false,
 })
 
-const { $firebaseAuth } = useNuxtApp()
-const { signInUser } = useFirebase($firebaseAuth)
-const user = useUser()
-const token = useCookie("token")
+const authStore = useAuthStore()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
@@ -71,7 +66,7 @@ const password = ref("")
 const signIn = async () => {
   disabled.value = true
   try {
-    await signInWithEmailAndPassword($firebaseAuth, email.value, password.value)
+    await authStore.login(email.value, password.value)
     router.push("/admin")
   } catch (error) {
     alert(error)

@@ -1,4 +1,6 @@
-export const getProtectedRoutes = (allowedRoutes: string[]) => {
+// TODO: Is this unfinished? allowedRoutes is never used
+// export const getProtectedRoutes = (allowedRoutes: string[]) => {
+export const getProtectedRoutes = () => {
   const router = useRouter()
   const allRoutes = router.getRoutes()
   const topLevelPaths = getTopLevelPaths(allRoutes.map((r) => r.path))
@@ -11,7 +13,7 @@ const getTopLevelPaths = (routes: string[]) => {
       routes.map((route) => {
         const parts = route.split("/")
         return parts[1] || ""
-      })
+      }),
     ),
   ]
 }

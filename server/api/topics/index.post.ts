@@ -1,5 +1,3 @@
-import { createTopic } from "~~/server/db/topic"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -8,5 +6,9 @@ export default defineEventHandler(async (event) => {
     title: body.title,
   }
 
-  return await createTopic(prismaQuery)
+  try {
+    return await createTopic(prismaQuery)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -1,0 +1,10 @@
+export default defineEventHandler(async (event) => {
+  // TODO add logic to ensure a user can only change their own course
+  const id = getRouterParam(event, "id")
+
+  try {
+    return await deleteCourse(parseInt(id as string))
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
+})

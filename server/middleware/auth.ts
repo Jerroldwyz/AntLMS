@@ -5,7 +5,11 @@ export default defineEventHandler(async (event) => {
   const { req, res } = event.node
   const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
 
-  if (req.url?.includes("/api/signin") || req.url?.includes("/api/session")) {
+  if (
+    req.url?.includes("/api/signin") ||
+    req.url?.includes("/api/session") ||
+    req.url?.includes("/api/signup")
+  ) {
     return
   }
 
@@ -20,7 +24,7 @@ export default defineEventHandler(async (event) => {
       console.error(error)
       res.statusCode = 400
       res.end(
-        "You must be signed in to view the protected content on this page"
+        "You must be signed in to view the protected content on this page",
       )
     }
   }

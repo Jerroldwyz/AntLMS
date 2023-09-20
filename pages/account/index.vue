@@ -5,8 +5,8 @@
     <v-row>
       <v-col cols="6">
         <AccountSetting
-          :userData="userData"
-          :updatePasswordCallback="updatePasswordCallback"
+          :user-data="userData"
+          :update-password-callback="updatePasswordCallback"
         />
       </v-col>
       <v-col cols="6">
@@ -14,8 +14,8 @@
           <v-container fluid>
             <v-row justify="center">
               <FormAccountSettingForm
-                :userData="userData"
-                :saveChangesCallback="updatePasswordCallback"
+                :user-data="userData"
+                :save-changes-callback="updatePasswordCallback"
               />
             </v-row>
           </v-container>
@@ -40,7 +40,7 @@
           />
           <img
             v-else
-            src="@/components/pp.png"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/1200px-Anonymous_emblem.svg.png"
             alt="Default Profile Picture"
             class="default-profile-picture"
           />
@@ -51,14 +51,16 @@
 </template>
 
 <script setup lang="ts">
-interface UserData {
-  id: number
-  name: string
-  email: string
-  gender: string
-  // Add profilePicture field
-  profilePicture: File | null
-}
+import { UserData } from "~/types"
+const authStore = useAuthStore()
+
+if (authStore.isAdmin) setPageLayout("admin")
+else setPageLayout("default")
+
+definePageMeta({
+  middleware: ["user"],
+  layout: false,
+})
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
@@ -167,8 +169,8 @@ const profilePictureUrl = computed(() => {
 /* Profile picture styles with circular frame */
 .profile-picture {
   max-width: 100%;
-  width: 350px;
-  height: 350px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%; /* Creates a circular frame */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }

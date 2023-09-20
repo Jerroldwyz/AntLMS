@@ -4,32 +4,27 @@ const props = defineProps<{
   title: string
   thumbnail: string | null
 }>()
-
-console.log(props.thumbnail)
 </script>
 
 <template>
   <v-card
-    @click="navigateTo(`/editcourse/${props.id}`)"
     elevation="2"
     rounded="lg"
+    width="175"
+    height="175"
+    @click="navigateTo(`/editcourse/${props.id}`)"
   >
     <v-img
-      width="200"
-      height="150"
+      cover
+      height="125"
       :src="
         props.thumbnail != null && props.thumbnail != ''
           ? props.thumbnail
           : 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
       "
-      cover
     >
     </v-img>
 
-    <v-card-item>
-      <v-card-title class="text-center">
-        {{ props.title }}
-      </v-card-title>
-    </v-card-item>
+    <v-card-title class="text-center">{{ props.title }}</v-card-title>
   </v-card>
 </template>

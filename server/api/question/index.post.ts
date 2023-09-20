@@ -1,6 +1,3 @@
-import { createQuestion } from "~~/server/db/question"
-import { questionsTransformer } from "~~/server/transformers/questions"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -21,7 +18,11 @@ export default defineEventHandler(async (event) => {
     },
   }
 
-  const question = await createQuestion(prismaData)
+  try {
+    const question = await createQuestion(prismaData)
 
-  return questionsTransformer(question)
+    return questionsTransformer(question)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -1,6 +1,3 @@
-import { createQuiz } from "~~/server/db/quiz"
-import { quizTransformer } from "~~/server/transformers/quiz"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -10,7 +7,11 @@ export default defineEventHandler(async (event) => {
     topic_position: parseInt(body.topicPosition as string),
   }
 
-  const quiz = await createQuiz(prismaData)
+  try {
+    const quiz = await createQuiz(prismaData)
 
-  return quizTransformer(quiz)
+    return quizTransformer(quiz)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

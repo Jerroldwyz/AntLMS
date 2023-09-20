@@ -1,6 +1,4 @@
 import { content_type } from "@prisma/client"
-import { createContent } from "~~/server/db/content"
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
@@ -12,5 +10,9 @@ export default defineEventHandler(async (event) => {
     topic_position: body.topicPosition as number,
   }
 
-  return await createContent(prismaData)
+  try {
+    return await createContent(prismaData)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

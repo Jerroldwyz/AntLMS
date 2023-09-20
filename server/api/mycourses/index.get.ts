@@ -1,12 +1,9 @@
-import { getCourseById } from "~~/server/db/mycourse"
-import { mycourseTransformer } from "~~/server/transformers/mycourse"
-
 export default defineEventHandler(async (event) => {
-  const query = await getQuery(event)
+  const query = getQuery(event)
 
-  const course = await getCourseById(parseInt(query.courseId as string))
-
-  console.log(course)
-
-  return mycourseTransformer(course)
+  try {
+    return await getCreatorCourses(query.userId as string)
+  } catch (e) {
+    return sendError(event, prismaErrorHandler(e))
+  }
 })

@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig.firebase)
   const auth = getAuth(app)
 
-  const firebaseUser = useUser()
+  const authStore = useAuthStore()
 
   nuxtApp.hooks.hook("app:mounted", () => {
     auth.onIdTokenChanged(async (user) => {
@@ -15,13 +15,20 @@ export default defineNuxtPlugin((nuxtApp) => {
         console.log("User signed in")
         const token = await user.getIdToken()
         setServerSession(token)
-        firebaseUser.value = formatUser(user)
-        navigateTo("/")
+        authStore.user = await formatUser(user)
+        user.getIdTokenResult().then((idTokenResult) => {
+          if (idTokenResult.claims.admin) {
+            authStore.isAdmin = true
+            navigateTo("/admin")
+          } else {
+            authStore.isAdmin = false
+            navigateTo("/")
+          }
+        })
       } else {
         console.log("User signed out")
-        // clear cookie session and auth state
         setServerSession("")
-        firebaseUser.value = null
+        authStore.user = null
       }
     })
   })
