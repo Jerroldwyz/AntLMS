@@ -19,10 +19,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         user.getIdTokenResult().then((idTokenResult) => {
           if (idTokenResult.claims.admin) {
             authStore.isAdmin = true
-            // navigateTo("/admin")
+            navigateTo("/admin")
           } else {
             authStore.isAdmin = false
-            // navigateTo("/")
+            navigateTo("/")
           }
         })
       } else {
