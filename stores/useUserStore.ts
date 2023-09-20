@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { User } from "~~/types"
 
-const route = "/api/account"
+const route = "/api/users"
 
 // store for user on client side
 export const useUserStore = defineStore("user-store", {

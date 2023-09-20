@@ -17,31 +17,6 @@ export const getQuizById = (quiz_id: number) => {
             select: {
               id: true,
               choice_text: true,
-            },
-          },
-        },
-      },
-    },
-  })
-}
-
-export const getMyCourseQuizById = (quiz_id: number) => {
-  return prisma.quizzes.findUnique({
-    where: {
-      id: quiz_id,
-    },
-    select: {
-      title: true,
-      topic_id: true,
-      questions: {
-        select: {
-          id: true,
-          question_text: true,
-          explanation: true,
-          choices: {
-            select: {
-              id: true,
-              choice_text: true,
               is_correct: true,
             },
           },

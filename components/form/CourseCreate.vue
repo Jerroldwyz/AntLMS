@@ -28,8 +28,6 @@ const tagRules = [
   },
 ]
 
-const { createCourse } = useCourse()
-
 const loading = ref(false)
 const valid = ref(false)
 
@@ -48,7 +46,7 @@ const uploadFile = async () => {
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
-    course.value.thumbnail = await uploadFileToS3(file.value[0], "image")
+    course.value.thumbnail = await uploadImage(file.value[0], "image")
   }
 }
 
@@ -80,7 +78,7 @@ async function submitCourse() {
         <v-col class="d-flex justify-end">
           <v-btn
             icon="mdi-close"
-            flat
+            variant="flat"
             @click="emit('close')"
           ></v-btn>
         </v-col>

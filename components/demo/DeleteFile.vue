@@ -6,8 +6,8 @@ const deleteFile = async () => {
     // No file selected, handle this case as needed
     console.log("No path to delete")
     throw new Error("No path to delete")
-  } else {
-    await deleteFileFromS3(pathToDelete.value)
+  } else if (!(await deleteImage(pathToDelete.value))) {
+    await deleteVideo(pathToDelete.value)
   }
 }
 </script>

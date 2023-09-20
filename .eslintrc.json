@@ -5,6 +5,9 @@
     "node": true
   },
   "extends": [
+    "plugin:vue/base",
+    "plugin:vuetify/base",
+    "plugin:vue/vue3-recommended",
     "@nuxtjs/eslint-config-typescript",
     "plugin:nuxt/recommended",
     "prettier"

@@ -1,4 +1,5 @@
 import { prisma } from "."
+import { CourseQueryStatus } from "~/types"
 
 export const getCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
@@ -66,18 +67,39 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = () => {
-  return prisma.courses.findMany({
-    select: {
-      id: true,
-      title: true,
-      enabled: true,
-      thumbnail: true,
-      creator: {
-        select: {
-          name: true,
-        },
+export const getAllCourses = (
+  status: CourseQueryStatus = CourseQueryStatus.all,
+) => {
+  const select = {
+    id: true,
+    title: true,
+    enabled: true,
+    thumbnail: true,
+    creator: {
+      select: {
+        name: true,
       },
     },
+  }
+  let where
+
+  switch (status) {
+    case CourseQueryStatus.all:
+      where = {}
+      break
+    case CourseQueryStatus.enabled:
+      where = { enabled: { equals: true } }
+      break
+    case CourseQueryStatus.disabled:
+      where = { enabled: { equals: false } }
+      break
+
+    default:
+      break
+  }
+
+  return prisma.courses.findMany({
+    where,
+    select,
   })
 }

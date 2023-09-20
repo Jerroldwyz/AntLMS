@@ -63,12 +63,12 @@ function getIcon(content: any): string {
                   <template #append>
                     <v-btn
                       icon="mdi-plus"
-                      flat
+                      variant="flat"
                     >
                     </v-btn>
                     <v-btn
                       icon="mdi-delete"
-                      flat
+                      variant="flat"
                     >
                     </v-btn>
                   </template>
@@ -90,7 +90,7 @@ function getIcon(content: any): string {
                     <template #append>
                       <v-btn
                         icon="mdi-delete"
-                        flat
+                        variant="flat"
                       >
                       </v-btn>
                     </template>

@@ -9,7 +9,7 @@ const thumbnailUrl = ref<string | null>(null)
 
 onMounted(async () => {
   if (props.thumbnail) {
-    thumbnailUrl.value = await getFileUrlFromS3(props.thumbnail)
+    thumbnailUrl.value = await getImage(props.thumbnail)
   }
 })
 </script>
