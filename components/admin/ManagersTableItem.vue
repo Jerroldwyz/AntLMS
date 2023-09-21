@@ -2,13 +2,9 @@
 const props = defineProps(["manager"])
 
 // const manager = props.manager
-const manager = {
-  name: props.manager.name,
-  email: props.manager.email,
-  roles: props.manager.admin_role_attachments
-    .map((attachment: any) => attachment.role.name)
-    .join(","),
-}
+const manager = props.manager
+
+const rolesString = manager.roles.map((role: any) => role.name).join(",")
 
 const disableDialog = ref(false)
 const deleteDialog = ref(false)
@@ -24,7 +20,7 @@ const disableManagerNow = () => {}
   <tr>
     <td>{{ manager.name }}</td>
     <td>{{ manager.email }}</td>
-    <td>{{ manager.roles }}</td>
+    <td>{{ rolesString }}</td>
     <td class="text-right">
       <v-btn
         class="ms-2"

@@ -37,3 +37,10 @@ export type ApiRole = {
     name: string
   }[]
 }
+
+export type ApiManager = {
+  uid: string
+  name: string
+  email: string
+  roles: ApiRole[]
+}
