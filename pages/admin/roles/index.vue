@@ -3,6 +3,7 @@ definePageMeta({
   layout: "admin",
   middleware: "admin",
 })
+const roles = await getRoles()
 </script>
 
 <template>

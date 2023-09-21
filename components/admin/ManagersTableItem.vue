@@ -1,6 +1,14 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps(["manager"])
-const manager = props.manager
+
+// const manager = props.manager
+const manager = {
+  name: props.manager.name,
+  email: props.manager.email,
+  roles: props.manager.admin_role_attachments
+    .map((attachment: any) => attachment.role.name)
+    .join(","),
+}
 
 const disableDialog = ref(false)
 const deleteDialog = ref(false)

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const props = defineProps(["role"])
+
 const role = props.role
+
+const rolesString = role.permissions.map((perm: any) => perm.name).join(",")
 
 const deleteDialog = ref(false)
 const roleDialog = ref(false)
@@ -18,7 +21,7 @@ const deleteRoleNow = () => {
   <tr>
     <td>{{ role.name }}</td>
     <td>
-      {{ role.permissions }}
+      {{ rolesString }}
     </td>
     <td class="text-right">
       <v-btn

@@ -7,5 +7,6 @@ export const createUser = (): users => {
     name: faker.person.fullName(),
     email: faker.internet.email(),
     contact_details: {},
+    is_admin: faker.datatype.boolean(),
   }
 }
