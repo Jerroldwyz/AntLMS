@@ -2,7 +2,8 @@ import { getApp } from "firebase-admin/app"
 import { getAuth } from "firebase-admin/auth"
 
 export default defineEventHandler(async (event) => {
-  if (process.env.NODE_ENV === "development") {
+  const appConfig = useRuntimeConfig()
+  if (appConfig.public.application === "development") {
   } else {
     const { req, res } = event.node
     const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie

@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: ["@pinia/nuxt"],
   vite: {
     define: {
-      "process.env.DEBUG": false,
+      "process.env.DEBUG": true,
     },
   },
   ssr: true,
@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
     firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
     public: {
+      application: process.env.APPLICATION,
       firebase: {
         apiKey: process.env.FIREBASE_API_KEY,
         authDomain: process.env.FIREBASE_AUTH_DOMAIN,

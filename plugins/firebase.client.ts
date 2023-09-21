@@ -11,7 +11,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   const authStore = useAuthStore()
 
   nuxtApp.hooks.hook("app:mounted", async () => {
-    if (process.env.NODE_ENV === "development") {
+    console.log(appConfig())
+    if (appConfig() === "development") {
       const dummyUser = await $fetch("/api/me")
       authStore.user = dummyUser as User
       setServerSession("")
