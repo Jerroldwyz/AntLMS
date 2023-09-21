@@ -12,14 +12,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.hooks.hook("app:mounted", async () => {
     if (process.env.NODE_ENV === "development") {
-      console.log("development")
-      const dummyUser = await $fetch("/api/users", {
-        method: "get",
-      })
-      authStore.user = (dummyUser as User[])[0]
+      const dummyUser = await $fetch("/api/me")
+      authStore.user = dummyUser as User
       setServerSession("")
     } else {
-      console.log(process.env.NODE_ENV)
       auth.onIdTokenChanged(async (user) => {
         if (user) {
           console.log("User signed in")

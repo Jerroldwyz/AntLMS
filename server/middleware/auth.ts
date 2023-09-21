@@ -2,18 +2,19 @@ import { getApp } from "firebase-admin/app"
 import { getAuth } from "firebase-admin/auth"
 
 export default defineEventHandler(async (event) => {
-  const { req, res } = event.node
-  const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
+  if (process.env.NODE_ENV === "development") {
+  } else {
+    const { req, res } = event.node
+    const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
 
-  if (
-    req.url?.includes("/api/signin") ||
-    req.url?.includes("/api/session") ||
-    req.url?.includes("/api/signup")
-  ) {
-    return
-  }
+    if (
+      req.url?.includes("/api/signin") ||
+      req.url?.includes("/api/session") ||
+      req.url?.includes("/api/signup")
+    ) {
+      return
+    }
 
-  if (process.env.NODE_ENV !== "development") {
     if (req.url?.includes("/api/")) {
       const token = getCookie(event, `${cookieOptions.name}-token`) || ""
       const app = getApp()

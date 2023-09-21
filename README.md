@@ -64,6 +64,14 @@ FIREBASE_DATABASE_URL=
 FIREBASE_ADMIN_CREDENTIALS=
 ```
 
+Enable NODE_ENV .env variable to be in development mode
+```
+# Windows
+SET NODE_ENV=development
+# Macs/Linux
+# export NODE_ENV=development
+```
+
 ## Production
 
 Build the application for production:
