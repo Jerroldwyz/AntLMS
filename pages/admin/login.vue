@@ -8,7 +8,7 @@
       elevation="10"
     >
       <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4 text--darken-2">Sign in as Admin</h2>
+        <h2 class="font-weight-bold mt-4">Sign in as Admin</h2>
         <NuxtLink to="/auth/login">Sign in as user</NuxtLink>
         <v-form
           ref="form"

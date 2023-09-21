@@ -4,12 +4,12 @@
     label="Password"
     type="password"
     required
-    @input="$emit('update:password', $event.target.value)"
+    @update:model-value="emit('update:password', $event)"
   ></v-text-field>
 </template>
 
 <script setup lang="ts">
-defineEmits(["update:password"])
+const emit = defineEmits(["update:password"])
 
 const passwordRules = [
   (v: string) => !!v || "Password is required",
