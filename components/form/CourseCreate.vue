@@ -41,7 +41,7 @@ const course = ref<Course>({
 })
 
 const uploadFile = async () => {
-  if (!file) {
+  if (!file.value) {
     // No file selected, handle this case as needed
     console.log("No file to upload")
     throw new Error("No file to upload")
@@ -99,7 +99,12 @@ async function submitCourse() {
           multiple
           chips
         ></v-select>
-        <FormImageInput v-model="file" />
+
+        <v-file-input
+          v-model="file"
+          label="Thumbnail"
+          accept="image/*"
+        ></v-file-input>
       </v-card-text>
 
       <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">
