@@ -46,3 +46,10 @@ export const getManagerById = async (uid: string): Promise<any> => {
   })
   return data
 }
+
+export const deleteManagerById = async (uid: string): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/users/${uid}`, {
+    method: "delete",
+  })
+  return data
+}

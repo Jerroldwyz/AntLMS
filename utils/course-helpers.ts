@@ -49,9 +49,26 @@ export async function createCourse(course: Course): Promise<any> {
   })
 }
 
-export async function deleteCourse(id: number): Promise<any> {
+export async function deleteCourseById(id: number): Promise<any> {
   // TODO: Is validation needed here? Or in the backend?
   await $fetch(`/api/courses/${id}`, {
     method: "DELETE",
+  })
+}
+
+export async function disableCourseById(id: number): Promise<any> {
+  // TODO: Is validation needed here? Or in the backend?
+  await $fetch(`/api/courses/${id}`, {
+    method: "PUT",
+    body: {
+      enabled: false,
+    },
+  })
+}
+
+export async function enableCourseById(id: number): Promise<any> {
+  // TODO: Is validation needed here? Or in the backend?
+  await $fetch(`/api/courses/${id}`, {
+    method: "PUT",
   })
 }

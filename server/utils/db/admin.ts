@@ -105,6 +105,16 @@ export const getManagerById = async (managerId: string) => {
   return apiManagerTransformer(manager)
 }
 
+export const deleteManagerById = async (managerId: string) => {
+  const manager = await prisma.users.delete({
+    where: {
+      uid: managerId,
+      is_admin: true,
+    },
+  })
+  return manager
+}
+
 export const getManagers = async () => {
   const managers = await prisma.users.findMany({
     where: {

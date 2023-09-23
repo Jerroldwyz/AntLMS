@@ -1,13 +1,13 @@
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id")
-  const query = getQuery(event)
+  const body = await readBody(event)
 
   try {
-    if (query.enabled) {
-      if (query.enabled === true) {
-        return await enableCourse(parseInt(id as string))
+    if (body.enabled !== undefined) {
+      if (body.enabled === true) {
+        return await enableCourseById(parseInt(id as string))
       } else {
-        return await disableCourse(parseInt(id as string))
+        return await disableCourseById(parseInt(id as string))
       }
     }
 

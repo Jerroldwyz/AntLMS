@@ -3,7 +3,7 @@ const { roles } = defineProps(["roles"])
 
 const roleList = ref(roles)
 
-const updateRoles = (roleIdToRemove: number) => {
+const deleteRoles = (roleIdToRemove: number) => {
   roleList.value = roleList.value.filter(
     (role: any) => role.id !== roleIdToRemove,
   )
@@ -25,7 +25,7 @@ const updateRoles = (roleIdToRemove: number) => {
           v-for="role in roleList"
           :key="role.id"
           :role="role"
-          @update:roleList="updateRoles"
+          @delete:roleList="deleteRoles"
         >
         </AdminRolesTableItem>
       </tbody>

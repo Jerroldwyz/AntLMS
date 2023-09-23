@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["manager"])
+const emits = defineEmits(["delete:managerList"])
 
 // const manager = props.manager
 const manager = props.manager
@@ -12,7 +13,16 @@ const roleDialog = ref(false)
 const dialogm1 = ref("")
 
 const saveNewRoles = () => {}
-const deleteManagerNow = () => {}
+const deleteManagerNow = () => {
+  try {
+    deleteManagerById(manager.uid)
+    emits("delete:managerList", manager.uid)
+    deleteDialog.value = false
+  } catch (e) {
+    alert(e)
+  }
+}
+
 const disableManagerNow = () => {}
 </script>
 

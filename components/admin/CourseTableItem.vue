@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const prop = defineProps(["course"])
-const emits = defineEmits(["update-courses"])
+const emits = defineEmits(["delete:courseList", "update:courseList"])
 const disableDialog = ref(false)
 const deleteDialog = ref(false)
 const course = prop.course
@@ -8,14 +8,14 @@ const course = prop.course
 const presignedUrl = await getImage(course.thumbnail)
 
 const disableCourseNow = async () => {
-  await disableCourse(course.id)
+  await disableCourseById(course.id)
+  emits("update:courseList", course.id)
   disableDialog.value = false
-  emits("update-courses")
 }
 const deleteCourseNow = async () => {
-  await deleteCourse(course.id)
+  await deleteCourseById(course.id)
+  emits("delete:courseList", course.id)
   deleteDialog.value = false
-  emits("update-courses")
 }
 </script>
 

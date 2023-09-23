@@ -1,7 +1,12 @@
 <script setup lang="ts">
 const props = defineProps(["courses"])
 const courses = props.courses
-const updateCourses = () => {}
+const courseList = ref(courses)
+const updateCourses = (courseIdToDelete: number) => {
+  courseList.value = courseList.value.filter(
+    (course: any) => course.id !== courseIdToDelete,
+  )
+}
 </script>
 
 <template>
@@ -16,10 +21,10 @@ const updateCourses = () => {}
     </thead>
     <tbody>
       <AdminCourseTableItem
-        v-for="course in courses"
+        v-for="course in courseList"
         :key="course.id"
         :course="course"
-        @update-courses="updateCourses"
+        @delete:courseList="updateCourses"
       ></AdminCourseTableItem>
     </tbody>
   </v-table>

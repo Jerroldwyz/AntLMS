@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["role"])
-const emits = defineEmits(["update:roleList"])
+const emits = defineEmits(["delete:roleList"])
 
 const role = props.role
 
@@ -16,7 +16,7 @@ const saveNewPermissions = () => {
 const deleteRoleNow = () => {
   try {
     deleteRoleById(role.id)
-    emits("update:roleList", role.id)
+    emits("delete:roleList", role.id)
     deleteDialog.value = false
   } catch (e) {
     alert(e)
