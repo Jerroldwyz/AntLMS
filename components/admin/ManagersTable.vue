@@ -1,13 +1,20 @@
 <script setup lang="ts">
-const props = defineProps(["managers"])
+const managers = await getManagers()
+const availableRoles = await getRoles()
 
-const managers = props.managers
 const managerList = ref(managers)
 
-const deleteManagerList = (managerUidToDelete: string) => {
+const deleteManager = (managerUidToDelete: string) => {
   managerList.value = managerList.value.filter(
     (manager: any) => manager.uid !== managerUidToDelete,
   )
+}
+
+const updateManager = (modifiedManager: any) => {
+  const managerToUpdate = managerList.value.findIndex(
+    (manager: any) => manager.uid === modifiedManager.uid,
+  )
+  managerList.value[managerToUpdate] = modifiedManager
 }
 </script>
 
@@ -27,7 +34,9 @@ const deleteManagerList = (managerUidToDelete: string) => {
           v-for="manager in managerList"
           :key="manager.uid"
           :manager="manager"
-          @delete:managerList="deleteManagerList"
+          :available-roles="availableRoles"
+          @delete:manager="deleteManager"
+          @update:manager="updateManager"
         >
         </AdminManagersTableItem>
       </tbody>

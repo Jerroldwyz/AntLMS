@@ -53,3 +53,42 @@ export const deleteManagerById = async (uid: string): Promise<any> => {
   })
   return data
 }
+
+export const createManagerRoleMapping = async (
+  managerUid: string,
+  roleId: number,
+): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/users/${managerUid}/mappings`, {
+    method: "post",
+    body: {
+      roleId,
+    },
+  })
+  return data
+}
+
+export const updateManagerRoleMapping = async (
+  managerUid: string,
+  roleId: number,
+): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/users/${managerUid}/mappings`, {
+    method: "put",
+    body: {
+      roleId,
+    },
+  })
+  return data
+}
+
+export const deleteManagerRoleMapping = async (
+  managerUid: string,
+  roleId: number,
+): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/users/${managerUid}/mappings`, {
+    method: "delete",
+    body: {
+      roleId,
+    },
+  })
+  return data
+}

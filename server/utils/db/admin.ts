@@ -2,6 +2,43 @@ import { apiManagerTransformer } from "../transformers/admin"
 import { prisma } from "."
 import { ApiRole } from "~~/types"
 
+export const getManagerRoleMapping = async (
+  managerUid: string,
+): Promise<any> => {
+  return await prisma.admin_role_attachments.findUnique({
+    where: {
+      user_id: managerUid,
+    },
+  })
+}
+
+export const createManagerRoleMapping = async (
+  managerUid: string,
+  roleId: number,
+): Promise<any> => {
+  return await prisma.admin_role_attachments.create({
+    data: {
+      user_id: managerUid,
+      role_id: roleId,
+    },
+  })
+}
+
+export const updateManagerRoleMapping = async (
+  managerUid: string,
+  roleId: number,
+) => {
+  return await prisma.admin_role_attachments.update({
+    where: {
+      user_id: managerUid,
+    },
+    data: {
+      user_id: managerUid,
+      role_id: roleId,
+    },
+  })
+}
+
 export const getRoleById = async (roleId: number): Promise<ApiRole> => {
   const role = await prisma.roles.findUnique({
     where: {

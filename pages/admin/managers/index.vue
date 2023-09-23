@@ -3,8 +3,6 @@ definePageMeta({
   layout: "admin",
   middleware: "admin",
 })
-
-const managers = await getManagers()
 </script>
 
 <template>
@@ -18,6 +16,6 @@ const managers = await getManagers()
   </v-text-field>
 
   <div>
-    <AdminManagersTable :managers="managers"> </AdminManagersTable>
+    <AdminManagersTable></AdminManagersTable>
   </div>
 </template>

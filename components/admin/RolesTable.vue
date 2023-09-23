@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { roles } = defineProps(["roles"])
+const roles = await getRoles()
+const availablePermissions = getPermissions()
 
 const roleList = ref(roles)
 
@@ -25,6 +26,7 @@ const deleteRoles = (roleIdToRemove: number) => {
           v-for="role in roleList"
           :key="role.id"
           :role="role"
+          :available-permissions="availablePermissions"
           @delete:roleList="deleteRoles"
         >
         </AdminRolesTableItem>
