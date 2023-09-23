@@ -150,8 +150,8 @@ model admin_role_attachments {
   id            Int @id @default(autoincrement())
   role_id       Int
   user_id       String
-  user          users       @relation(fields: [user_id], references: [uid])
-  role          roles       @relation(fields: [role_id], references: [id])
+  user          users       @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+  role          roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
   @@unique([user_id, role_id])
 }
 
@@ -165,7 +165,7 @@ model role_permissions_attachments {
   id            Int @id @default(autoincrement())
   permission_id Int
   role_id       Int
-  permission    permissions @relation(fields: [permission_id], references: [id])
-  role          roles       @relation(fields: [role_id], references: [id])
+  permission    permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+  role          roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
   @@unique([permission_id, role_id])
 }

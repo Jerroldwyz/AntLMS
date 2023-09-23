@@ -12,6 +12,13 @@ export const getRoleById = async (id: number): Promise<any> => {
   return data
 }
 
+export const deleteRoleById = async (id: number): Promise<any> => {
+  const data = await $fetch(`/api/admin/roles/${id}`, {
+    method: "DELETE",
+  })
+  return data
+}
+
 export const getPermissions = async (): Promise<any> => {
   const { data } = await useFetch("/api/admin/permissions", {
     method: "get",

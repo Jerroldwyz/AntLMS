@@ -45,6 +45,14 @@ export const getRoles = async (): Promise<ApiRole[]> => {
   return roles.map((role) => apiRoleTransformer(role))
 }
 
+export const deleteRoleById = (role_id: number) => {
+  return prisma.roles.delete({
+    where: {
+      id: role_id,
+    },
+  })
+}
+
 export const getPermissionById = (permissionId: number) => {
   return prisma.roles.findUnique({
     where: {

@@ -1,5 +1,13 @@
-<script setup>
+<script setup lang="ts">
 const { roles } = defineProps(["roles"])
+
+const roleList = ref(roles)
+
+const updateRoles = (roleIdToRemove: number) => {
+  roleList.value = roleList.value.filter(
+    (role: any) => role.id !== roleIdToRemove,
+  )
+}
 </script>
 
 <template>
@@ -14,9 +22,10 @@ const { roles } = defineProps(["roles"])
       </thead>
       <tbody>
         <AdminRolesTableItem
-          v-for="role in roles"
+          v-for="role in roleList"
           :key="role.id"
           :role="role"
+          @update:roleList="updateRoles"
         >
         </AdminRolesTableItem>
       </tbody>
