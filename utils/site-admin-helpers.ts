@@ -92,3 +92,16 @@ export const deleteManagerRoleMapping = async (
   })
   return data
 }
+
+export const updateRolePermissionMappings = async (
+  roleId: number,
+  permission_ids: number[],
+): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/roles/${roleId}/mappings`, {
+    method: "put",
+    body: {
+      permission_ids,
+    },
+  })
+  return data
+}

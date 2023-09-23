@@ -2,6 +2,35 @@ import { apiManagerTransformer } from "../transformers/admin"
 import { prisma } from "."
 import { ApiRole } from "~~/types"
 
+export const getRolePermissionMappings = async (
+  roleId: number,
+): Promise<any> => {
+  return await prisma.role_permissions_attachments.findMany({
+    where: {
+      role_id: roleId,
+    },
+  })
+}
+
+export const updateRolePermissionMappings = async (
+  roleId: number,
+  permission_ids: number[],
+): Promise<any> => {
+  await prisma.role_permissions_attachments.deleteMany({
+    where: {
+      role_id: roleId,
+    },
+  })
+  return await prisma.role_permissions_attachments.createMany({
+    data: permission_ids.map((perm_id) => {
+      return {
+        role_id: roleId,
+        permission_id: perm_id,
+      }
+    }),
+  })
+}
+
 export const getManagerRoleMapping = async (
   managerUid: string,
 ): Promise<any> => {

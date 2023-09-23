@@ -1,22 +1,34 @@
 <script setup lang="ts">
-const props = defineProps(["role"])
-const emits = defineEmits(["delete:roleList"])
+const props = defineProps(["role", "availablePermissions"])
+const emits = defineEmits(["delete:role", "update:role"])
 
 const role = props.role
+const availablePermissions = props.availablePermissions
 
-const rolesString = role.permissions.map((perm: any) => perm.name).join(",")
+const permissionsString = ref(
+  role.permissions.map((perm: any) => perm.name).join(","),
+)
+
+const newPermissionIds = ref(role.permissions.map((perm: any) => perm.id))
 
 const deleteDialog = ref(false)
 const roleDialog = ref(false)
 
 const saveNewPermissions = () => {
+  updateRolePermissionMappings(role.id, newPermissionIds.value)
+  const newPermissionString = availablePermissions
+    .filter((perm: any) => newPermissionIds.value.includes(perm.id))
+    .map((perm: any) => perm.name)
+    .join(",")
+  permissionsString.value = newPermissionString
+  emits("update:role", newPermissionIds.value)
   roleDialog.value = false
 }
 
 const deleteRoleNow = () => {
   try {
     deleteRoleById(role.id)
-    emits("delete:roleList", role.id)
+    emits("delete:role", role.id)
     deleteDialog.value = false
   } catch (e) {
     alert(e)
@@ -27,8 +39,8 @@ const deleteRoleNow = () => {
 <template>
   <tr>
     <td>{{ role.name }}</td>
-    <td>
-      {{ rolesString }}
+    <td class="overflow-auto">
+      {{ permissionsString }}
     </td>
     <td class="text-right">
       <v-btn
@@ -47,67 +59,17 @@ const deleteRoleNow = () => {
             <v-card-title>Select Permissions</v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-row>
-                <v-col>
-                  <v-checkbox
-                    label="EditUser"
-                    value="edituser"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="DisableUser"
-                    value="disableuser"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="DeleteUser"
-                    value="deleteuser"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                </v-col>
-                <v-col>
-                  <v-checkbox
-                    label="CreateSiteAdmin"
-                    value="createsiteadmin"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="EditSiteAdmin"
-                    value="editsiteadmin"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="DisableSiteAdmin"
-                    value="disablesiteadmin"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                </v-col>
-                <v-col>
-                  <v-checkbox
-                    label="DeleteSiteAdmin"
-                    value="deletesiteadmin"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="DisableCourse"
-                    value="disablecourse"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="DeleteCourse"
-                    value="deletecourse"
-                    class="my-2 mx-4"
-                    hide-details
-                  ></v-checkbox>
-                </v-col>
+              <v-row class="flex">
+                <v-checkbox
+                  v-for="permission in availablePermissions"
+                  :key="permission.id"
+                  v-model="newPermissionIds"
+                  :label="permission.name"
+                  :value="permission.id"
+                  class="my-2 mx-4 w-25"
+                  hide-details
+                >
+                </v-checkbox>
               </v-row>
             </v-card-text>
             <v-divider></v-divider>

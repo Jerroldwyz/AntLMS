@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const roles = await getRoles()
-const availablePermissions = getPermissions()
+const availablePermissions = await getPermissions()
 
 const roleList = ref(roles)
 
@@ -27,7 +27,7 @@ const deleteRoles = (roleIdToRemove: number) => {
           :key="role.id"
           :role="role"
           :available-permissions="availablePermissions"
-          @delete:roleList="deleteRoles"
+          @delete:role="deleteRoles"
         >
         </AdminRolesTableItem>
       </tbody>
