@@ -31,6 +31,18 @@ export const updateRolePermissionMappings = async (
   })
 }
 
+export const deleteRolePermissionMapping = async (
+  roleId: number,
+  permissionId: number,
+): Promise<any> => {
+  return await prisma.role_permissions_attachments.delete({
+    where: {
+      role_id: roleId,
+      permission_id: permissionId,
+    },
+  })
+}
+
 export const getManagerRoleMapping = async (
   managerUid: string,
 ): Promise<any> => {
