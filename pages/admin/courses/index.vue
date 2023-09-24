@@ -8,6 +8,6 @@ definePageMeta({
 <template>
   <h1 class="mb-4">Admin Panel - Courses</h1>
   <div>
-    <AdminCourseTable :courses="courses"></AdminCourseTable>
+    <AdminCourseTable></AdminCourseTable>
   </div>
 </template>

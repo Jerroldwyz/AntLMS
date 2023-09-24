@@ -2,17 +2,37 @@
 const roles = await getRoles()
 const availablePermissions = await getPermissions()
 
-const roleList = ref(roles)
+let roleList = toRaw(roles.value)
+
+// TODO I would rather use computed value here but it does not want to work lol
+const filteredRoleList = ref(roleList)
+
+const updateSearch = (searchString: string) => {
+  if (searchString === "") {
+    filteredRoleList.value = roleList
+  } else {
+    filteredRoleList.value = roleList.filter((role: any) =>
+      role.name.toLowerCase().includes(searchString.toLowerCase()),
+    )
+  }
+}
 
 const deleteRoles = (roleIdToRemove: number) => {
-  roleList.value = roleList.value.filter(
-    (role: any) => role.id !== roleIdToRemove,
-  )
+  roleList = roleList.filter((role: any) => role.id !== roleIdToRemove)
 }
 </script>
 
 <template>
   <div>
+    <v-text-field
+      clearable
+      label="Search"
+      type="text"
+      variant="outlined"
+      @update:model-value="updateSearch"
+    >
+    </v-text-field>
+
     <v-table fixed-header>
       <thead>
         <tr>
@@ -23,7 +43,7 @@ const deleteRoles = (roleIdToRemove: number) => {
       </thead>
       <tbody>
         <AdminRolesTableItem
-          v-for="role in roleList"
+          v-for="role in filteredRoleList"
           :key="role.id"
           :role="role"
           :available-permissions="availablePermissions"
