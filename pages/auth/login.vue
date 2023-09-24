@@ -8,7 +8,7 @@
       elevation="10"
     >
       <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4 text--darken-2">Sign in</h2>
+        <h2 class="font-weight-bold mt-4">Sign in</h2>
         <v-form
           ref="form"
           v-model="valid"

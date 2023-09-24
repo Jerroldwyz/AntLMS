@@ -10,10 +10,10 @@ useHead({
 </script>
 
 <template>
-  <div class="error-main blue-grey lighten-5">
+  <div class="error-main bg-blue-grey-lighten-5">
     <div class="py-12 error-box">
       <div class="text-center">
-        <h1 class="error-title error--text">404</h1>
+        <h1 class="error-title text-error">404</h1>
         <h3 class="text-uppercase error-subtitle">PAGE NOT FOUND !</h3>
         <p class="text-grey-darken-1 mt-4 mb-4">
           You seem to be trying to find your way home

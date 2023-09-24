@@ -8,7 +8,9 @@ const getUrl = async () => {
     console.log("No path to get")
     throw new Error("No path to get")
   } else {
-    urls.value.push(await getFileUrlFromS3(pathToGet.value))
+    const url =
+      (await getImage(pathToGet.value)) ?? (await getVideo(pathToGet.value))
+    urls.value.push(url)
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-menu
+    class="rounded"
     min-width="200px"
-    rounded
   >
     <template #activator="{ props }">
       <v-btn
