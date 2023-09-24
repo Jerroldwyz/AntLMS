@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   try {
     const result = resultTransformer(await evaluateQuiz(body.result))
 
+    // comment from here
     if (body.quizScoreId !== undefined) {
       await storeExistingQuizResult(result, body.quizScoreId)
     } else {
@@ -15,6 +16,8 @@ export default defineEventHandler(async (event) => {
         parseInt(body.quizId),
       )
     }
+
+    // to here to take quiz
 
     return result
   } catch (e) {
