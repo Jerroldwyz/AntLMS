@@ -2,24 +2,48 @@
 const managers = await getManagers()
 const availableRoles = await getRoles()
 
-const managerList = ref(managers)
+let managerList = toRaw(managers.value)
+const filteredManagerList = ref(managerList)
+
+const updateSearch = (searchString: string) => {
+  if (searchString === "") {
+    filteredManagerList.value = managerList
+  } else {
+    filteredManagerList.value = managerList.filter(
+      (manager: any) =>
+        manager.name.toLowerCase().includes(searchString.toLowerCase()) ||
+        manager.email.toLowerCase().includes(searchString.toLowerCase()) ||
+        manager.roles[0]?.name
+          .toLowerCase()
+          .includes(searchString.toLowerCase()),
+    )
+  }
+}
 
 const deleteManager = (managerUidToDelete: string) => {
-  managerList.value = managerList.value.filter(
+  managerList = managerList.filter(
     (manager: any) => manager.uid !== managerUidToDelete,
   )
 }
 
 const updateManager = (modifiedManager: any) => {
-  const managerToUpdate = managerList.value.findIndex(
+  const managerToUpdate = managerList.findIndex(
     (manager: any) => manager.uid === modifiedManager.uid,
   )
-  managerList.value[managerToUpdate] = modifiedManager
+  managerList[managerToUpdate] = modifiedManager
 }
 </script>
 
 <template>
   <div>
+    <v-text-field
+      clearable
+      label="Search"
+      type="text"
+      variant="outlined"
+      @update:model-value="updateSearch"
+    >
+    </v-text-field>
     <v-table fixed-header>
       <thead>
         <tr>
@@ -31,7 +55,7 @@ const updateManager = (modifiedManager: any) => {
       </thead>
       <tbody>
         <AdminManagersTableItem
-          v-for="manager in managerList"
+          v-for="manager in filteredManagerList"
           :key="manager.uid"
           :manager="manager"
           :available-roles="availableRoles"
