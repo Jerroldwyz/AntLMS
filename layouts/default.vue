@@ -4,14 +4,15 @@
 
     <SideNavDrawer></SideNavDrawer>
 
-    <v-main class="bg-main">
+    <v-main class="d-flex align-center justify-center bg-main">
       <v-container
-        class="h-screen fill-height"
+        class="fill-height"
         fluid
       >
         <v-card
-          class="pa-4 w-100 fill-height"
+          class="pa-7 m-10 w-100 h-100"
           rounded="lg"
+          style="min-height: 568px"
         >
           <slot />
         </v-card>

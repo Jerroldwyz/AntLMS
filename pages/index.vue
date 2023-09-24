@@ -13,16 +13,5 @@ console.log()
       :title="course.title"
       :thumbnail="course.thumbnail"
     />
-
-    <!-- <CourseTile></CourseTile>
-    <CourseTile></CourseTile>
-    <CourseTile></CourseTile>
-    <CourseTile></CourseTile> -->
   </v-row>
 </template>
-
-<!-- v-for="course in courses" 
-:id="course.id" 
-:key="course.id" 
-:title="course.title" 
-:thumbnail="course.thumbnail" -->
