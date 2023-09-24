@@ -16,6 +16,7 @@ export const formatUser = async <TypeUser>(
     uid: user.uid,
     email: user.email,
     name: data.value?.name,
+    thumbnail: data.value?.thumbnail,
     contact_details: data.value?.contact_details,
   }
 }

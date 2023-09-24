@@ -1,7 +1,7 @@
 <!-- Index.vue -->
 
 <template>
-  <v-container fluid>
+  <!-- <v-container fluid>
     <v-row>
       <v-col cols="6">
         <AccountSetting
@@ -29,29 +29,46 @@
           closable
           text="Your account settings have been updated."
         ></v-alert>
-
-        <!-- Display the profile picture on the right side -->
-        <div class="profile-picture-container">
-          <img
-            v-if="profilePictureUrl !== null"
-            :src="profilePictureUrl"
-            alt="Profile Picture"
-            class="profile-picture"
-          />
-          <img
-            v-else
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/1200px-Anonymous_emblem.svg.png"
-            alt="Default Profile Picture"
-            class="default-profile-picture"
-          />
-        </div>
+        
       </v-col>
     </v-row>
+  </v-container> -->
+  <v-container class="w-50">
+    <pre>
+      {{ userData }}
+    </pre>
+    <v-card>
+      <h1>Account Settings</h1>
+      <hr style="height: 1px" />
+      <v-row>
+        <v-col cols="7"> </v-col>
+        <v-col cols="3">
+          <v-container style="position: relative">
+            <h4>Profile picture</h4>
+            <v-avatar
+              class="outlined"
+              size="250"
+            >
+              <v-img
+                :aspect-ratio="1"
+                cover
+                :src="thumbnail"
+              ></v-img>
+            </v-avatar>
+            <EditProfilePictureMenu
+              :thumbnail="thumbnailPath"
+              @thumbnail:upload="updateProfilePicture"
+              @thumbnail:remove="updateProfilePicture"
+            />
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { UserData } from "~/types"
+import { User, UserData } from "~/types"
 const authStore = useAuthStore()
 
 if (authStore.isAdmin) setPageLayout("admin")
@@ -64,15 +81,19 @@ definePageMeta({
 
 const editAccountDialog = ref(false)
 const accountUpdatedAlert = ref(false)
-const userData = ref<UserData>({
-  id: 1,
-  name: "John Doe",
-  email: "johndoe@example.com",
-  gender: "Male",
-  profilePicture: null, // Initialize profile picture
-})
+// const userData = ref<UserData>({
+//   id: 1,
+//   name: "John Doe",
+//   email: "johndoe@example.com",
+//   gender: "Male",
+//   profilePicture: null, // Initialize profile picture
+// })
 
-const updatePasswordCallback = (updatedUserData: UserData | null) => {
+const userData = ref(authStore.user)
+
+const currentUser = authStore.user
+
+const updatePasswordCallback = (updatedUserData: User | null) => {
   if (updatedUserData !== null) {
     userData.value = updatedUserData
     accountUpdatedAlert.value = true
@@ -80,15 +101,46 @@ const updatePasswordCallback = (updatedUserData: UserData | null) => {
   editAccountDialog.value = false
 }
 
-const profilePictureUrl = computed(() => {
-  // Generate a data URL from the profile picture File object
-  if (userData.value.profilePicture) {
-    const reader = new FileReader()
-    reader.readAsDataURL(userData.value.profilePicture)
-    return reader.result as string
+const fetchedThumbnail = ref<string | undefined>()
+const thumbnailPath = ref<string | undefined>()
+
+const thumbnail = computed(() => {
+  if (currentUser?.thumbnail) {
+    getImage(currentUser?.thumbnail).then((url) => {
+      fetchedThumbnail.value = url
+    })
+
+    return fetchedThumbnail.value
   }
-  return null
+
+  if (thumbnailPath.value) {
+    getImage(thumbnailPath.value).then((url) => {
+      fetchedThumbnail.value = url
+    })
+  } else {
+    fetchedThumbnail.value =
+      "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+  }
+
+  return fetchedThumbnail.value
 })
+
+const updateProfilePicture = async (path: string) => {
+  await $fetch(`/api/users/${currentUser?.uid}`, {
+    method: "PUT",
+    body: {
+      name: currentUser?.name,
+      email: currentUser?.email,
+      thumbnail: path,
+      contact_details: currentUser?.contact_details,
+    },
+  })
+  if (path) {
+    thumbnailPath.value = path
+  } else {
+    thumbnailPath.value = undefined
+  }
+}
 </script>
 
 <style scoped>

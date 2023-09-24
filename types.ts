@@ -19,6 +19,7 @@ export type User = {
   uid: string
   name: string
   email: string
+  thumbnail: string | null
   contact_details: JsonObject
 }
 

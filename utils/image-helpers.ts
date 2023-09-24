@@ -34,7 +34,9 @@ export const getImage = async (path: string): Promise<string> => {
 }
 
 export const deleteImage = async (path: string): Promise<boolean> => {
-  const { success } = await $fetch(`/api/images/${path}`, {
+  // before /api/images/:path
+  // after /api/images/
+  const { success } = await $fetch(`/api/images`, {
     method: "DELETE",
     body: {
       path,

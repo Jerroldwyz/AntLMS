@@ -14,6 +14,7 @@ const uploadFile = async () => {
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
+    console.log(selectedFile.value[0])
     const path = await uploadImage(selectedFile.value[0], "image")
     emit("upload-status", path)
   }
