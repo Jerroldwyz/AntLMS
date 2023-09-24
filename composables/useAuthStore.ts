@@ -55,33 +55,13 @@ export const useAuthStore = defineStore("authStore", {
     },
     async login(email: string, password: string) {
       const { $firebaseAuth } = useNuxtApp()
-      const message = await signInWithEmailAndPassword(
-        $firebaseAuth,
-        email,
-        password,
-      )
-        .then((userCredentials) => {
-          if (userCredentials.user.emailVerified) {
-            return {
-              message: "verified",
-            }
-          } else {
-            return {
-              mesasge: "unverified",
-            }
-          }
-        })
-        .catch((error) => {
-          throw error
-        })
-
-      return message
+      await signInWithEmailAndPassword($firebaseAuth, email, password)
+      const router = useRouter()
+      router.push("/")
     },
     async logout() {
       const { $firebaseAuth } = useNuxtApp()
-      await signOut($firebaseAuth).catch((error) => {
-        throw error
-      })
+      await signOut($firebaseAuth)
     },
   },
 })

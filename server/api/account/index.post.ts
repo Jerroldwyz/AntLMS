@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await createAccount(userProps)
   } catch (e) {
-    return sendError(event, primsaErrorHandler(e))
+    return sendError(event, prismaErrorHandler(e))
   }
 })

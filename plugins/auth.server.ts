@@ -4,15 +4,15 @@ import { getFirebaseAdmin } from "~/utils/firebase-admin"
 // server side runtime
 export default defineNuxtPlugin(async (nuxtApp) => {
   const token = useFirebaseToken()
-  const auth = getAuth(getFirebaseAdmin())
-  const authStore = useAuthStore()
 
   if (!token.value) return
 
+  const auth = useServerAuth()!
+  const authStore = useAuthStore()
+
   try {
-    const result = await auth.verifyIdToken(token.value)
-    authStore.user = await formatUser(result)
+    const currentUser = await auth.verifySessionCookie(token.value)
   } catch (error) {
-    console.error("Not authenticated or invalid token")
+    console.error("Can't verify session:", error)
   }
 })
