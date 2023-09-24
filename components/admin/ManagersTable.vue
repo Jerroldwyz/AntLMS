@@ -3,6 +3,7 @@ const managers = await getManagers()
 const availableRoles = await getRoles()
 
 let managerList = toRaw(managers.value)
+// TODO I would rather use computed value here but it does not want to work lol
 const filteredManagerList = ref(managerList)
 
 const updateSearch = (searchString: string) => {

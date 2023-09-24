@@ -1,15 +1,36 @@
 <script setup lang="ts">
-const props = defineProps(["courses"])
-const courses = props.courses
-const courseList = ref(courses)
+const courses = await fetchAllCourses()
+
+let courseList = toRaw(courses.value)
+// TODO I would rather use computed value here but it does not want to work lol
+const filteredCourseList = ref(courseList)
+
+const updateSearch = (searchString: string) => {
+  if (searchString === "") {
+    filteredCourseList.value = courseList
+  } else {
+    filteredCourseList.value = courseList.filter((course: any) =>
+      course.title.toLowerCase().includes(searchString.toLowerCase()),
+    )
+  }
+}
+
 const updateCourses = (courseIdToDelete: number) => {
-  courseList.value = courseList.value.filter(
+  courseList = courseList.filter(
     (course: any) => course.id !== courseIdToDelete,
   )
 }
 </script>
 
 <template>
+  <v-text-field
+    clearable
+    label="Search"
+    type="text"
+    variant="outlined"
+    @update:model-value="updateSearch"
+  >
+  </v-text-field>
   <v-table fixed-header>
     <thead>
       <tr>
@@ -21,7 +42,7 @@ const updateCourses = (courseIdToDelete: number) => {
     </thead>
     <tbody>
       <AdminCourseTableItem
-        v-for="course in courseList"
+        v-for="course in filteredCourseList"
         :key="course.id"
         :course="course"
         @delete:courseList="updateCourses"
