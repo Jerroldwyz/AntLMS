@@ -31,6 +31,8 @@ const tagRules = [
 const loading = ref(false)
 const valid = ref(false)
 
+const file = ref<File[]>([])
+
 const course = ref<Course>({
   title: "",
   thumbnail: "",
@@ -38,14 +40,21 @@ const course = ref<Course>({
   creatorId: "",
 })
 
-// TODO v-model on <v-file-input is incorrect
-
-const files = ref<File[]>()
+const uploadFile = async () => {
+  if (!file.value) {
+    // No file selected, handle this case as needed
+    console.log("No file to upload")
+    throw new Error("No file to upload")
+  } else {
+    course.value.thumbnail = await uploadImage(file.value[0], "image")
+  }
+}
 
 async function submitCourse() {
   if (valid.value === true) {
     loading.value = true
     try {
+      await uploadFile()
       await createCourse(course.value)
       loading.value = false
       emit("close")
@@ -90,10 +99,11 @@ async function submitCourse() {
           multiple
           chips
         ></v-select>
+
         <v-file-input
-          v-model="files"
-          variant="outlined"
+          v-model="file"
           label="Thumbnail"
+          accept="image/*"
         ></v-file-input>
       </v-card-text>
 

@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const query = await getQuery(event)
+  const id = getRouterParam(event, "id")
 
-  const course = await getCreatorCourseById(parseInt(query.courseId as string))
+  const course = await getCreatorCourseById(parseInt(id as string))
 
   try {
     return mycourseTransformer(course)
