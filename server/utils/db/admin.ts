@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid"
 import { apiManagerTransformer } from "../transformers/admin"
 import { prisma } from "."
 import { ApiRole } from "~~/types"
@@ -9,6 +10,25 @@ export const getRolePermissionMappings = async (
     where: {
       role_id: roleId,
     },
+  })
+}
+
+export const createRole = async (
+  roleName: string,
+  permission_ids: number[],
+): Promise<any> => {
+  const role = await prisma.roles.create({
+    data: {
+      name: roleName,
+    },
+  })
+  return await prisma.role_permissions_attachments.createMany({
+    data: permission_ids.map((perm_id) => {
+      return {
+        role_id: role.id,
+        permission_id: perm_id,
+      }
+    }),
   })
 }
 
@@ -41,6 +61,32 @@ export const deleteRolePermissionMapping = async (
       permission_id: permissionId,
     },
   })
+}
+
+export const createManager = async (
+  name: string,
+  email: string,
+  roleId: number = -1,
+): Promise<any> => {
+  const manager = await prisma.users.create({
+    data: {
+      uid: uuidv4(),
+      name,
+      email,
+      is_admin: true,
+    },
+  })
+  if (typeof roleId === "number") {
+    if (roleId !== -1) {
+      await prisma.admin_role_attachments.create({
+        data: {
+          user_id: manager.uid,
+          role_id: roleId,
+        },
+      })
+    }
+  }
+  return manager
 }
 
 export const getManagerRoleMapping = async (

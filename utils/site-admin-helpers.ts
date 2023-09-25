@@ -1,3 +1,17 @@
+export const createRole = async (
+  roleName: string,
+  permissionIds: number[] = [],
+): Promise<any> => {
+  const { data } = await useFetch("/api/admin/roles", {
+    method: "post",
+    body: {
+      name: roleName,
+      permission_ids: permissionIds,
+    },
+  })
+  return data
+}
+
 export const getRoles = async (): Promise<any> => {
   const { data } = await useFetch("/api/admin/roles", {
     method: "get",
@@ -50,6 +64,22 @@ export const getManagerById = async (uid: string): Promise<any> => {
 export const deleteManagerById = async (uid: string): Promise<any> => {
   const { data } = await useFetch(`/api/admin/users/${uid}`, {
     method: "delete",
+  })
+  return data
+}
+
+export const createManager = async (
+  name: string,
+  email: string,
+  role_id: number = -1,
+): Promise<any> => {
+  const { data } = await useFetch(`/api/admin/users`, {
+    method: "post",
+    body: {
+      name,
+      email,
+      role_id,
+    },
   })
   return data
 }
