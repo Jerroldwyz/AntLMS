@@ -41,10 +41,26 @@ export async function createCourse(course: Course): Promise<any> {
     course.creatorId = authStore.user.uid
   }
 
-  console.log(course)
-
   await $fetch("/api/mycourses", {
     method: "post",
+    body: {
+      ...course,
+    },
+  })
+}
+
+export async function updateCourse(
+  course: Course,
+  id: string | string[],
+): Promise<any> {
+  const authStore = useAuthStore()
+
+  if (authStore.user?.uid !== undefined) {
+    course.creatorId = authStore.user.uid
+  }
+
+  await $fetch(`api/mycourses/${id}`, {
+    method: "PUT",
     body: {
       ...course,
     },

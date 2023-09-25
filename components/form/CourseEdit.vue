@@ -7,8 +7,35 @@ const props = defineProps<{
   course: Course
 }>()
 
+const valid = ref(false)
+const loading = ref(false)
+
 // TODO is this suppose to emit anything back to the parent??
-const course = props.course
+const course = ref<Course>(props.course)
+const file = ref<File[]>([])
+
+const updateThumbnail = async () => {
+  if (!file) {
+    // No file selected, handle this case as needed
+    console.log("No file to upload")
+    throw new Error("No file to upload")
+  } else {
+    await deleteImage(course.value.thumbnail)
+    course.value.thumbnail = await uploadImage(file.value[0], "image")
+  }
+}
+
+async function submitCourse() {
+  if (valid.value === true) {
+    loading.value = true
+    try {
+      const route = useRoute()
+      await updateThumbnail()
+      await updateCourse(course.value, route.params.id)
+      loading.value = false
+    } catch (e) {}
+  }
+}
 </script>
 
 <template>
@@ -30,7 +57,7 @@ const course = props.course
         </v-col>
       </v-row>
       <v-divider class="mb-2"></v-divider>
-      <v-form>
+      <v-form @submit.prevent="submitCourse">
         <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
           v-model="course.tags"
@@ -40,6 +67,7 @@ const course = props.course
           chips
         ></v-select>
         <v-file-input
+          v-model="file"
           label="Thumbnail"
           variant="outlined"
           >{{ course.thumbnail }}</v-file-input
