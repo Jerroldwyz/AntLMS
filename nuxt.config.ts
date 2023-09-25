@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
     firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
     public: {
-      application: "development", // application in development setting
+      application: process.env.APPLICATION ?? "development",
       firebase: {
         apiKey: process.env.FIREBASE_API_KEY,
         authDomain: process.env.FIREBASE_AUTH_DOMAIN,
