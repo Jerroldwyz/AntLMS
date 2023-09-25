@@ -35,7 +35,7 @@
   </v-container> -->
   <v-container class="w-50">
     <pre>
-      {{ userData }}
+      {{ user }}
     </pre>
     <v-card>
       <h1>Account Settings</h1>
@@ -48,12 +48,19 @@
             <v-avatar
               class="outlined"
               size="250"
+              color="grey-darken-1"
             >
               <v-img
+                v-if="user?.thumbnail"
                 :aspect-ratio="1"
                 cover
                 :src="thumbnail"
               ></v-img>
+              <span
+                v-else
+                class="text-h1"
+                >{{ authStore.initials }}</span
+              >
             </v-avatar>
             <EditProfilePictureMenu
               :thumbnail="thumbnailPath"
@@ -92,6 +99,10 @@ const accountUpdatedAlert = ref(false)
 const userData = ref(authStore.user)
 
 const currentUser = authStore.user
+
+const user = computed(() => {
+  return authStore.user
+})
 
 const updatePasswordCallback = (updatedUserData: User | null) => {
   if (updatedUserData !== null) {

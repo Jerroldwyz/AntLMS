@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
-import { retry } from "radash"
+import { useUserStore } from "~/stores/useUserStore"
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const app = initializeApp(firebaseConfig.firebase)
   const auth = getAuth(app)
 
-  const authStore = useAuthStore()
+  const userStore = useUserStore()
 
   nuxtApp.hooks.hook("app:mounted", () => {
     // auth.onIdTokenChanged(async (user) => {
@@ -38,10 +38,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (user) {
       const token = await user.getIdToken(true)
       await setServerSession(token)
-      authStore.user = await formatUser(user)
+      userStore.setUser(await formatUser(user))
     } else {
       await setServerSession(null)
-      authStore.user = null
+      userStore.setUser(null)
     }
   })
 

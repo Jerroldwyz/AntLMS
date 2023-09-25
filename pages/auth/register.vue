@@ -8,7 +8,7 @@
       elevation="10"
       class="pa-7 pa-sm-10"
     >
-      <h2 class="font-weight-bold mt-4 text--darken-2">Sign up</h2>
+      <h2 class="font-weight-bold mt-4">Sign up</h2>
       <div v-if="isRegistered">
         We have sent you a verification to your email, please check the email
         <NuxtLink to="/auth/login"></NuxtLink>
@@ -94,8 +94,8 @@ definePageMeta({
   layout: false,
   middleware: "guest",
 })
-const router = useRouter()
-const authStore = useAuthStore()
+
+const { register } = useAuth()
 
 const email = ref("")
 const password = ref("")
@@ -138,7 +138,7 @@ const signUp = async () => {
         phone_number: phoneNumber.value,
       },
     }
-    const firebaseUser = await authStore.register(userProps)
+    const firebaseUser = await register(userProps)
 
     if (firebaseUser) isRegistered.value = true
 
