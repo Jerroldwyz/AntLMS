@@ -13,7 +13,7 @@
           color="grey-darken-1"
           size="large"
         >
-          <span class="text-h6">AN</span>
+          <span class="text-h6">{{ initials }}</span>
         </v-avatar>
       </v-btn>
     </template>
@@ -42,11 +42,6 @@
             variant="text"
             @click="signOut"
           >
-            <!-- <NuxtLink
-              to="/logout"
-              class="text-button text-decoration-none text-black"
-              >Logout</NuxtLink
-            > -->
             Logout
           </v-btn>
         </div>

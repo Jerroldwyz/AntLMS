@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   try {
-    const fileType = body.fileType
-    const path = `images/${uuidv4()}.${fileType}`
+    const fileName = body.name
+    const path = `images/${uuidv4()}.${fileName}`
     const presignedUrl = await generatePresignedUrlPUT(path)
     return { success: true, presignedUrl, path }
   } catch (e) {
