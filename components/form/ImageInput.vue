@@ -1,11 +1,7 @@
 components/form/Input.vue
 <script setup lang="ts">
-const props = defineProps<{
-  label?: string
-  accept?: string
-  modelValue: File[]
-}>()
-defineEmits(["update:modelValue"])
+const props = defineProps(["label", "accept", "file"])
+defineEmits(["update:file"])
 
 const label = props.label ?? "Image Input"
 const mimeAccept = props.accept ?? "image/*"
@@ -13,9 +9,9 @@ const mimeAccept = props.accept ?? "image/*"
 
 <template>
   <v-file-input
-    :model-value="props.modelValue"
+    :model-value="file"
     :label="label"
     :accept="mimeAccept"
-    @change="$emit('update:modelValue', [...$event.target.files])"
+    @update:model-value="$emit('update:file', $event.target.value)"
   ></v-file-input>
 </template>

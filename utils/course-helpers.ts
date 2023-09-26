@@ -51,6 +51,24 @@ export async function createCourse(course: Course): Promise<any> {
   })
 }
 
+export async function updateCourse(
+  course: Course,
+  id: string | string[],
+): Promise<any> {
+  const authStore = useAuthStore()
+
+  if (authStore.user?.uid !== undefined) {
+    course.creatorId = authStore.user.uid
+  }
+
+  await $fetch(`/api/mycourses/${id}`, {
+    method: "PUT",
+    body: {
+      ...course,
+    },
+  })
+}
+
 export async function deleteCourse(id: number): Promise<any> {
   // TODO: Is validation needed here? Or in the backend?
   await $fetch(`/api/courses/${id}`, {

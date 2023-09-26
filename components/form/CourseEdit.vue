@@ -11,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "update:course", course: Course): void
   (e: "update:file", file: File[]): void
+  (e: "changed"): void
 }>()
 
 function formatThumbnail(thumbnail: string) {
@@ -44,15 +45,25 @@ function formatThumbnail(thumbnail: string) {
       </v-row>
       <v-divider class="my-2"></v-divider>
       <v-form>
-        <v-text-field variant="outlined">{{ course.title }}</v-text-field>
+        <v-text-field
+          :model-value="course.title"
+          variant="outlined"
+          @update:model-value="
+            (title) => $emit('update:course', { ...course, title })
+          "
+        ></v-text-field>
         <v-select
           :model-value="course.tags"
           multiple
           :items="tags"
           variant="outlined"
           chips
+          @update:model-value="
+            (tags) => $emit('update:course', { ...course, tags: [...tags] })
+          "
         ></v-select>
         <v-file-input
+          class="overflow-hidden"
           :model-value="file"
           :label="formatThumbnail(course.thumbnail)"
           variant="outlined"

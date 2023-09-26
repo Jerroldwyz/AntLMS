@@ -1,13 +1,53 @@
 <script setup lang="ts">
+import { Course } from "~/types"
+
 definePageMeta({
   middleware: ["user"],
 })
+
+const loading = ref(false)
+const alertSuccess = ref(false)
+const alertError = ref(false)
+
 const route = useRoute()
-const course = await fetchUserCourse(route.params.id)
+const course = ref<Course>(await fetchUserCourse(route.params.id))
 const file = ref<File[]>([])
-watchEffect(() => console.log(file.value))
+
+async function submitCourse() {
+  try {
+    loading.value = true
+    if (file.value[0]) {
+      const newThumbnail = await uploadImage(file.value[0], "image")
+      await deleteImage(course.value.thumbnail)
+      course.value.thumbnail = newThumbnail
+    }
+    console.log(course.value)
+    await updateCourse(course.value, route.params.id)
+    loading.value = false
+    alertSuccess.value = true
+  } catch (e) {
+    alertError.value = true
+  }
+}
 </script>
 <template>
+  <v-alert
+    v-model="alertSuccess"
+    type="success"
+    density="compact"
+    title="Course Updated"
+    rounded="0"
+    closable
+  ></v-alert>
+  <v-alert
+    v-model="alertError"
+    type="error"
+    density="compact"
+    title="Course Not Updated"
+    rounded="0"
+    closable
+    text="Something went wrong. Please try again later."
+  ></v-alert>
   <v-container fluid>
     <v-container
       class="d-flex"
@@ -32,7 +72,13 @@ watchEffect(() => console.log(file.value))
         >
           Cancel
         </v-btn>
-        <v-btn class="text-capitalize bg-primary"> Save Changes </v-btn>
+        <v-btn
+          class="text-capitalize bg-primary"
+          :loading="loading"
+          @click="submitCourse"
+        >
+          Save Changes
+        </v-btn>
       </v-card>
     </v-container>
   </v-container>
