@@ -4,6 +4,8 @@ definePageMeta({
 })
 const route = useRoute()
 const course = await fetchUserCourse(route.params.id)
+const file = ref<File[]>([])
+watchEffect(() => console.log(file.value))
 </script>
 <template>
   <v-container fluid>
@@ -12,7 +14,10 @@ const course = await fetchUserCourse(route.params.id)
       style="gap: 2em"
       fluid
     >
-      <FormCourseEdit :course="course" />
+      <FormCourseEdit
+        v-model:course="course"
+        v-model:file="file"
+      />
       <ContentList :course="course" />
     </v-container>
     <v-container
