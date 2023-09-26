@@ -17,7 +17,7 @@
       <v-table fixed-header>
         <thead>
           <tr>
-            <th class="text-left">Profile Picture</th>
+            <!-- <th class="text-left">Profile Picture</th> -->
             <th class="text-left">User Name</th>
             <th class="text-left">Email</th>
             <th class="text-left">First Name</th>
@@ -28,19 +28,19 @@
         <tbody>
           <tr
             v-for="user in filteredUsers"
-            :key="user.id"
+            :key="user.uid"
           >
-            <td>
+            <!-- <td>
               <v-avatar
                 class="ma-2"
                 color="grey-darken-1"
                 size="large"
               >
-                <span class="text-h6">{{ user.username[0] }}</span>
+                <span class="text-h6">{{ user?.username[0] }}</span>
               </v-avatar>
-            </td>
+            </td> -->
             <td>
-              <span v-if="!editDialog[user.id]">{{ user.username }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.username }}</span>
               <v-text-field
                 v-else
                 v-model="user.username"
@@ -51,7 +51,7 @@
               ></v-text-field>
             </td>
             <td>
-              <span v-if="!editDialog[user.id]">{{ user.email }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.email }}</span>
               <v-text-field
                 v-else
                 v-model="user.email"
@@ -62,7 +62,7 @@
               ></v-text-field>
             </td>
             <td>
-              <span v-if="!editDialog[user.id]">{{ user.firstName }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.firstName }}</span>
               <v-text-field
                 v-else
                 v-model="user.firstName"
@@ -73,7 +73,7 @@
               ></v-text-field>
             </td>
             <td>
-              <span v-if="!editDialog[user.id]">{{ user.lastName }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.lastName }}</span>
               <v-text-field
                 v-else
                 v-model="user.lastName"
@@ -89,10 +89,10 @@
                 class="ms-2"
                 variant="outlined"
                 size="small"
-                :color="editDialog[user.id] ? 'success' : ''"
-                @click="toggleEditDialog(user.id)"
+                :color="editDialog[user?.uid] ? 'success' : ''"
+                @click="toggleEditDialog(user?.uid)"
               >
-                {{ editDialog[user.id] ? "Save" : "Edit" }}
+                {{ editDialog[user?.uid] ? "Save" : "Edit" }}
               </v-btn>
 
               <v-btn
@@ -100,7 +100,7 @@
                 variant="outlined"
                 size="small"
                 color="red"
-                @click="confirmDeleteUser(user)"
+                @click="confirmDeleteUser(user?.uid)"
               >
                 Delete
               </v-btn>
@@ -113,56 +113,58 @@
 </template>
 
 <script>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
+import {
+  fetchAllUsers,
+  fetchUser,
+  updateUser,
+  deleteUser,
+} from "../../../utils/user-helpers" // Import your user-related functions
 
 export default {
   setup() {
     const editDialog = ref({})
-    const users = [
-      {
-        id: 1,
-        username: "user1",
-        email: "user1@example.com",
-        firstName: "John",
-        lastName: "Doe",
-        // ... other user properties ...
-      },
-      // Add more user objects from api
-      {
-        id: 2,
-        username: "user2",
-        email: "user2@example.com",
-        firstName: "James",
-        lastName: "Smith",
-        // ... other user properties ...
-      },
-    ]
-
-    const searchQuery = ref("") // Added to track the search input
+    const searchQuery = ref("")
+    const users = ref([])
 
     const toggleEditDialog = (userId) => {
       editDialog.value[userId] = !editDialog.value[userId]
     }
-
-    const confirmDeleteUser = (user) => {
-      if (window.confirm(`Are you sure you want to delete ${user.username}?`)) {
-        // Implement the delete logic here (e.g., remove the user from the users array)
-        // You can also make an API call to delete the user on the server.
-        // After deleting the user, you may want to update the UI accordingly.
-        const index = users.indexOf(user)
-        if (index !== -1) {
-          users.splice(index, 1) // Remove the user from the array
+    const handleEdit = async (user) => {
+      if (editDialog.value[user.uid]) {
+        // Save changes
+        try {
+          await updateUser(user.uid, {
+            // Update user properties
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          })
+          toggleEditDialog(user.uid) // Toggle edit mode off
+        } catch (e) {
+          console.error("Error updating user:", e)
         }
+      } else {
+        // Enter edit mode
+        toggleEditDialog(user.uid)
       }
     }
 
-    // Compute the filtered users based on the search query
+    const confirmDeleteUser = async (userId) => {
+      try {
+        await deleteUser(userId) // Call the deleteUser function
+        users.value = users.value.filter((user) => user.uid !== userId) // Remove the user from the local list
+      } catch (e) {
+        console.error("Error deleting user:", e)
+      }
+    }
     const filteredUsers = computed(() => {
       const query = searchQuery.value.trim().toLowerCase()
       if (query === "") {
-        return users
+        return users?.value
       } else {
-        return users.filter(
+        return users?.value.filter(
           (user) =>
             user.username.toLowerCase().includes(query) ||
             user.firstName.toLowerCase().includes(query) ||
@@ -172,34 +174,28 @@ export default {
       }
     })
 
-    const searchUsers = () => {
-      // This function can be used to trigger the search action.
-      // In this example, it's a simple method that updates the filteredUsers computed property based on the searchQuery.
-      // You can further customize this function to make API requests or perform other actions.
-      filteredUsers.value = computed(() => {
-        const query = searchQuery.value.trim().toLowerCase()
-        if (query === "") {
-          return users
+    onMounted(async () => {
+      try {
+        const response = await fetchAllUsers()
+        if (response.ok) {
+          const userData = await response.json() // Parse the JSON response
+          console.log(userData) // Log the user data
+          users.value = userData
         } else {
-          return users.filter(
-            (user) =>
-              user.username.toLowerCase().includes(query) ||
-              user.firstName.toLowerCase().includes(query) ||
-              user.lastName.toLowerCase().includes(query) ||
-              user.email.toLowerCase().includes(query),
-          )
+          console.warn("No user data found in the response.")
         }
-      })
-    }
+      } catch (e) {
+        console.error("Error fetching user data:", e)
+      }
+    })
 
     return {
       editDialog,
+      searchQuery,
       users,
       toggleEditDialog,
       confirmDeleteUser,
-      searchQuery,
       filteredUsers,
-      searchUsers,
     }
   },
 }
