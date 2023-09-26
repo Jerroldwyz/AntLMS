@@ -1,3 +1,4 @@
+import { JsonObject } from "@prisma/client/runtime/library"
 import { defineStore } from "pinia"
 import { User } from "~~/types"
 
@@ -5,6 +6,7 @@ import { User } from "~~/types"
 export const useUserStore = defineStore("current-user-store", {
   state: () => ({
     user: null as User | null,
+    isAdmin: false,
   }),
   getters: {
     isAuthenticated: (state) => !!state.user,
@@ -18,11 +20,53 @@ export const useUserStore = defineStore("current-user-store", {
         .join("")
       return initials
     },
+    thumbnailUrl: (state) => {
+      const currentThumbnail = state.user?.thumbnail
+      let thumbnailUrl
+      if (currentThumbnail) {
+        getImage(currentThumbnail).then((url) => {
+          thumbnailUrl = url
+        })
+      }
+
+      return currentThumbnail
+    },
   },
   actions: {
     setUser(user: User | null) {
       this.user = user
     },
-    async fetchUser() {},
+    async updateThumbnail(thumbnailPath: string) {
+      const updatedUser = {
+        name: this.user?.name,
+        email: this.user?.email,
+        thumbnail: thumbnailPath,
+        contact_details: this.user?.contact_details,
+      }
+
+      await updateAccount(this.user?.uid, updatedUser)
+    },
+    async updateDetails({ ...userData }) {
+      const userToUpdate = {
+        name: userData.name,
+        email: userData.email,
+        thumbnail: this.user?.thumbnail,
+        contact_details: userData.contact_details,
+      }
+
+      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+
+      this.user = {
+        uid: updatedUser.uid,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        thumbnail: updatedUser.thumbnail,
+        contact_details: updatedUser.contact_details as JsonObject,
+      }
+
+      return {
+        success: true,
+      }
+    },
   },
 })

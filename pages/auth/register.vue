@@ -55,11 +55,6 @@
             required
           ></v-text-field>
           <v-text-field
-            v-model="phoneNumber"
-            label="Phone number"
-            class="mt-4"
-          ></v-text-field>
-          <v-text-field
             v-model="password"
             :rules="passwordRules"
             label="Password"
@@ -89,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { sendEmailVerification } from "firebase/auth"
+import { sendEmailVerification, sendSignInLinkToEmail } from "firebase/auth"
 definePageMeta({
   layout: false,
   middleware: "guest",
@@ -104,7 +99,6 @@ const valid = ref(false)
 const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
-const phoneNumber = ref()
 
 const emailVerified = ref(false)
 const isRegistered = ref(false)
@@ -127,23 +121,20 @@ const passwordValidation = ref([
   () => password.value === confirmedPassword.value || "Password must match",
 ])
 
-const signUp = async () => {
+const signUp = () => {
   disabled.value = true
   try {
     const userProps = {
       email: email.value,
       name: `${firstName.value} ${lastName.value}`,
       password: password.value,
-      contact_details: {
-        phone_number: phoneNumber.value,
-      },
+      contact_details: {},
     }
-    const firebaseUser = await register(userProps)
-
-    if (firebaseUser) isRegistered.value = true
-
-    await sendEmailVerification(firebaseUser).then(() => {
-      emailVerified.value = firebaseUser.emailVerified
+    register(userProps).then((user) => {
+      const actionCodeSettings = {
+        url: "http://localhost:3000/auth/login",
+      }
+      sendEmailVerification(user, actionCodeSettings)
     })
   } catch (error) {
     alert(error)

@@ -147,7 +147,6 @@
 </template>
 
 <script>
-const authStore = useAuthStore()
 export default {
   data: () => ({
     loaded: false,
@@ -157,18 +156,6 @@ export default {
     dashboard: ["Dashboard", "Math 101", "Business 101", "Baking 101"],
   }),
 
-  computed: {
-    isAuthenticated() {
-      return authStore.isAuthenticated
-    },
-    currentUser() {
-      return authStore.user
-    },
-    initials() {
-      return authStore.initials
-    },
-  },
-
   methods: {
     onClick() {
       this.loading = true
@@ -177,10 +164,6 @@ export default {
         this.loading = false
         this.loaded = true
       }, 2000)
-    },
-    async signOut() {
-      await authStore.logout()
-      navigateTo("/auth/login")
     },
   },
 }

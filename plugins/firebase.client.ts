@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { useUserStore } from "~/stores/useUserStore"
+import { User } from "~/types"
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
@@ -10,38 +11,23 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const userStore = useUserStore()
 
-  nuxtApp.hooks.hook("app:mounted", () => {
-    // auth.onIdTokenChanged(async (user) => {
-    //   if (user) {
-    //     console.log("User signed in")
-    //     const token = await user.getIdToken()
-    //     setServerSession(token)
-    //     authStore.user = await formatUser(user)
-    //     user.getIdTokenResult().then((idTokenResult) => {
-    //       if (idTokenResult.claims.admin) {
-    //         authStore.isAdmin = true
-    //         navigateTo("/admin")
-    //       } else {
-    //         authStore.isAdmin = false
-    //         navigateTo("/")
-    //       }
-    //     })
-    //   } else {
-    //     console.log("User signed out")
-    //     setServerSession("")
-    //     authStore.user = null
-    //   }
-    // })
-  })
-
-  auth.onIdTokenChanged(async (user) => {
-    if (user) {
-      const token = await user.getIdToken(true)
-      await setServerSession(token)
-      userStore.setUser(await formatUser(user))
-    } else {
+  nuxtApp.hooks.hook("app:mounted", async () => {
+    if (appConfig() === "development") {
+      const dummyUser = await $fetch("/api/me")
+      userStore.user = dummyUser as User
       await setServerSession(null)
-      userStore.setUser(null)
+    } else {
+      auth.onIdTokenChanged(async (user) => {
+        if (user) {
+          const token = await user.getIdToken(true)
+          await setServerSession(token)
+          userStore.setUser(await formatUser(user))
+        } else {
+          await setServerSession(null)
+          userStore.setUser(null)
+          navigateTo("/auth/login")
+        }
+      })
     }
   })
 

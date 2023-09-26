@@ -51,20 +51,23 @@
 </template>
 
 <script setup lang="ts">
-const authStore = useAuthStore()
+const userStore = useUserStore()
+const { logout } = useAuth()
+
 const isAuthenticated = computed(() => {
-  return authStore.isAuthenticated
+  return userStore.isAuthenticated
 })
 const currentUser = computed(() => {
-  return authStore.user
+  return userStore.user
 })
 const initials = computed(() => {
-  return authStore.initials
+  return userStore.initials
 })
 
 const signOut = async () => {
-  await authStore.logout()
-  navigateTo("/auth/login")
+  await logout()
+  const router = useRouter()
+  router.push("/auth/login")
 }
 </script>
 <style scoped></style>

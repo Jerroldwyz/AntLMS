@@ -1,5 +1,7 @@
 import {
   createUserWithEmailAndPassword,
+  isSignInWithEmailLink,
+  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth"
@@ -18,7 +20,7 @@ export const useAuth = () => {
     const userProps = {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
-      name: `${userData.firstName} ${userData.lastName}`,
+      name: userData.name,
       contact_details: {
         phone_number: userData.phone_number,
       },
@@ -41,6 +43,35 @@ export const useAuth = () => {
   const logout = async () => {
     const { $firebaseAuth } = useNuxtApp()
     await signOut($firebaseAuth)
+  }
+
+  const sendEmailVerification = () => {
+    try {
+      const { $firebaseAuth } = useNuxtApp()
+      const actionCodeSettings = {
+        // URL you want to redirect back to. The domain (www.example.com) for this
+        // URL must be in the authorized domains list in the Firebase Console.
+        url: "http://localhost:3000/auth/login",
+        // This must be true.
+        handleCodeInApp: true,
+      }
+      if (isSignInWithEmailLink($firebaseAuth, window.location.href)) {
+        let email = window.localStorage.getItem("emailForSignIn")
+        if (!email) {
+          // User opened the link on a different device. To prevent session fixation
+          // attacks, ask the user to provide the associated email again. For example:
+          email = window.prompt("Please provide your email for confirmation")
+        } else {
+          sendSignInLinkToEmail($firebaseAuth, email, actionCodeSettings).then(
+            (result) => {
+              window.localStorage.removeItem("emailForSignIn")
+            },
+          )
+        }
+      }
+    } catch (error) {
+      console.error("Error while sending verification email:", error)
+    }
   }
 
   return {

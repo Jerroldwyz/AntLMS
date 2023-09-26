@@ -44,6 +44,7 @@ export const getUserById = (user_id: string) => {
 
 export const updateUser = (
   user_id: string,
+  name: string,
   thumbnail: string,
   contact_details = {},
 ) => {
@@ -52,6 +53,7 @@ export const updateUser = (
       uid: user_id,
     },
     data: {
+      name,
       thumbnail,
       contact_details,
     },
