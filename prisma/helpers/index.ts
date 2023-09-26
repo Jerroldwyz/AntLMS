@@ -46,7 +46,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   const choices: choices[] = []
 
   for (let i = 0; i < amount; i++) {
-    users.push(createUser())
+    users.push(await createUser())
     users = _.unique(users, (x) => x.email)
   }
   for (let i = 0; i < amount; i++) {
