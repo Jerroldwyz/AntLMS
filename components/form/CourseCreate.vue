@@ -46,7 +46,7 @@ const uploadFile = async () => {
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
-    course.value.thumbnail = await uploadImage(file.value[0], "image")
+    course.value.thumbnail = await uploadImage(file.value[0])
   }
 }
 

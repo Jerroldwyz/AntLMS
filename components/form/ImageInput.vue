@@ -1,4 +1,3 @@
-components/form/Input.vue
 <script setup lang="ts">
 const props = defineProps<{
   label?: string

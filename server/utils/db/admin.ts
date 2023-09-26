@@ -57,8 +57,10 @@ export const deleteRolePermissionMapping = async (
 ): Promise<any> => {
   return await prisma.role_permissions_attachments.delete({
     where: {
-      role_id: roleId,
-      permission_id: permissionId,
+      permission_id_role_id: {
+        role_id: roleId,
+        permission_id: permissionId,
+      },
     },
   })
 }
