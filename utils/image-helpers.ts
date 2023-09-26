@@ -11,7 +11,7 @@ export const uploadImage = async (
   const { presignedUrl, path } = await $fetch("/api/images", {
     method: "POST",
     body: {
-      type: mimeType,
+      name: file.name,
     },
   })
 
