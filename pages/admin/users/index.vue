@@ -40,10 +40,10 @@
               </v-avatar>
             </td> -->
             <td>
-              <span v-if="!editDialog[user?.uid]">{{ user?.username }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.uid }}</span>
               <v-text-field
                 v-else
-                v-model="user.username"
+                v-model="user.uid"
                 label="Username"
                 variant="outlined"
                 density="compact"
@@ -62,10 +62,10 @@
               ></v-text-field>
             </td>
             <td>
-              <span v-if="!editDialog[user?.uid]">{{ user?.firstName }}</span>
+              <span v-if="!editDialog[user?.uid]">{{ user?.name }}</span>
               <v-text-field
                 v-else
-                v-model="user.firstName"
+                v-model="user.name"
                 label="First Name"
                 variant="outlined"
                 density="compact"
@@ -117,7 +117,7 @@ import { ref, computed, onMounted } from "vue"
 import {
   fetchAllUsers,
   fetchUser,
-  updateUser,
+  updateUser as updateUserInHelpers,
   deleteUser,
 } from "../../../utils/user-helpers" // Import your user-related functions
 
@@ -130,27 +130,26 @@ export default {
     const toggleEditDialog = (userId) => {
       editDialog.value[userId] = !editDialog.value[userId]
     }
-    const handleEdit = async (user) => {
-      if (editDialog.value[user.uid]) {
-        // Save changes
-        try {
-          await updateUser(user.uid, {
-            // Update user properties
-            username: user.username,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          })
-          toggleEditDialog(user.uid) // Toggle edit mode off
-        } catch (e) {
-          console.error("Error updating user:", e)
+
+    const updateUserInDatabase = async (user) => {
+      try {
+        console.log("Updating user:", user) // Debugging line
+
+        const userId = user.uid // Get the user's ID try
+
+        const updatedUserData = {
+          uid: user.uid,
+          email: user.email,
+          name: user.name,
+          // lastName: user.lastName,
         }
-      } else {
-        // Enter edit mode
-        toggleEditDialog(user.uid)
+
+        await updateUserInHelpers(userId, updatedUserData) // Call the updateUser function
+        editDialog.value[userId] = false // Close the edit dialog
+      } catch (e) {
+        console.error("Error updating user:", e)
       }
     }
-
     const confirmDeleteUser = async (userId) => {
       try {
         await deleteUser(userId) // Call the deleteUser function
@@ -164,13 +163,20 @@ export default {
       if (query === "") {
         return users?.value
       } else {
-        return users?.value.filter(
-          (user) =>
-            user.username.toLowerCase().includes(query) ||
-            user.firstName.toLowerCase().includes(query) ||
-            user.lastName.toLowerCase().includes(query) ||
-            user.email.toLowerCase().includes(query),
-        )
+        const filtered = users?.value.filter((user) => {
+          const lowerCaseUsername = user.uid ? user.uid.toLowerCase() : ""
+          const lowerCaseFirstName = user.name ? user.name.toLowerCase() : ""
+          const lowerCaseLastName = user.name ? user.name.toLowerCase() : ""
+          const lowerCaseEmail = user.email ? user.email.toLowerCase() : ""
+
+          return (
+            lowerCaseUsername.includes(query) ||
+            lowerCaseFirstName.includes(query) ||
+            lowerCaseLastName.includes(query) ||
+            lowerCaseEmail.includes(query)
+          )
+        })
+        return filtered
       }
     })
 
@@ -182,6 +188,7 @@ export default {
           console.log(userData) // Log the user data
           users.value = userData
         } else {
+          console.warn("Request failed with status:", response.status)
           console.warn("No user data found in the response.")
         }
       } catch (e) {
@@ -196,7 +203,13 @@ export default {
       toggleEditDialog,
       confirmDeleteUser,
       filteredUsers,
+      updateUserInDatabase,
     }
   },
 }
+
+definePageMeta({
+  layout: "admin",
+  middleware: "admin",
+})
 </script>
