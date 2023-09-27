@@ -12,6 +12,10 @@ import {
   choices,
   enrollments,
   progress,
+  permissions,
+  roles,
+  role_permissions_attachments,
+  admin_role_attachments,
 } from ".prisma/client"
 import * as _ from "radash"
 import { createTempDir, cleanupTempDir } from "./fileHelpers"
@@ -27,6 +31,151 @@ import { createChoice } from "./createChoice"
 import { createEnrollment } from "./createEnrollment"
 import { createProgress } from "./createProgress"
 import { createQuizscore } from "./createQuizscore"
+
+import { faker } from "./faker"
+
+const admins: users[] = [
+  {
+    uid: faker.string.uuid(),
+    name: "admin",
+    email: faker.internet.email(),
+    contact_details: {},
+    is_admin: true,
+  },
+  {
+    uid: faker.string.uuid(),
+    name: "manager",
+    email: faker.internet.email(),
+    contact_details: {},
+    is_admin: true,
+  },
+  {
+    uid: faker.string.uuid(),
+    name: "staff",
+    email: faker.internet.email(),
+    contact_details: {},
+    is_admin: true,
+  },
+]
+
+const permissions_list: permissions[] = [
+  {
+    id: faker.number.int(2147483647),
+    name: "editUser",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "disableUser",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "deleteUser",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "createSiteAdmin",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "editSiteAdmin",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "disableSiteAdmin",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "deleteSiteAdmin",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "disableCourse",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "deleteCourse",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "createRoles",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "editRoles",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "deleteRoles",
+  },
+]
+
+const roles_list: roles[] = [
+  {
+    id: faker.number.int(2147483647),
+    name: "admin",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "manager",
+  },
+  {
+    id: faker.number.int(2147483647),
+    name: "staff",
+  },
+]
+
+const role_permissions_attachments_list: role_permissions_attachments[] = [
+  ...permissions_list.map((perm) => {
+    return {
+      id: faker.number.int(2147483647),
+      permission_id: perm.id,
+      role_id: roles_list[0].id,
+    }
+  }),
+  ...permissions_list
+    .filter(
+      (perm) =>
+        perm.name.includes("edit") ||
+        perm.name.includes("disable") ||
+        perm.name.includes("create"),
+    )
+    .map((perm) => {
+      return {
+        id: faker.number.int(2147483647),
+        permission_id: perm.id,
+        role_id: roles_list[1].id,
+      }
+    }),
+  ...permissions_list
+    .filter(
+      (perm) => perm.name.includes("edit") || perm.name.includes("create"),
+    )
+    .map((perm) => {
+      return {
+        id: faker.number.int(2147483647),
+        permission_id: perm.id,
+        role_id: roles_list[2].id,
+      }
+    }),
+]
+
+const admin_role_attachments_list: admin_role_attachments[] = [
+  {
+    id: faker.number.int(2147483647),
+    user_id: admins[0].uid,
+    role_id: roles_list[0].id,
+  },
+  {
+    id: faker.number.int(2147483647),
+    user_id: admins[1].uid,
+    role_id: roles_list[1].id,
+  },
+  {
+    id: faker.number.int(2147483647),
+    user_id: admins[2].uid,
+    role_id: roles_list[2].id,
+  },
+]
 
 export const generateData = async (prisma: PrismaClient, amount: number) => {
   createTempDir()
@@ -44,6 +193,20 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   const progress: progress[] = []
   let quiz_score: quiz_score[] = []
   const choices: choices[] = []
+  const roles: roles[] = []
+  const permissions: permissions[] = []
+  const admin_role_attachments: admin_role_attachments[] = []
+  const role_permissions_attachments: role_permissions_attachments[] = []
+
+  admins.forEach((admin) => users.push(admin))
+  roles_list.forEach((role) => roles.push(role))
+  permissions_list.forEach((permission) => permissions.push(permission))
+  admin_role_attachments_list.forEach((admin_role_attachment) =>
+    admin_role_attachments.push(admin_role_attachment),
+  )
+  role_permissions_attachments_list.forEach((role_permissions_attachment) =>
+    role_permissions_attachments.push(role_permissions_attachment),
+  )
 
   for (let i = 0; i < amount; i++) {
     users.push(createUser())
@@ -84,6 +247,18 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
         contact_details: JSON.stringify(user.contact_details),
       }
     }),
+  })
+  await prisma.roles.createMany({
+    data: roles,
+  })
+  await prisma.permissions.createMany({
+    data: permissions,
+  })
+  await prisma.role_permissions_attachments.createMany({
+    data: role_permissions_attachments,
+  })
+  await prisma.admin_role_attachments.createMany({
+    data: admin_role_attachments,
   })
   await prisma.courses.createMany({
     data: courses,

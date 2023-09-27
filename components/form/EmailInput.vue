@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     :rules="emailRules"
-    label="E-mail"
+    :label="props.label ?? 'E-mail'"
     class="mt-4"
     required
     @update:model-value="emit('update:email', $event)"
@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps(["email", "label"])
 const emit = defineEmits(["update:email"])
 
 const emailRules = [

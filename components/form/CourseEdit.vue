@@ -9,6 +9,19 @@ const props = defineProps<{
 
 // TODO is this suppose to emit anything back to the parent??
 const course = props.course
+const thumbnailUrl = ref<string | null>(null)
+
+function formatThumbnail(thumbnail: string) {
+  const split = thumbnail.split(".")
+  split.shift()
+  return split.join(".")
+}
+
+onMounted(async () => {
+  if (course.thumbnail) {
+    thumbnailUrl.value = await getImage(course.thumbnail)
+  }
+})
 </script>
 
 <template>
@@ -19,6 +32,21 @@ const course = props.course
     <v-container>
       <v-row>
         <v-col class="d-flex justify-start align-center">
+          <v-avatar
+            class="mx-4"
+            size="64"
+          >
+            <v-img
+              v-if="thumbnailUrl !== null"
+              :src="thumbnailUrl"
+              cover
+            ></v-img>
+            <span
+              v-if="thumbnailUrl === null"
+              class="text-h6"
+              >NO IMAGE</span
+            >
+          </v-avatar>
           <h4 class="text-h4">Details</h4>
         </v-col>
         <v-col class="d-flex justify-end align-center">
@@ -29,7 +57,7 @@ const course = props.course
           ></v-btn>
         </v-col>
       </v-row>
-      <v-divider class="mb-2"></v-divider>
+      <v-divider class="my-2"></v-divider>
       <v-form>
         <v-text-field variant="outlined">{{ course.title }}</v-text-field>
         <v-select
@@ -40,7 +68,7 @@ const course = props.course
           chips
         ></v-select>
         <v-file-input
-          label="Thumbnail"
+          :label="formatThumbnail(course.thumbnail)"
           variant="outlined"
           >{{ course.thumbnail }}</v-file-input
         >

@@ -64,6 +64,11 @@ FIREBASE_DATABASE_URL=
 FIREBASE_ADMIN_CREDENTIALS=
 ```
 
+Modify APPLICATION .env variable to be in development mode
+```
+APPLICATION='development'
+```
+
 ## Production
 
 Build the application for production:

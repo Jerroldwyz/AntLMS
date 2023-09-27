@@ -28,3 +28,19 @@ export type Course = {
   tags: string[]
   creatorId: string
 }
+
+export type ApiRole = {
+  id: number
+  name: string
+  permissions: {
+    id: number
+    name: string
+  }[]
+}
+
+export type ApiManager = {
+  uid: string
+  name: string
+  email: string
+  roles: ApiRole[]
+}
