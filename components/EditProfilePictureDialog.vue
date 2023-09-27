@@ -74,6 +74,15 @@
           </v-card-actions>
           <v-card-actions>
             <v-btn
+              variant="tonal"
+              color="red"
+              class="px-10"
+              @click="removeThumbnail"
+              >Remove</v-btn
+            >
+          </v-card-actions>
+          <v-card-actions>
+            <v-btn
               class="px-10"
               variant="tonal"
               color="blue"
@@ -146,6 +155,23 @@ const applyChange = () => {
         alert("You have successfully updated your profile picture")
       }
     })
+  }
+}
+
+const removeThumbnail = async () => {
+  if (userStore.user?.thumbnail) {
+    const currentUserThumbnail = userStore.user.thumbnail
+    try {
+      await userStore.updateThumbnail(null)
+    } catch (error) {
+      throw new Error("Cannot delete image from database")
+    }
+
+    const result = await deleteImage(currentUserThumbnail)
+    if (result) {
+      dialog.value = false
+      alert("Successfully remove avatar")
+    }
   }
 }
 </script>

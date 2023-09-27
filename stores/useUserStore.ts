@@ -36,7 +36,7 @@ export const useUserStore = defineStore("current-user-store", {
     setUser(user: User | null) {
       this.user = user
     },
-    async updateThumbnail(thumbnailPath: string) {
+    async updateThumbnail(thumbnailPath: string | null) {
       const userToUpdate = {
         name: this.user?.name,
         email: this.user?.email,
