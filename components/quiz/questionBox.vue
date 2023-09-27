@@ -16,11 +16,7 @@ const emit = defineEmits(["update:answer"])
     <v-card-text>{{ props.explanation }}</v-card-text>
     <v-card-text class="quiz-box-body">
       <v-list>
-        <v-radio-group
-          @update:model-value="
-            emit('update:answer', parseInt($event.target.value))
-          "
-        >
+        <v-radio-group @update:model-value="emit('update:answer', $event)">
           <v-radio
             v-for="choice in props.choices"
             :key="choice.id"

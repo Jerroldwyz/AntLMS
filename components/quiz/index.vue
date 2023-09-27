@@ -1,5 +1,7 @@
 <script setup>
-const quiz = await $fetch("/api/quiz/702097645", {
+const props = defineProps(["id"])
+
+const quiz = await $fetch(`/api/quiz/${props.id}`, {
   method: "get",
 })
 
@@ -12,14 +14,18 @@ const handleSubmit = async () => {
     return answers.value[question.id]
   })
 
-  const result = await $fetch("/api/quiz/702097645/evaluate", {
-    method: "post",
-    body: {
-      result: choices,
-    },
-  })
+  try {
+    const result = await $fetch(`/api/quiz/${props.id}/evaluate`, {
+      method: "post",
+      body: {
+        result: choices,
+      },
+    })
 
-  score.value = `${result.correctAnswer}/${result.totalQuestion}`
+    score.value = `${result.correctAnswer}/${result.totalQuestion}`
+  } catch (e) {
+    console.log(e)
+  }
 }
 </script>
 

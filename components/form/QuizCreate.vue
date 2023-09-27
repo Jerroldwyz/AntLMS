@@ -1,4 +1,6 @@
 <script setup>
+const props = defineProps(["topicId", "topicPosition"])
+
 const emit = defineEmits(["close", "submit"])
 
 const titleRules = [
@@ -17,14 +19,20 @@ const titleRules = [
 const loading = ref(false)
 const valid = ref(false)
 
-const quiz = ref({
-  title: "",
-})
+const title = ref("")
 
-const submitQuiz = () => {
+const submitQuiz = async () => {
   if (valid.value === true) {
     loading.value = true
     try {
+      const quiz = await $fetch("/api/quiz", {
+        method: "post",
+        body: {
+          title: title.value,
+          topicId: props.topicId,
+          topicPosition: props.topicPosition,
+        },
+      })
       loading.value = false
       emit("close")
       emit("submit", true)
@@ -36,10 +44,7 @@ const submitQuiz = () => {
 
 <template>
   <v-card width="40%">
-    <v-form
-      v-model="valid"
-      @submit.prevent="submitQuiz"
-    >
+    <v-form v-model="valid">
       <v-row>
         <v-col>
           <v-card-title class="text-h5"> Create A New Quiz </v-card-title>
@@ -54,7 +59,7 @@ const submitQuiz = () => {
       </v-row>
       <v-card-text>
         <v-text-field
-          v-model="quiz.title"
+          v-model="title"
           variant="outlined"
           label="Title"
           :rules="titleRules"
@@ -73,6 +78,7 @@ const submitQuiz = () => {
           class="text-capitalize bg-primary"
           type="submit"
           :loading="loading"
+          @click="submitQuiz"
         >
           Create Quiz
         </v-btn>
