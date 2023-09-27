@@ -2,7 +2,7 @@
   <v-app-bar flat>
     <v-container
       class="d-flex align-center justify-space-between"
-      fluid="true"
+      fluid
     >
       <v-btn
         prepend-icon="mdi-vuetify"

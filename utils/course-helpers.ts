@@ -1,10 +1,8 @@
+import courses from "~/server/middleware/courses"
 import { Course } from "~~/types"
 
 export async function fetchAllCourses() {
   // TODO: add type
-  // const authStore = useAuthStore()
-  // const uid = authStore.user.uid;
-  const uid = "9d93ed2d-f55e-47ba-b4f5-75b563152a43	"
   const { data } = await useFetch("/api/courses/", {
     method: "get",
   })
@@ -21,6 +19,9 @@ export async function fetchAllUserCourses(): Promise<any> {
     method: "get",
     query: { userId: authStore.user?.uid },
   })
+
+  console.log(authStore.user?.uid)
+  console.log(allCourses)
 
   return allCourses
 }
