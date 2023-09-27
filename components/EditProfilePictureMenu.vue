@@ -49,10 +49,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  thumbnail?: string
-}>()
-const emit = defineEmits(["thumbnail:upload", "thumbnail:remove"])
+const userStore = useUserStore()
+
+const emit = defineEmits(["thumbnail:update"])
 
 enum MenuAction {
   Upload,
@@ -87,15 +86,14 @@ const checkFiles = async (event: InputEvent) => {
   if (!files) {
     throw new Error("No file uploaded")
   } else {
-    if (props.thumbnail) {
+    if (userStore.user?.thumbnail) {
       // remove previous thumbnail from s3
-      await deleteImage(props.thumbnail)
+      await deleteImage(userStore.user?.thumbnail)
     }
     // upload new image to bucket
     const file = files.value[0]
     const mimeType = file.type.split("/")[1]
     const path = await uploadImage(files.value[0], "image")
-    emit("thumbnail:upload", path)
   }
 }
 
@@ -103,9 +101,5 @@ const upload = () => {
   document.getElementById("selectedFile")?.click()
 }
 
-const remove = async () => {
-  console.log(`Removing thumbnail: ${props.thumbnail}`)
-  if (props.thumbnail) await deleteImage(props.thumbnail)
-  emit("thumbnail:remove", null)
-}
+const remove = async () => {}
 </script>

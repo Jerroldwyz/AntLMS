@@ -51,17 +51,19 @@
       >
     </v-form>
     <v-alert
-      v-if="hasUpdated"
+      v-if="showSuccess"
       type="success"
       title="Successfully updated"
       closable
+      @click:close="showSuccess = false"
       >You have successfully updated your account</v-alert
     >
     <v-alert
-      v-else
+      v-else-if="showFailure"
       type="error"
       title="Failed"
       closable
+      @click:close="showFailure = false"
       >Failed to update your account. Please try again</v-alert
     >
   </v-container>
@@ -82,7 +84,9 @@ const pronouns = ["Do not specify", "He/Him", "She/Her", "They/Them"]
 const pronoun = ref<string>(
   (userStore.user?.contact_details.pronoun as string) || pronouns[0],
 )
-const hasUpdated = ref<boolean>(true)
+
+const showSuccess = ref(false)
+const showFailure = ref(false)
 
 const nameRules = [(v: string) => !!v || "Name is required"]
 
@@ -91,7 +95,6 @@ const onFormattedPhoneNumber = (value: string) => {
 }
 
 const saveChange = async () => {
-  hasUpdated.value = false
   if (valid.value) {
     try {
       await userStore
@@ -104,10 +107,10 @@ const saveChange = async () => {
           },
         })
         .then((result) => {
-          hasUpdated.value = true
+          showSuccess.value = true
         })
         .catch((error) => {
-          hasUpdated.value = false
+          showFailure.value = true
           throw new Error(
             "An error has occurred while updated your profile",
             error,

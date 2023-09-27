@@ -37,14 +37,26 @@ export const useUserStore = defineStore("current-user-store", {
       this.user = user
     },
     async updateThumbnail(thumbnailPath: string) {
-      const updatedUser = {
+      const userToUpdate = {
         name: this.user?.name,
         email: this.user?.email,
         thumbnail: thumbnailPath,
         contact_details: this.user?.contact_details,
       }
 
-      await updateAccount(this.user?.uid, updatedUser)
+      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+
+      this.user = {
+        uid: updatedUser.uid,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        thumbnail: updatedUser.thumbnail,
+        contact_details: updatedUser.contact_details as JsonObject,
+      }
+
+      return {
+        success: true,
+      }
     },
     async updateDetails({ ...userData }) {
       const userToUpdate = {
