@@ -19,8 +19,4 @@ const videoCallback = (x: string) => {
 <template>
   <h1>Example index page</h1>
   <NuxtLink to="/mycourses"> View Courses </NuxtLink>
-
-  <FormVideoInput @upload-status="videoCallback"></FormVideoInput>
-  <DemoGetUrl></DemoGetUrl>
-  <DemoDeleteFile></DemoDeleteFile>
 </template>

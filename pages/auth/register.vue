@@ -103,23 +103,23 @@ const lastName = ref("")
 const emailVerified = ref(false)
 const isRegistered = ref(false)
 
-const nameRules = ref([(v: string) => !!v || "Name is required"])
+const nameRules = [(v: string) => !!v || "Name is required"]
 
-const emailRules = ref([
+const emailRules = [
   (v: string) => !!v || "E-mail is required",
   (v: string) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-])
+]
 
-const passwordRules = ref([
+const passwordRules = [
   (v: string) => !!v || "Password is required",
   (v: string) =>
     (v && v.length >= 6) || "Password must be more than 6 characters",
-])
+]
 
-const passwordValidation = ref([
+const passwordValidation = [
   (v: string) => !!v || "Confirmed password is required",
   () => password.value === confirmedPassword.value || "Password must match",
-])
+]
 
 const signUp = () => {
   disabled.value = true

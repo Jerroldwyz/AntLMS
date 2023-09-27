@@ -9,5 +9,6 @@ export const createUser = async (): Promise<users> => {
     email: faker.internet.email(),
     thumbnail: await createThumbnail(),
     contact_details: {},
+    is_admin: faker.datatype.boolean(),
   }
 }
