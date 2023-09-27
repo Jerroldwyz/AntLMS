@@ -1,7 +1,4 @@
-export const uploadImage = async (
-  file: File,
-  mimeType: string,
-): Promise<string> => {
+export const uploadImage = async (file: File): Promise<string> => {
   if (!file) {
     // No file selected, handle this case as needed
     console.log("No image to upload")

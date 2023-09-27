@@ -35,11 +35,18 @@ onMounted(async () => {
           <v-avatar
             class="mx-4"
             size="64"
-            ><v-img
+          >
+            <v-img
+              v-if="thumbnailUrl !== null"
               :src="thumbnailUrl"
               cover
-            ></v-img
-          ></v-avatar>
+            ></v-img>
+            <span
+              v-if="thumbnailUrl === null"
+              class="text-h6"
+              >NO IMAGE</span
+            >
+          </v-avatar>
           <h4 class="text-h4">Details</h4>
         </v-col>
         <v-col class="d-flex justify-end align-center">

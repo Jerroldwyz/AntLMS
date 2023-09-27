@@ -11,14 +11,17 @@ datasource db {
 }
 
 model users {
-  uid             String        @id
-  name            String
-  email           String        @db.VarChar(255)
-  contact_details Json?
-  enrollments     enrollments[]
-  courses         courses[]
-  progress        progress[]
-  quiz_score      quiz_score[]
+  uid                    String                   @id
+  name                   String
+  email                  String                   @db.VarChar(255)
+  contact_details        Json?
+  enrollments            enrollments[]
+  courses                courses[]
+  progress               progress[]
+  quiz_score             quiz_score[]
+  is_admin               Boolean                  @default(false)
+  admin_role_attachments admin_role_attachments[]
+  enabled                Boolean                  @default(true)
 }
 
 model courses {
@@ -135,4 +138,37 @@ model quiz_score {
   user          users       @relation(fields: [user_id], references: [uid], onDelete: Cascade)
 
   @@unique([user_id, quiz_id])
+}
+
+model roles {
+  id                          Int                            @id @default(autoincrement())
+  name                        String @unique
+  admin_role_attachments      admin_role_attachments[]
+  role_permission_attachments role_permissions_attachments[]
+}
+
+model admin_role_attachments {
+  id      Int    @id @default(autoincrement())
+  role_id Int
+  user_id String @unique
+  user    users  @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+  role    roles  @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role_id])
+}
+
+model permissions {
+  id                           Int                            @id @default(autoincrement())
+  name                         String
+  role_permissions_attachments role_permissions_attachments[]
+}
+
+model role_permissions_attachments {
+  id            Int         @id @default(autoincrement())
+  permission_id Int
+  role_id       Int
+  permission    permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+  role          roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@unique([permission_id, role_id])
 }
