@@ -142,7 +142,7 @@ model quiz_score {
 
 model roles {
   id                          Int                            @id @default(autoincrement())
-  name                        String
+  name                        String @unique
   admin_role_attachments      admin_role_attachments[]
   role_permission_attachments role_permissions_attachments[]
 }

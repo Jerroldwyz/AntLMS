@@ -25,9 +25,9 @@ const saveNewPermissions = () => {
   roleDialog.value = false
 }
 
-const deleteRoleNow = () => {
+const deleteRoleNow = async () => {
   try {
-    deleteRoleById(role.id)
+    await deleteRoleById(role.id)
     emits("delete:role", role.id)
     deleteDialog.value = false
   } catch (e) {

@@ -72,5 +72,8 @@ export async function enableCourseById(id: number): Promise<any> {
   // TODO: Is validation needed here? Or in the backend?
   await $fetch(`/api/courses/${id}`, {
     method: "PUT",
+    body: {
+      enabled: true,
+    },
   })
 }

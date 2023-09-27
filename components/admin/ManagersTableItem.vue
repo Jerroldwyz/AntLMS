@@ -27,9 +27,9 @@ const saveNewRoles = () => {
   emits("update:manager", modifiedManager)
   roleDialog.value = false
 }
-const deleteManagerNow = () => {
+const deleteManagerNow = async () => {
   try {
-    deleteManagerById(manager.uid)
+    await deleteManagerById(manager.uid)
     emits("delete:manager", manager.uid)
     deleteDialog.value = false
   } catch (e) {

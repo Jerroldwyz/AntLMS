@@ -2,43 +2,51 @@
 const roles = await getRoles()
 const availablePermissions = await getPermissions()
 
-let roleList = toRaw(roles.value)
+// This is required for computed property to work
+const reactiveElements = reactive({
+  searchString: "",
+  roleList: roles,
+})
 
-// TODO I would rather use computed value here but it does not want to work lol
-const filteredRoleList = ref(roleList)
+const { searchString, roleList } = toRefs(reactiveElements)
+
+const filteredRoleList = computed(() => {
+  if (searchString.value === "") {
+    return roleList.value
+  } else {
+    return roleList.value.filter((role: any) =>
+      role.name.toLowerCase().includes(searchString.value.toLowerCase()),
+    )
+  }
+})
 
 const newDialogue = ref(false)
 const newRoleName = ref("")
 const newRolePermissionIds = ref([])
+const valid = ref(false)
 
-const updateSearch = (searchString: string) => {
-  if (searchString === "") {
-    filteredRoleList.value = roleList
-  } else {
-    filteredRoleList.value = roleList.filter((role: any) =>
-      role.name.toLowerCase().includes(searchString.toLowerCase()),
-    )
+const createNewRole = async () => {
+  if (valid.value) {
+    createRole(newRoleName.value, newRolePermissionIds.value)
+    roleList.value = await getRoles()
+    newDialogue.value = false
   }
 }
 
-const createNewRole = () => {
-  createRole(newRoleName.value, newRolePermissionIds.value)
-  newDialogue.value = false
-}
-
-const deleteRoles = (roleIdToRemove: number) => {
-  roleList = roleList.filter((role: any) => role.id !== roleIdToRemove)
+// Internals handled by roles table item
+const deleteRoles = async (roleIdToRemove: number) => {
+  roleList.value = await getRoles()
 }
 </script>
 
 <template>
   <div>
     <v-text-field
+      v-model:model-value="searchString"
       clearable
       label="Search"
       type="text"
       variant="outlined"
-      @update:model-value="updateSearch"
     >
     </v-text-field>
 
@@ -56,45 +64,52 @@ const deleteRoles = (roleIdToRemove: number) => {
         width="auto"
       >
         <v-card>
-          <v-card-title>Create new Role</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text>
-            <v-row>
-              <v-text-field
-                v-model:model-value="newRoleName"
-                label="Name"
-              ></v-text-field>
-            </v-row>
-            <v-row>
-              <v-checkbox
-                v-for="permission in availablePermissions"
-                :key="permission.id"
-                v-model="newRolePermissionIds"
-                :label="permission.name"
-                :value="permission.id"
-                class="my-2 mx-4 w-25"
-                hide-details
+          <v-form
+            v-model="valid"
+            @submit.prevent="createNewRole"
+          >
+            <v-card-title>Create new Role</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-row>
+                <v-text-field
+                  v-model:model-value="newRoleName"
+                  class="mx-4 mt-4"
+                  :rules="[(v: string) => !!v || 'Name is required']"
+                  label="Name"
+                ></v-text-field>
+              </v-row>
+              <v-row>
+                <v-checkbox
+                  v-for="permission in availablePermissions"
+                  :key="permission.id"
+                  v-model="newRolePermissionIds"
+                  :label="permission.name"
+                  :value="permission.id"
+                  class="my-2 mx-4 w-25"
+                  hide-details
+                >
+                </v-checkbox>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-btn
+                color="green-darken-1"
+                variant="text"
+                type="submit"
               >
-              </v-checkbox>
-            </v-row>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn
-              color="green-darken-1"
-              variant="text"
-              @click="createNewRole"
-            >
-              Save
-            </v-btn>
-            <v-btn
-              color="black"
-              variant="text"
-              @click="newDialogue = false"
-            >
-              Close
-            </v-btn>
-          </v-card-actions>
+                Save
+              </v-btn>
+              <v-btn
+                color="black"
+                variant="text"
+                @click="newDialogue = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-btn>
