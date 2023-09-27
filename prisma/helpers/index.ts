@@ -41,6 +41,7 @@ const admins: users[] = [
     email: faker.internet.email(),
     contact_details: {},
     is_admin: true,
+    enabled: true,
   },
   {
     uid: faker.string.uuid(),
@@ -48,6 +49,7 @@ const admins: users[] = [
     email: faker.internet.email(),
     contact_details: {},
     is_admin: true,
+    enabled: true,
   },
   {
     uid: faker.string.uuid(),
@@ -55,6 +57,7 @@ const admins: users[] = [
     email: faker.internet.email(),
     contact_details: {},
     is_admin: true,
+    enabled: true,
   },
 ]
 
