@@ -31,6 +31,16 @@ const handleSubmit = async () => {
 
 <template>
   <h1>{{ quiz.title }}</h1>
+  <!-- <v-alert type="success" density="compact" title="Quiz Result" rounded="0" closable text="Your Quiz Score is: " +
+    score.value /> -->
+  <v-alert
+    v-show="score"
+    title="Quiz Result"
+    rounded="0"
+    closable
+    text="Your Score is:"
+    >{{ score }}</v-alert
+  >
   <QuizQuestionBox
     v-for="(question, index) in quiz.questions"
     :id="question.id"
