@@ -55,7 +55,7 @@ const updateCourses = async () => {
     <tbody>
       <AdminCourseTableItem
         v-for="course in filteredCourseList"
-        :key="course.id"
+        :key="course.enabled ? `${course.id}-en` : course.id"
         :course="course"
         @delete:course-list="updateCourses"
         @update:course-list="updateCourses"
