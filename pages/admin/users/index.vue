@@ -20,8 +20,8 @@
             <!-- <th class="text-left">Profile Picture</th> -->
             <th class="text-left">User Name</th>
             <th class="text-left">Email</th>
-            <th class="text-left">First Name</th>
-            <th class="text-left">Last Name</th>
+            <th class="text-left">Full Name</th>
+
             <th class="text-right">Actions</th>
           </tr>
         </thead>
@@ -66,13 +66,13 @@
               <v-text-field
                 v-else
                 v-model="user.name"
-                label="First Name"
+                label="Full Name"
                 variant="outlined"
                 density="compact"
                 autofocus
               ></v-text-field>
             </td>
-            <td>
+            <!-- <td>
               <span v-if="!editDialog[user?.uid]">{{ user?.lastName }}</span>
               <v-text-field
                 v-else
@@ -82,7 +82,7 @@
                 density="compact"
                 autofocus
               ></v-text-field>
-            </td>
+            </td> -->
 
             <td class="text-right">
               <v-btn
@@ -165,14 +165,14 @@ export default {
       } else {
         const filtered = users?.value.filter((user) => {
           const lowerCaseUsername = user.uid ? user.uid.toLowerCase() : ""
-          const lowerCaseFirstName = user.name ? user.name.toLowerCase() : ""
-          const lowerCaseLastName = user.name ? user.name.toLowerCase() : ""
+          const lowerCaseFullName = user.name ? user.name.toLowerCase() : ""
+          // const lowerCaseLastName = user.name ? user.name.toLowerCase() : ""
           const lowerCaseEmail = user.email ? user.email.toLowerCase() : ""
 
           return (
             lowerCaseUsername.includes(query) ||
-            lowerCaseFirstName.includes(query) ||
-            lowerCaseLastName.includes(query) ||
+            lowerCaseFullName.includes(query) ||
+            // lowerCaseLastName.includes(query) ||
             lowerCaseEmail.includes(query)
           )
         })
