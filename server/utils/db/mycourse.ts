@@ -49,7 +49,6 @@ export const getCreatorCourseById = (course_id: number) => {
 }
 
 export const getCreatorCourses = (creator_id: string) => {
-  console.log("h")
   return prisma.courses.findMany({
     where: {
       creator_id,
@@ -109,7 +108,7 @@ export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
   })
 }
 
-export const disableCourseById = (course_id: number) => {
+export const disableCourse = (course_id: number) => {
   return prisma.courses.update({
     where: {
       id: course_id,
@@ -120,7 +119,7 @@ export const disableCourseById = (course_id: number) => {
   })
 }
 
-export const enableCourseById = (course_id: number) => {
+export const enableCourse = (course_id: number) => {
   return prisma.courses.update({
     where: {
       id: course_id,
@@ -142,7 +141,7 @@ export const setCourseEnabled = (course_id: number, enabled: boolean) => {
   })
 }
 
-export const deleteCourseById = (course_id: number) => {
+export const deleteCourse = (course_id: number) => {
   return prisma.courses.delete({
     where: {
       id: course_id,

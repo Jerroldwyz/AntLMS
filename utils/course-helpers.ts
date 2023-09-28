@@ -20,9 +20,6 @@ export async function fetchAllUserCourses(): Promise<any> {
     query: { userId: authStore.user?.uid },
   })
 
-  console.log(authStore.user?.uid)
-  console.log(allCourses)
-
   return allCourses
 }
 

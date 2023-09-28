@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const courses = await fetchAllUserCourses()
-// const { id } = courses.value
-console.log(courses)
 </script>
 
 <template>

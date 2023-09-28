@@ -38,6 +38,7 @@
           v-for="(browseTitle, i) in browse"
           :key="i"
           :title="browseTitle"
+          prepend-icon="mdi-circle-small"
           href="?"
         >
         </v-list-item>
@@ -57,10 +58,12 @@
         </template>
 
         <v-list-item
-          v-for="(courseTitle, i) in dashboard"
-          :key="i"
-          :title="courseTitle"
-          href="?"
+          v-for="course in courses"
+          :id="course.id"
+          :key="course.id"
+          :title="course.title"
+          prepend-icon="mdi-circle-small"
+          to=""
         >
         </v-list-item>
       </v-list-group>
@@ -76,14 +79,12 @@
   </v-navigation-drawer>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    hovered: false,
-    browse: ["Browse all", "Creative", "Technology", "Business"],
-    dashboard: ["Math 101", "Business 101", "Baking 101"],
-  }),
-}
+<script setup lang="ts">
+const courses = await fetchAllUserCourses()
+const browse = ["Browse all", "Creative", "Technology", "Business"]
+const hovered = true
+
+console.log(courses)
 </script>
 
 <style>
@@ -95,5 +96,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: 91.75%;
+}
+
+.v-list-group__items {
+  --indent-padding: 0px;
 }
 </style>
