@@ -9,6 +9,21 @@ const contentTypeRules = [
     return "You must select a content type!"
   },
 ]
+
+const contentType = ref<"quiz" | "text" | "video" | undefined>()
+function addContent() {
+  switch (contentType.value) {
+    case "quiz":
+      navigateTo("newquiz")
+      break
+    case "text":
+      navigateTo("newtext")
+      break
+    case "video":
+      navigateTo("newvideo")
+      break
+  }
+}
 </script>
 
 <template>
@@ -17,7 +32,7 @@ const contentTypeRules = [
     fluid
   >
     <v-card width="25%">
-      <v-form @submit.prevent="">
+      <v-form @submit.prevent="addContent">
         <v-row>
           <v-col>
             <v-card-title class="text-h5"> Add New Content </v-card-title>
@@ -31,14 +46,17 @@ const contentTypeRules = [
           </v-col>
         </v-row>
         <v-container>
-          <v-radio-group :rules="contentTypeRules">
+          <v-radio-group
+            v-model="contentType"
+            :rules="contentTypeRules"
+          >
             <v-radio
               label="Quiz"
               value="quiz"
             ></v-radio>
             <v-radio
-              label="Image"
-              value="image"
+              label="Text"
+              value="text"
             ></v-radio>
             <v-radio
               label="Video"
