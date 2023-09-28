@@ -5,7 +5,7 @@ const data = defineProps<{
   thumbnail: string | null
 }>()
 
-const fetchedThumbnail = ref<string | null>(null)
+const fetchedThumbnail = ref<string>("")
 
 const thumbnail = computed(() => {
   if (data.thumbnail) {
