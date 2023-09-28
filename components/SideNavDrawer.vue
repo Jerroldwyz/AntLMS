@@ -82,7 +82,7 @@
 <script setup lang="ts">
 const courses = await fetchAllUserCourses()
 const browse = ["Browse all", "Creative", "Technology", "Business"]
-const hovered = true
+const hovered: boolean = true
 
 console.log(courses)
 </script>
