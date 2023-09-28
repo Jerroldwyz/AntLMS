@@ -8,6 +8,10 @@ const props = defineProps<{
   course: any
 }>()
 
+const emit = defineEmits<{
+  (e: "showModal"): void
+}>()
+
 const course = ref(props.course)
 
 // TODO: add proper type
@@ -34,6 +38,7 @@ function getIcon(content: any): string {
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
+            @click="$emit('showModal')"
           ></v-btn>
         </v-col>
       </v-row>

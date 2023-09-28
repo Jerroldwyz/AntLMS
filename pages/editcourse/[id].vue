@@ -5,9 +5,18 @@ definePageMeta({
   middleware: ["user"],
 })
 
+const contentTypeRules = [
+  (value: string) => {
+    if (value) return true
+    return "You must select a content type!"
+  },
+]
+
 const loading = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)
+
+const showModal = ref(false)
 
 const route = useRoute()
 const course = ref<Course>(await fetchUserCourse(route.params.id))
@@ -48,6 +57,7 @@ async function submitCourse() {
     closable
     text="Something went wrong. Please try again later."
   ></v-alert>
+
   <v-container fluid>
     <v-container
       class="d-flex"
@@ -58,7 +68,10 @@ async function submitCourse() {
         v-model:course="course"
         v-model:file="file"
       />
-      <ContentList :course="course" />
+      <ContentList
+        :course="course"
+        @show-modal="showModal = true"
+      />
     </v-container>
     <v-container
       class="d-flex align-end"
@@ -82,4 +95,59 @@ async function submitCourse() {
       </v-card>
     </v-container>
   </v-container>
+  <v-dialog v-model="showModal">
+    <v-container
+      class="d-flex justify-center align-center"
+      fluid
+    >
+      <v-card width="25%">
+        <v-form @submit.prevent="">
+          <v-row>
+            <v-col>
+              <v-card-title class="text-h5"> Add New Content </v-card-title>
+            </v-col>
+            <v-col class="d-flex justify-end">
+              <v-btn
+                icon="mdi-close"
+                variant="flat"
+                @click="showModal = false"
+              ></v-btn>
+            </v-col>
+          </v-row>
+          <v-container>
+            <v-radio-group :rules="contentTypeRules">
+              <v-radio
+                label="Quiz"
+                value="quiz"
+              ></v-radio>
+              <v-radio
+                label="Image"
+                value="image"
+              ></v-radio>
+              <v-radio
+                label="Video"
+                value="video"
+              ></v-radio>
+            </v-radio-group>
+          </v-container>
+          <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">
+            <v-btn
+              class="text-capitalize"
+              variant="text"
+              @click="showModal = false"
+            >
+              Cancel
+            </v-btn>
+            <v-btn
+              class="text-capitalize bg-primary"
+              type="submit"
+              :loading="loading"
+            >
+              Next
+            </v-btn>
+          </v-card>
+        </v-form>
+      </v-card>
+    </v-container>
+  </v-dialog>
 </template>
