@@ -14,6 +14,7 @@ model users {
   uid                    String                   @id
   name                   String
   email                  String                   @db.VarChar(255)
+  thumbnail              String?
   contact_details        Json?
   enrollments            enrollments[]
   courses                courses[]

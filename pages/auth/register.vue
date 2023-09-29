@@ -6,9 +6,14 @@
     <v-card
       width="35%"
       elevation="10"
+      class="pa-7 pa-sm-10"
     >
-      <div class="pa-7 pa-sm-10">
-        <h2 class="font-weight-bold mt-4">Sign up</h2>
+      <h2 class="font-weight-bold mt-4">Sign up</h2>
+      <div v-if="isRegistered">
+        We have sent you a verification to your email, please check the email
+        <NuxtLink to="/auth/login"></NuxtLink>
+      </div>
+      <div v-else>
         <h6 class="text-subtitle-1 text-grey-darken-1">
           Already have an account?
           <NuxtLink
@@ -50,11 +55,6 @@
             required
           ></v-text-field>
           <v-text-field
-            v-model="phoneNumber"
-            label="Phone number"
-            class="mt-4"
-          ></v-text-field>
-          <v-text-field
             v-model="password"
             :rules="passwordRules"
             label="Password"
@@ -84,13 +84,13 @@
 </template>
 
 <script setup lang="ts">
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { sendEmailVerification, sendSignInLinkToEmail } from "firebase/auth"
 definePageMeta({
   layout: false,
   middleware: "guest",
 })
-const router = useRouter()
-const authStore = useAuthStore()
+
+const { register } = useAuth()
 
 const email = ref("")
 const password = ref("")
@@ -99,7 +99,9 @@ const valid = ref(false)
 const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
-const phoneNumber = ref()
+
+const emailVerified = ref(false)
+const isRegistered = ref(false)
 
 const nameRules = [(v: string) => !!v || "Name is required"]
 
@@ -119,19 +121,21 @@ const passwordValidation = [
   () => password.value === confirmedPassword.value || "Password must match",
 ]
 
-const signUp = async () => {
+const signUp = () => {
   disabled.value = true
   try {
     const userProps = {
       email: email.value,
       name: `${firstName.value} ${lastName.value}`,
       password: password.value,
-      contact_details: {
-        phone_number: phoneNumber.value,
-      },
+      contact_details: {},
     }
-    await authStore.register(userProps)
-    router.push("/auth/login")
+    register(userProps).then((user) => {
+      const actionCodeSettings = {
+        url: "http://localhost:3000/auth/login",
+      }
+      sendEmailVerification(user, actionCodeSettings)
+    })
   } catch (error) {
     alert(error)
   }

@@ -8,21 +8,13 @@
         icon
         v-bind="props"
       >
-        <v-avatar
-          class="ms-4"
-          color="grey-darken-1"
-          size="large"
-        >
-          <span class="text-h6">{{ initials }}</span>
-        </v-avatar>
+        <UserAvatar :size="50" />
       </v-btn>
     </template>
     <v-card>
       <v-card-text>
         <div class="mx-auto text-center">
-          <v-avatar color="grey-darken-1">
-            <span class="text-h5">{{ initials }}</span>
-          </v-avatar>
+          <UserAvatar :size="80" />
           <h3>{{ currentUser?.name }}</h3>
           <p class="text-caption mt-1">{{ currentUser?.email }}</p>
           <v-divider class="my-3"></v-divider>
@@ -51,20 +43,23 @@
 </template>
 
 <script setup lang="ts">
-const authStore = useAuthStore()
+const userStore = useUserStore()
+const { logout } = useAuth()
+
 const isAuthenticated = computed(() => {
-  return authStore.isAuthenticated
+  return userStore.isAuthenticated
 })
 const currentUser = computed(() => {
-  return authStore.user
+  return userStore.user
 })
 const initials = computed(() => {
-  return authStore.initials
+  return userStore.initials
 })
 
 const signOut = async () => {
-  await authStore.logout()
-  navigateTo("/auth/login")
+  await logout()
+  const router = useRouter()
+  router.push("/auth/login")
 }
 </script>
 <style scoped></style>

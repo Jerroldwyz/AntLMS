@@ -1,4 +1,4 @@
-import courses from "~/server/middleware/courses"
+import { useUserStore } from "~/stores/useUserStore"
 import { Course } from "~~/types"
 
 export async function fetchAllCourses() {
@@ -12,12 +12,12 @@ export async function fetchAllCourses() {
 
 // TODO: change any to proper type
 export async function fetchAllUserCourses(): Promise<any> {
-  const authStore = useAuthStore()
+  const userStore = useUserStore()
 
   // TODO: add type
   const allCourses = await $fetch("/api/mycourses", {
     method: "get",
-    query: { userId: authStore.user?.uid },
+    query: { userId: userStore.user?.uid },
   })
 
   return allCourses
@@ -36,10 +36,10 @@ export async function fetchUserCourse(
 }
 
 export async function createCourse(course: Course): Promise<any> {
-  const authStore = useAuthStore()
+  const userStore = useUserStore()
 
-  if (authStore.user?.uid !== undefined) {
-    course.creatorId = authStore.user.uid
+  if (userStore.user?.uid !== undefined) {
+    course.creatorId = userStore.user.uid
   }
 
   console.log(course)
@@ -56,10 +56,10 @@ export async function updateCourse(
   course: Course,
   id: string | string[],
 ): Promise<any> {
-  const authStore = useAuthStore()
+  const userStore = useUserStore()
 
-  if (authStore.user?.uid !== undefined) {
-    course.creatorId = authStore.user.uid
+  if (userStore.user?.uid !== undefined) {
+    course.creatorId = userStore.user.uid
   }
 
   await $fetch(`/api/mycourses/${id}`, {
