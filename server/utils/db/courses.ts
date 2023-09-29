@@ -35,6 +35,11 @@ export const getCourseById = (course_id: number) => {
               id: true,
               title: true,
               topic_position: true,
+              progress: {
+                select: {
+                  user_id: true,
+                },
+              },
             },
           },
         },

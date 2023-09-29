@@ -6,7 +6,7 @@ import {
   courses_tags,
   topics,
   content,
-  quiz_score,
+  quiz_progress,
   quizzes,
   questions,
   choices,
@@ -42,7 +42,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   const quizzes: quizzes[] = []
   const questions: questions[] = []
   const progress: progress[] = []
-  let quiz_score: quiz_score[] = []
+  let quiz_progress: quiz_progress[] = []
   const choices: choices[] = []
 
   for (let i = 0; i < amount; i++) {
@@ -70,8 +70,8 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   for (let i = 0; i < amount; i++) {
     progress.push(createProgress(users, enrollments, content))
     questions.push(createQuestion(quizzes))
-    quiz_score.push(createQuizscore(enrollments, quizzes, users))
-    quiz_score = _.unique(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
+    quiz_progress.push(createQuizscore(enrollments, quizzes, users))
+    quiz_progress = _.unique(quiz_progress, (x) => `${x.quiz_id}${x.user_id}`)
   }
   for (let i = 0; i < amount; i++) {
     choices.push(createChoice(questions))
@@ -112,8 +112,8 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   await prisma.questions.createMany({
     data: questions,
   })
-  await prisma.quiz_score.createMany({
-    data: quiz_score,
+  await prisma.quiz_progress.createMany({
+    data: quiz_progress,
   })
   await prisma.choices.createMany({
     data: choices,
