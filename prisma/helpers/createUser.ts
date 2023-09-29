@@ -10,5 +10,6 @@ export const createUser = async (): Promise<users> => {
     thumbnail: await createThumbnail(),
     contact_details: {},
     is_admin: faker.datatype.boolean(),
+    enabled: faker.datatype.boolean(),
   }
 }

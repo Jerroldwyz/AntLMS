@@ -40,21 +40,27 @@ const admins: users[] = [
     name: "admin",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
+    enabled: true,
   },
   {
     uid: faker.string.uuid(),
     name: "manager",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
+    enabled: true,
   },
   {
     uid: faker.string.uuid(),
     name: "staff",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
+    enabled: true,
   },
 ]
 

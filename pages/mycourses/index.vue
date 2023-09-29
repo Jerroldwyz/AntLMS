@@ -3,23 +3,21 @@ definePageMeta({
   middleware: ["user"],
 })
 
-const courses = await fetchAllUserCourses()
+const courses = ref(await fetchAllUserCourses())
 
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)
 
-const courseList = ref(courses)
-
 async function handleSubmit(status: boolean) {
   status ? (alertError.value = status) : (alertSuccess.value = status)
-  courseList.value = await fetchAllUserCourses()
+  courses.value = await fetchAllUserCourses()
 }
 </script>
 
 <template>
   <v-alert
-    v-model="alertError"
+    v-model="alertSuccess"
     type="success"
     density="compact"
     title="Course Created"
@@ -28,7 +26,7 @@ async function handleSubmit(status: boolean) {
     text="Click on the course you just created in order to add further information."
   ></v-alert>
   <v-alert
-    v-model="alertSuccess"
+    v-model="alertError"
     type="error"
     density="compact"
     title="Course Not Created"

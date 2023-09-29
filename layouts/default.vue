@@ -1,186 +1,24 @@
 <template>
-  <v-app>
-    <v-app-bar flat>
-      <v-container
-        class="d-flex align-center justify-space-between"
-        fluid
-      >
-        <v-btn
-          prepend-icon="mdi-vuetify"
-          variant="text"
-          color="black"
-          size="large"
-        >
-          <NuxtLink
-            to="/home"
-            class="text-button text-decoration-none text-black"
-            >AntLMS</NuxtLink
-          >
-        </v-btn>
+  <v-app id="inspire">
+    <TopNavBar></TopNavBar>
 
-        <v-responsive
-          max-width="500"
-          align-center
-          justify-center
-        >
-          <v-card-text>
-            <v-text-field
-              :loading="loading"
-              density="compact"
-              variant="solo"
-              label="Search for courses"
-              append-inner-icon="mdi-magnify"
-              single-line
-              hide-details
-              @click:append-inner="onClick"
-            ></v-text-field>
-          </v-card-text>
-        </v-responsive>
+    <SideNavDrawer></SideNavDrawer>
 
-        <UserProfileMenu />
-      </v-container>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      expand-on-hover
-      rail
-      permanent
-      @mouseenter="hovered = true"
-      @mouseleave="hovered = false"
-    >
-      <v-divider></v-divider>
-
-      <v-list
-        nav
-        rounded
-        class="drawer-list"
-      >
-        <v-list-item
-          class="listItemFont"
-          prepend-icon="mdi-home"
-          title="Home"
-          value="home"
-          to="/home"
-        >
-        </v-list-item>
-
-        <v-list-group
-          class="listItemFont"
-          :value="hovered ? 'Browse' : null"
-        >
-          <template #activator="{ props }">
-            <v-list-item
-              v-bind="props"
-              prepend-icon="mdi-format-list-bulleted"
-              title="Browse"
-            >
-            </v-list-item>
-          </template>
-
-          <v-list-item
-            v-for="(browseTitle, i) in browse"
-            :key="i"
-            :title="browseTitle"
-            href="?"
-          >
-          </v-list-item>
-        </v-list-group>
-
-        <v-list-group
-          class="listItemFont"
-          :value="hovered ? 'Courses' : null"
-        >
-          <template #activator="{ props }">
-            <v-list-item
-              v-bind="props"
-              prepend-icon="mdi-view-dashboard"
-              title="Courses"
-            >
-            </v-list-item>
-          </template>
-
-          <v-list-item
-            v-for="(courseTitle, i) in dashboard"
-            :key="i"
-            :title="courseTitle"
-            href="?"
-          >
-          </v-list-item>
-        </v-list-group>
-      </v-list>
-
-      <!-- <v-divider></v-divider> -->
-
-      <v-list-item
-        class="listItemFont"
-        prepend-icon="mdi-cog"
-        title="Settings"
-        value="Settings"
-        href="?"
-      >
-      </v-list-item>
-    </v-navigation-drawer>
-
-    <v-main class="bg-main">
+    <v-main class="d-flex align-center justify-center bg-main">
       <v-container
         class="fill-height"
         fluid
       >
         <v-card
-          class="pa-4 w-100 fill-height"
+          class="pa-7 m-10 w-100 h-100"
           rounded="lg"
+          style="min-height: 568px"
         >
           <slot />
         </v-card>
       </v-container>
     </v-main>
 
-    <v-footer
-      app
-      height="50"
-    >
-      <p class="text-center w-100">
-        AntLMS &copy; {{ new Date().getFullYear() }}
-      </p>
-    </v-footer>
+    <Footer></Footer>
   </v-app>
 </template>
-
-<script>
-export default {
-  data: () => ({
-    loaded: false,
-    loading: false,
-    hovered: false,
-    browse: ["Browse all", "Creative", "Technology", "Business"],
-    dashboard: ["Dashboard", "Math 101", "Business 101", "Baking 101"],
-  }),
-
-  methods: {
-    onClick() {
-      this.loading = true
-
-      setTimeout(() => {
-        this.loading = false
-        this.loaded = true
-      }, 2000)
-    },
-  },
-}
-</script>
-
-<style>
-.v-footer {
-  font-size: small;
-}
-
-.listItemFont .v-list-item-title {
-  font-size: 15px;
-}
-
-.drawer-list {
-  display: flex;
-  flex-direction: column;
-  height: 91.75%;
-}
-</style>

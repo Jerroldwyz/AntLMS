@@ -40,14 +40,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 })
 
 const setServerSession = async (token: string | null) => {
-  await useAsyncData(
-    async () =>
-      await $fetch("/api/session", {
-        method: "post",
-        body: {
-          token,
-        },
-        retry: 0,
-      }),
-  )
+  await useFetch("/api/session", {
+    method: "post",
+    body: {
+      token,
+    },
+    retry: 0,
+  })
 }

@@ -30,6 +30,11 @@ export const getEnrollment = (user_id: string) => {
           id: true,
           title: true,
           thumbnail: true,
+          creator: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },

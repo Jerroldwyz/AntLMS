@@ -1,11 +1,6 @@
 <script setup lang="ts">
-// const { data, error, execute, refresh } = await useFetch('/api/courses', {
-//   query: {
-//     status: "all"
-//   }
-// })
-// const courses = error !== null ? data : []
-const courses = await fetchAllCourses()
+// Need any to fix weird type errors...
+const courses: any = await fetchAllCourses()
 
 // This is required for computed property to work
 const reactiveElements = reactive({
@@ -16,19 +11,22 @@ const reactiveElements = reactive({
 const { searchString, courseList } = toRefs(reactiveElements)
 
 const filteredCourseList = computed(() => {
-  if (searchString.value === "") {
-    return courseList.value.sort((a: any, b: any) => a.id - b.id)
+  if (courseList.value) {
+    if (searchString.value === "") {
+      return courseList.value.sort((a: any, b: any) => a.id - b.id)
+    } else {
+      return courseList.value
+        .filter((course: any) =>
+          course.title.toLowerCase().includes(searchString.value.toLowerCase()),
+        )
+        .sort((a: any, b: any) => a.id - b.id)
+    }
   } else {
-    return courseList.value
-      .filter((course: any) =>
-        course.title.toLowerCase().includes(searchString.value.toLowerCase()),
-      )
-      .sort((a: any, b: any) => a.id - b.id)
+    return []
   }
 })
 
 const updateCourses = async () => {
-  // await refresh()
   courseList.value = await fetchAllCourses()
 }
 </script>
