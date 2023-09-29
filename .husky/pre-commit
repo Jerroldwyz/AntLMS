@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx vue-tsc --noEmit || true
+echo "Running 'vue-tsc --noEmit || true' for typescript warnings. Recommended to fix these but not required"
+npx vue-tsc --noEmit
+echo "Running eslint for code smell and bad vue/vueitfy code detection. Mandatory to fix these"
 npx lint-staged
