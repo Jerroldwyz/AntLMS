@@ -17,7 +17,7 @@ async function submitCourse() {
   try {
     loading.value = true
     if (file.value[0]) {
-      const newThumbnail = await uploadImage(file.value[0], "image")
+      const newThumbnail = await uploadImage(file.value[0])
       await deleteImage(course.value.thumbnail)
       course.value.thumbnail = newThumbnail
     }
