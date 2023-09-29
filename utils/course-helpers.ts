@@ -1,8 +1,9 @@
+import courses from "~/server/middleware/courses"
 import { Course } from "~~/types"
 
-export async function fetchAllCourses(): Promise<any> {
+export async function fetchAllCourses() {
   // TODO: add type
-  const { data } = await useFetch("/api/courses", {
+  const { data } = await useFetch("/api/courses/", {
     method: "get",
   })
 
@@ -69,9 +70,29 @@ export async function updateCourse(
   })
 }
 
-export async function deleteCourse(id: number): Promise<any> {
+export async function deleteCourseById(id: number): Promise<any> {
   // TODO: Is validation needed here? Or in the backend?
   await $fetch(`/api/courses/${id}`, {
     method: "DELETE",
+  })
+}
+
+export async function disableCourseById(id: number): Promise<any> {
+  // TODO: Is validation needed here? Or in the backend?
+  await $fetch(`/api/courses/${id}`, {
+    method: "PUT",
+    body: {
+      enabled: false,
+    },
+  })
+}
+
+export async function enableCourseById(id: number): Promise<any> {
+  // TODO: Is validation needed here? Or in the backend?
+  await $fetch(`/api/courses/${id}`, {
+    method: "PUT",
+    body: {
+      enabled: true,
+    },
   })
 }
