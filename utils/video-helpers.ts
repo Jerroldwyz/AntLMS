@@ -1,7 +1,4 @@
-export const uploadVideo = async (
-  file: File,
-  mimeType: string,
-): Promise<string> => {
+export const uploadVideo = async (file: File): Promise<string> => {
   if (!file) {
     // No file selected, handle this case as needed
     console.log("No video to upload")
@@ -11,7 +8,7 @@ export const uploadVideo = async (
   const { presignedUrl, path } = await $fetch("/api/videos", {
     method: "POST",
     body: {
-      type: mimeType,
+      name: file.name,
     },
   })
 

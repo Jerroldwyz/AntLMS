@@ -1,19 +1,27 @@
+import { getAuth } from "firebase-admin/auth"
+import { useFirebaseAdmin } from "~/composables/useFirebaseAdmin.server"
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const { token } = await readBody(event)
   const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
 
-  if (body.token) {
-    setCookie(event, `${cookieOptions.name}-token`, body.token, {
+  if (token && token.length > 0) {
+    const expiresIn = 60 * 60 * 24 * 1000
+    const app = useFirebaseAdmin()!
+    const auth = getAuth(app)
+    const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
+
+    setCookie(event, `${cookieOptions.name}-token`, sessionCookie, {
       domain: cookieOptions.domain,
-      maxAge: cookieOptions.lifetime ?? 0,
+      maxAge: expiresIn ?? 0,
       path: cookieOptions.path,
       sameSite: cookieOptions.sameSite as boolean | "lax" | "strict" | "none",
     })
-    return "auth cookie set"
+  } else {
+    deleteCookie(event, `${cookieOptions.name}-token`, {
+      maxAge: -1,
+    })
   }
-  setCookie(event, `${cookieOptions.name}-token`, "", {
-    maxAge: -1,
-    path: cookieOptions.path,
-  })
-  return "auth cookie cleared"
+
+  return { success: true }
 })

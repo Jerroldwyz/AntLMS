@@ -1,14 +1,42 @@
-<script setup>
-const props = defineProps(["manager"])
+<script setup lang="ts">
+const props = defineProps(["manager", "availableRoles"])
+const emits = defineEmits(["delete:manager", "update:manager"])
+
 const manager = props.manager
+const availableRoles = props.availableRoles
+
+const rolesString = ref(manager.roles.map((role: any) => role.name).join(","))
 
 const disableDialog = ref(false)
 const deleteDialog = ref(false)
 const roleDialog = ref(false)
-const dialogm1 = ref("")
+const newRole = ref(rolesString.value)
 
-const saveNewRoles = () => {}
-const deleteManagerNow = () => {}
+const saveNewRoles = () => {
+  const role = availableRoles.find((role: any) => role.name === newRole.value)
+  const modifiedManager = {
+    ...manager,
+    roles: [role],
+  }
+  if (manager.roles.length === 0) {
+    createManagerRoleMapping(manager.uid, role.id)
+  } else {
+    updateManagerRoleMapping(manager.uid, role.id)
+  }
+  rolesString.value = newRole.value
+  emits("update:manager", modifiedManager)
+  roleDialog.value = false
+}
+const deleteManagerNow = async () => {
+  try {
+    await deleteManagerById(manager.uid)
+    emits("delete:manager", manager.uid)
+    deleteDialog.value = false
+  } catch (e) {
+    alert(e)
+  }
+}
+
 const disableManagerNow = () => {}
 </script>
 
@@ -16,7 +44,7 @@ const disableManagerNow = () => {}
   <tr>
     <td>{{ manager.name }}</td>
     <td>{{ manager.email }}</td>
-    <td>{{ manager.roles }}</td>
+    <td>{{ rolesString }}</td>
     <td class="text-right">
       <v-btn
         class="ms-2"
@@ -34,19 +62,14 @@ const disableManagerNow = () => {}
             <v-card-title>Select Role</v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-radio-group v-model="dialogm1">
+              <v-radio-group v-model="newRole">
                 <v-radio
-                  label="Admin"
-                  value="admin"
-                ></v-radio>
-                <v-radio
-                  label="Manager"
-                  value="manager"
-                ></v-radio>
-                <v-radio
-                  label="Staff"
-                  value="staff"
-                ></v-radio>
+                  v-for="role in availableRoles"
+                  :key="role.id"
+                  :label="role.name"
+                  :value="role.name"
+                >
+                </v-radio>
               </v-radio-group>
             </v-card-text>
             <v-divider></v-divider>

@@ -61,19 +61,18 @@ definePageMeta({
   middleware: "guest",
 })
 
-const authStore = useAuthStore()
+const { login } = useAuth()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
 const router = useRouter()
-
 const email = ref("")
 const password = ref("")
 
 const signIn = async () => {
   disabled.value = true
   try {
-    await authStore.login(email.value, password.value)
+    await login(email.value, password.value)
     router.push("/")
   } catch (error) {
     alert(error)

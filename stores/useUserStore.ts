@@ -1,40 +1,84 @@
+import { JsonObject } from "@prisma/client/runtime/library"
 import { defineStore } from "pinia"
 import { User } from "~~/types"
 
-const route = "/api/users"
-
 // store for user on client side
-export const useUserStore = defineStore("user-store", {
-  state: () => ({ users: [] as User[] }),
+export const useUserStore = defineStore("current-user-store", {
+  state: () => ({
+    user: null as User | null,
+    isAdmin: false,
+  }),
+  getters: {
+    isAuthenticated: (state) => !!state.user,
+    fullName: (state) => state.user?.name,
+    email: (state) => state.user?.email,
+    initials: (state) => {
+      const userName = state.user?.name || ""
+      const nameParts = userName.split(" ")
+      const initials = nameParts
+        ?.map((part) => part.charAt(0).toUpperCase())
+        .join("")
+      return initials
+    },
+    thumbnailUrl: (state) => {
+      const currentThumbnail = state.user?.thumbnail
+      let thumbnailUrl
+      if (currentThumbnail) {
+        getImage(currentThumbnail).then((url) => {
+          thumbnailUrl = url
+        })
+      }
+
+      return currentThumbnail
+    },
+  },
   actions: {
-    // get all users
-    async getAll() {
-      try {
-        const data = await $fetch<User[]>(route)
-        this.users = data
-        return data as User[]
-      } catch (error) {
-        console.error(error)
+    setUser(user: User | null) {
+      this.user = user
+    },
+    async updateThumbnail(thumbnailPath: string | null) {
+      const userToUpdate = {
+        name: this.user?.name,
+        email: this.user?.email,
+        thumbnail: thumbnailPath,
+        contact_details: this.user?.contact_details,
+      }
+
+      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+
+      this.user = {
+        uid: updatedUser.uid,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        thumbnail: updatedUser.thumbnail,
+        contact_details: updatedUser.contact_details as JsonObject,
+      }
+
+      return {
+        success: true,
       }
     },
-    // create new user
-    async create({ ...user }) {
-      await $fetch(route, {
-        method: "POST",
-        body: user,
-      })
-        .catch((error) => console.error(error))
-        .then(() => {
-          console.log("You have created a user")
-        })
-    },
-    async register({ ...user }) {
-      await $fetch("/api/signin", {
-        method: "POST",
-        body: user,
-      })
-        .catch((error) => console.error(error))
-        .then(() => console.log("You have register"))
+    async updateDetails({ ...userData }) {
+      const userToUpdate = {
+        name: userData.name,
+        email: userData.email,
+        thumbnail: this.user?.thumbnail,
+        contact_details: userData.contact_details,
+      }
+
+      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+
+      this.user = {
+        uid: updatedUser.uid,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        thumbnail: updatedUser.thumbnail,
+        contact_details: updatedUser.contact_details as JsonObject,
+      }
+
+      return {
+        success: true,
+      }
     },
   },
 })
