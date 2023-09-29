@@ -93,7 +93,7 @@ const checkFiles = async (event: InputEvent) => {
     // upload new image to bucket
     const file = files.value[0]
     const mimeType = file.type.split("/")[1]
-    const path = await uploadImage(files.value[0], "image")
+    const path = await uploadImage(files.value[0])
   }
 }
 

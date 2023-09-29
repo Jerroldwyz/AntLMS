@@ -1,7 +1,4 @@
-export const uploadImage = async (
-  file: File,
-  mimeType: string,
-): Promise<string> => {
+export const uploadImage = async (file: File): Promise<string> => {
   if (!file) {
     // No file selected, handle this case as needed
     console.log("No image to upload")
@@ -34,8 +31,6 @@ export const getImage = async (path: string): Promise<string> => {
 }
 
 export const deleteImage = async (path: string): Promise<boolean> => {
-  // before /api/images/:path
-  // after /api/images/
   const { success } = await $fetch(`/api/images`, {
     method: "DELETE",
     body: {

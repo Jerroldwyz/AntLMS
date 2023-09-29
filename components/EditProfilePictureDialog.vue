@@ -145,7 +145,7 @@ const applyChange = () => {
   } else {
     const currentUserThumbnail = userStore.user?.thumbnail
 
-    uploadImage(files.value[0], "image").then(async (path) => {
+    uploadImage(files.value[0]).then(async (path) => {
       const result = await userStore.updateThumbnail(path)
       if (result.success) {
         dialog.value = false
