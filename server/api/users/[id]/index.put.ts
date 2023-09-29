@@ -1,3 +1,5 @@
+import { updateUserById } from "~/server/utils/db/users"
+
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, "id")
   const body = await readBody(event)
@@ -6,7 +8,12 @@ export default defineEventHandler(async (event) => {
   const name = body.name
 
   try {
-    return await updateUser(userId as string, name, thumbnail, contactDetails)
+    return await updateUserById(
+      userId as string,
+      name,
+      thumbnail,
+      contactDetails,
+    )
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }
