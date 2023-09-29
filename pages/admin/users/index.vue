@@ -1,3 +1,104 @@
+<script>
+import {
+  fetchAllUsers,
+  fetchUser,
+  updateUser as updateUserInHelpers,
+  deleteUser,
+} from "~~/utils/user-helpers"
+
+definePageMeta({
+  layout: "admin",
+  middleware: "admin",
+})
+
+export default {
+  setup() {
+    const editDialog = ref({})
+    const searchQuery = ref("")
+    const users = ref([])
+
+    const toggleEditDialog = (userId) => {
+      editDialog.value[userId] = !editDialog.value[userId]
+    }
+
+    const updateUserInDatabase = async (user) => {
+      try {
+        console.log("Updating user:", user) // Debugging line
+
+        const userId = user.uid // Get the user's ID try
+
+        const updatedUserData = {
+          uid: user.uid,
+          email: user.email,
+          name: user.name,
+          // lastName: user.lastName,
+        }
+
+        await updateUserInHelpers(userId, updatedUserData) // Call the updateUser function
+        editDialog.value[userId] = false // Close the edit dialog
+      } catch (e) {
+        console.error("Error updating user:", e)
+      }
+    }
+    const confirmDeleteUser = async (userId) => {
+      try {
+        await deleteUser(userId) // Call the deleteUser function
+        users.value = users.value.filter((user) => user.uid !== userId) // Remove the user from the local list
+      } catch (e) {
+        console.error("Error deleting user:", e)
+      }
+    }
+    const filteredUsers = computed(() => {
+      const query = searchQuery.value.trim().toLowerCase()
+      if (query === "") {
+        return users?.value
+      } else {
+        const filtered = users?.value.filter((user) => {
+          const lowerCaseUsername = user.uid ? user.uid.toLowerCase() : ""
+          const lowerCaseFullName = user.name ? user.name.toLowerCase() : ""
+          // const lowerCaseLastName = user.name ? user.name.toLowerCase() : ""
+          const lowerCaseEmail = user.email ? user.email.toLowerCase() : ""
+
+          return (
+            lowerCaseUsername.includes(query) ||
+            lowerCaseFullName.includes(query) ||
+            // lowerCaseLastName.includes(query) ||
+            lowerCaseEmail.includes(query)
+          )
+        })
+        return filtered
+      }
+    })
+
+    onMounted(async () => {
+      try {
+        const response = await fetchAllUsers()
+        if (response.ok) {
+          const userData = await response.json() // Parse the JSON response
+          console.log(userData) // Log the user data
+          users.value = userData
+        } else {
+          console.warn("Request failed with status:", response.status)
+          console.warn("No user data found in the response.")
+        }
+      } catch (e) {
+        console.error("Error fetching user data:", e)
+      }
+    })
+
+    return {
+      editDialog,
+      searchQuery,
+      users,
+      toggleEditDialog,
+      confirmDeleteUser,
+      filteredUsers,
+      updateUserInDatabase,
+    }
+  },
+}
+</script>
+
 <template>
   <div>
     <h1 class="mb-4">Admin Panel - Users</h1>
@@ -111,105 +212,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { ref, computed, onMounted } from "vue"
-import {
-  fetchAllUsers,
-  fetchUser,
-  updateUser as updateUserInHelpers,
-  deleteUser,
-} from "../../../utils/user-helpers" // Import your user-related functions
-
-export default {
-  setup() {
-    const editDialog = ref({})
-    const searchQuery = ref("")
-    const users = ref([])
-
-    const toggleEditDialog = (userId) => {
-      editDialog.value[userId] = !editDialog.value[userId]
-    }
-
-    const updateUserInDatabase = async (user) => {
-      try {
-        console.log("Updating user:", user) // Debugging line
-
-        const userId = user.uid // Get the user's ID try
-
-        const updatedUserData = {
-          uid: user.uid,
-          email: user.email,
-          name: user.name,
-          // lastName: user.lastName,
-        }
-
-        await updateUserInHelpers(userId, updatedUserData) // Call the updateUser function
-        editDialog.value[userId] = false // Close the edit dialog
-      } catch (e) {
-        console.error("Error updating user:", e)
-      }
-    }
-    const confirmDeleteUser = async (userId) => {
-      try {
-        await deleteUser(userId) // Call the deleteUser function
-        users.value = users.value.filter((user) => user.uid !== userId) // Remove the user from the local list
-      } catch (e) {
-        console.error("Error deleting user:", e)
-      }
-    }
-    const filteredUsers = computed(() => {
-      const query = searchQuery.value.trim().toLowerCase()
-      if (query === "") {
-        return users?.value
-      } else {
-        const filtered = users?.value.filter((user) => {
-          const lowerCaseUsername = user.uid ? user.uid.toLowerCase() : ""
-          const lowerCaseFullName = user.name ? user.name.toLowerCase() : ""
-          // const lowerCaseLastName = user.name ? user.name.toLowerCase() : ""
-          const lowerCaseEmail = user.email ? user.email.toLowerCase() : ""
-
-          return (
-            lowerCaseUsername.includes(query) ||
-            lowerCaseFullName.includes(query) ||
-            // lowerCaseLastName.includes(query) ||
-            lowerCaseEmail.includes(query)
-          )
-        })
-        return filtered
-      }
-    })
-
-    onMounted(async () => {
-      try {
-        const response = await fetchAllUsers()
-        if (response.ok) {
-          const userData = await response.json() // Parse the JSON response
-          console.log(userData) // Log the user data
-          users.value = userData
-        } else {
-          console.warn("Request failed with status:", response.status)
-          console.warn("No user data found in the response.")
-        }
-      } catch (e) {
-        console.error("Error fetching user data:", e)
-      }
-    })
-
-    return {
-      editDialog,
-      searchQuery,
-      users,
-      toggleEditDialog,
-      confirmDeleteUser,
-      filteredUsers,
-      updateUserInDatabase,
-    }
-  },
-}
-
-definePageMeta({
-  layout: "admin",
-  middleware: "admin",
-})
-</script>
