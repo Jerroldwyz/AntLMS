@@ -1,8 +1,9 @@
+import courses from "~/server/middleware/courses"
 import { Course } from "~~/types"
 
-export async function fetchAllCourses(): Promise<any> {
+export async function fetchAllCourses() {
   // TODO: add type
-  const { data } = await useFetch("/api/courses", {
+  const { data } = await useFetch("/api/courses/", {
     method: "get",
   })
 
