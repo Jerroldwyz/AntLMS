@@ -31,6 +31,7 @@
           v-for="(choice, index) in choices"
           :key="index"
           :value="index"
+          style="width: 45%"
         >
           <template #label>
             <v-text-field
@@ -103,6 +104,7 @@ const addChoice = () => {
       isCorrect: false,
     })
   }
+  console.log(editor.getContent())
 }
 
 const handleSubmit = async () => {
