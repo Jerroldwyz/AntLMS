@@ -5,16 +5,19 @@ export default defineEventHandler(async (event) => {
   try {
     const result = resultTransformer(await evaluateQuiz(body.result))
 
-    if (body.quizScoreId !== undefined) {
-      await storeExistingQuizResult(result, body.quizScoreId)
-    } else {
-      await storeQuizResult(
-        result,
-        parseInt(body.enrollmentId),
-        body.userId as string,
-        parseInt(body.quizId),
-      )
-    }
+    // comment from here
+    // if (body.quizScoreId !== undefined) {
+    //   await storeExistingQuizResult(result, body.quizScoreId)
+    // } else {
+    //   await storeQuizResult(
+    //     result,
+    //     parseInt(body.enrollmentId),
+    //     body.userId as string,
+    //     parseInt(body.quizId),
+    //   )
+    // }
+
+    // to here to take quiz
 
     return result
   } catch (e) {

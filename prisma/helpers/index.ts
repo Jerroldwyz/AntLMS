@@ -40,6 +40,7 @@ const admins: users[] = [
     name: "admin",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
     enabled: true,
   },
@@ -48,6 +49,7 @@ const admins: users[] = [
     name: "manager",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
     enabled: true,
   },
@@ -56,6 +58,7 @@ const admins: users[] = [
     name: "staff",
     email: faker.internet.email(),
     contact_details: {},
+    thumbnail: null,
     is_admin: true,
     enabled: true,
   },
@@ -212,7 +215,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   )
 
   for (let i = 0; i < amount; i++) {
-    users.push(createUser())
+    users.push(await createUser())
     users = _.unique(users, (x) => x.email)
   }
   for (let i = 0; i < amount; i++) {
