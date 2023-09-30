@@ -11,17 +11,20 @@
 <script setup lang="ts">
 import { ICourse } from "~/interfaces"
 
-function sortContentByTopicPosition(data: ICourse): ICourse {
-  const sortedTopics = data.topics.map((topic) => ({
+function sortContentByTopicPosition({ ...data }) {
+  const sortedTopics = data.topics.map(({ ...topic }) => ({
     ...topic,
-    content: topic.content.sort((a, b) => a.topicPosition - b.topicPosition),
+    content: topic.content.sort(
+      (a: { topicPosition: number }, b: { topicPosition: number }) =>
+        a.topicPosition - b.topicPosition,
+    ),
   }))
 
   return { ...data, topics: sortedTopics }
 }
 
 const courseId = 413970944
-const dummyCourse: ICourse = await $fetch(`/api/courses/${courseId}`, {
+const dummyCourse = await $fetch(`/api/courses/${courseId}`, {
   method: "GET",
 })
 
