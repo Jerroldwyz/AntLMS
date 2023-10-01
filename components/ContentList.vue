@@ -10,9 +10,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "showModal"): void
+  (e: "update:course", course: any): void
 }>()
-
-const course = ref(props.course)
 
 // TODO: add proper type
 function getIcon(content: any): string {
@@ -49,10 +48,13 @@ function getIcon(content: any): string {
         height="400"
       >
         <draggable
-          v-model="course.topics"
+          :model-value="props.course.topics"
           group="topics"
           item-key="id"
           animation="200"
+          @update:model-value="
+            (topics) => $emit('update:course', { ...course, topics })
+          "
           @change="changed = true"
           @start="drag = true"
           @end="drag = false"
