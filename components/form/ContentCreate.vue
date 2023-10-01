@@ -1,7 +1,21 @@
 <script setup lang="ts">
+const route = useRoute()
 const emit = defineEmits<{
   (e: "toggleModal", value: boolean): void
 }>()
+
+const titleRules = [
+  (value: string) => {
+    if (value) return true
+
+    return "You must enter a title"
+  },
+  (value: string) => {
+    if (value.length > 5) return true
+
+    return "Title must be 5 characters or more"
+  },
+]
 
 const contentTypeRules = [
   (value: string) => {
@@ -10,17 +24,34 @@ const contentTypeRules = [
   },
 ]
 
+const title = ref("")
 const contentType = ref<"quiz" | "text" | "video" | undefined>()
+
 function addContent() {
   switch (contentType.value) {
     case "quiz":
-      navigateTo("newquiz")
+      navigateTo({
+        path: `${route.params.id}/content/newquiz`,
+        query: {
+          title: title.value,
+        },
+      })
       break
     case "text":
-      navigateTo("newtext")
+      navigateTo({
+        path: `${route.params.id}/content/newtext`,
+        query: {
+          title: title.value,
+        },
+      })
       break
     case "video":
-      navigateTo("newvideo")
+      navigateTo({
+        path: `${route.params.id}/content/newvideo`,
+        query: {
+          title: title.value,
+        },
+      })
       break
   }
 }
@@ -46,10 +77,17 @@ function addContent() {
           </v-col>
         </v-row>
         <v-container>
+          <v-text-field
+            v-model="title"
+            variant="outlined"
+            label="Title"
+            :rules="titleRules"
+          ></v-text-field>
           <v-radio-group
             v-model="contentType"
             :rules="contentTypeRules"
           >
+            <template #label>Content Type</template>
             <v-radio
               label="Quiz"
               value="quiz"
