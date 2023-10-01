@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import draggable from "vuedraggable"
+import { removeTopic } from "~/utils/topic-helpers"
 const drag = ref(false)
 const changed = ref(false)
 
@@ -9,7 +10,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "showModal"): void
+  (e: "showModal", modal: "content" | "topic"): void
   (e: "update:course", course: any): void
 }>()
 
@@ -24,6 +25,10 @@ function getIcon(content: any): string {
       return "mdi-pencil-circle"
   }
 }
+
+async function handleDelete(topicId: string) {
+  await removeTopic(topicId)
+}
 </script>
 
 <template>
@@ -37,7 +42,7 @@ function getIcon(content: any): string {
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
-            @click="$emit('showModal')"
+            @click="$emit('showModal', 'content')"
           ></v-btn>
         </v-col>
       </v-row>
@@ -71,11 +76,13 @@ function getIcon(content: any): string {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
+                      @click="$emit('showModal', 'topic')"
                     >
                     </v-btn>
                     <v-btn
                       icon="mdi-delete"
                       variant="flat"
+                      @click="handleDelete(topic.id)"
                     >
                     </v-btn>
                   </template>
