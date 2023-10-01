@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import draggable from "vuedraggable"
 import { removeTopic } from "~/utils/topic-helpers"
+const route = useRoute()
 const drag = ref(false)
 const changed = ref(false)
 
@@ -42,7 +43,7 @@ async function handleDelete(topicId: string) {
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
-            @click="$emit('showModal', 'content')"
+            @click="navigateTo(`${route.params.id}/newtopic`)"
           ></v-btn>
         </v-col>
       </v-row>
@@ -76,7 +77,7 @@ async function handleDelete(topicId: string) {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
-                      @click="$emit('showModal', 'topic')"
+                      @click="$emit('showModal', 'content')"
                     >
                     </v-btn>
                     <v-btn
