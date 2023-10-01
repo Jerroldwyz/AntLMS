@@ -215,14 +215,15 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   )
   for (let i = 0; i < amount; i++) {
     users.push(await createUser())
-    users
-      .filter((user) => user.is_admin)
-      .forEach((admin) =>
-        admin_role_attachments.push(createAdminRoleAttachment(roles, admin)),
-      )
-    // Needs to occur after random role attachment bindings as these need to be specific
-    admins.forEach((admin) => users.push(admin))
   }
+  users
+    .filter((user) => user.is_admin)
+    .forEach((admin) =>
+      admin_role_attachments.push(createAdminRoleAttachment(roles, admin)),
+    )
+  // Needs to occur after random role attachment bindings as these need to be specific
+  admins.forEach((admin) => users.push(admin))
+
   users = _.unique(users, (x) => `${x.uid}${x.email}`)
   roles = _.unique(roles, (x) => x.id)
   permissions = _.unique(permissions, (x) => x.id)
@@ -242,48 +243,47 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
 
   for (let i = 0; i < amount; i++) {
     courses_tags.push(createCoursetag(courses, tags))
-    courses.forEach((course: any) => {
-      createMultipleTopics(course).forEach((topic) => topics.push(topic))
-    })
-    users.forEach((user) => {
-      enrollments.push(createEnrollment(user, courses))
-    })
   }
+  courses.forEach((course: any) => {
+    createMultipleTopics(course).forEach((topic) => topics.push(topic))
+  })
+  users.forEach((user) => {
+    enrollments.push(createEnrollment(user, courses))
+  })
+
   courses_tags = _.unique(courses_tags, (x) => `${x.course_id}${x.tag_id}`)
   topics = _.unique(topics, (x) => `${x.course_id}${x.id}`)
   enrollments = _.unique(enrollments, (x) => `${x.course_id}${x.user_id}`)
 
-  for (let i = 0; i < amount; i++) {
-    topics.forEach((topic) => {
-      createMultipleContent(topic).forEach((content) => contents.push(content))
-      quizzes.push(createQuiz(topic))
-    })
-  }
+  topics.forEach((topic) => {
+    createMultipleContent(topic).forEach((content) => contents.push(content))
+    quizzes.push(createQuiz(topic))
+  })
+
   contents = _.unique(contents, (x) => x.id)
   quizzes = _.unique(quizzes, (x) => x.id)
 
   for (let i = 0; i < amount; i++) {
     // TODO
     progress.push(createProgress(users, enrollments, contents))
-    quizzes.forEach((quiz) => {
-      createMultipleQuestions(quiz).forEach((question) =>
-        questions.push(question),
-      )
-    })
     quiz_score.push(createQuizscore(enrollments, quizzes, users))
   }
+  quizzes.forEach((quiz) => {
+    createMultipleQuestions(quiz).forEach((question) =>
+      questions.push(question),
+    )
+  })
   progress = _.unique(progress, (x) => x.id)
   questions = _.unique(questions, (x) => x.id)
   quiz_score = _.unique(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
 
-  for (let i = 0; i < amount; i++) {
-    questions.forEach((question) => {
-      createMultipleChoices(question).forEach((choice) => choices.push(choice))
-    })
-    // choices.push(createChoice(questions))
-  }
+  questions.forEach((question) => {
+    createMultipleChoices(question).forEach((choice) => choices.push(choice))
+  })
+  // choices.push(createChoice(questions))
   choices = _.unique(choices, (x) => x.id)
 
+  console.log("Generating Users...")
   await prisma.users.createMany({
     data: users.map((user) => {
       return {
@@ -292,48 +292,63 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
       }
     }),
   })
+  console.log("Generating Roles...")
   await prisma.roles.createMany({
     data: roles,
   })
+  console.log("Generating Permissions...")
   await prisma.permissions.createMany({
     data: permissions,
   })
+  console.log("Generating Role permission attachments...")
   await prisma.role_permissions_attachments.createMany({
     data: role_permissions_attachments,
   })
+  console.log("Generating admin role attachments...")
   await prisma.admin_role_attachments.createMany({
     data: admin_role_attachments,
   })
+  console.log("Generating courses...")
   await prisma.courses.createMany({
     data: courses,
   })
+  console.log("Generating tags...")
   await prisma.tags.createMany({
     data: tags,
   })
+  console.log("Generating course tags...")
   await prisma.courses_tags.createMany({
     data: courses_tags,
   })
+  console.log("Generating topics...")
   await prisma.topics.createMany({
     data: topics,
   })
+  console.log("Generating enrollments...")
   await prisma.enrollments.createMany({
     data: enrollments,
   })
+  console.log("Generating contents...")
   await prisma.content.createMany({
     data: contents,
   })
+  console.log("Generating quizzes...")
   await prisma.quizzes.createMany({
     data: quizzes,
   })
+  console.log("Generating progress...")
   await prisma.progress.createMany({
     data: progress,
   })
+  console.log("Generating questions...")
   await prisma.questions.createMany({
     data: questions,
   })
+  console.log("Generating quiz score...")
   await prisma.quiz_score.createMany({
     data: quiz_score,
   })
+  console.log("Generating choices...")
   await prisma.choices.createMany({
     data: choices,
   })
