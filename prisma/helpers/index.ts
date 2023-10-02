@@ -283,7 +283,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   // choices.push(createChoice(questions))
   choices = _.unique(choices, (x) => x.id)
 
-  console.log("Generating Users...")
+  console.log(`Generating ${users.length} Users...`)
   await prisma.users.createMany({
     data: users.map((user) => {
       return {
@@ -292,63 +292,67 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
       }
     }),
   })
-  console.log("Generating Roles...")
+  console.log(`Generating ${roles.length} Roles...`)
   await prisma.roles.createMany({
     data: roles,
   })
-  console.log("Generating Permissions...")
+  console.log(`Generating ${permissions.length} Permissions...`)
   await prisma.permissions.createMany({
     data: permissions,
   })
-  console.log("Generating Role permission attachments...")
+  console.log(
+    `Generating ${role_permissions_attachments.length} Role attachments...`,
+  )
   await prisma.role_permissions_attachments.createMany({
     data: role_permissions_attachments,
   })
-  console.log("Generating admin role attachments...")
+  console.log(
+    `Generating ${admin_role_attachments.length} admin role attachments...`,
+  )
   await prisma.admin_role_attachments.createMany({
     data: admin_role_attachments,
   })
-  console.log("Generating courses...")
+  console.log(`Generating ${courses.length} courses...`)
   await prisma.courses.createMany({
     data: courses,
   })
-  console.log("Generating tags...")
+  console.log(`Generating ${tags.length} tags...`)
   await prisma.tags.createMany({
     data: tags,
   })
-  console.log("Generating course tags...")
+  console.log(`Generating ${courses_tags.length} course tags...`)
   await prisma.courses_tags.createMany({
     data: courses_tags,
   })
-  console.log("Generating topics...")
+  console.log(`Generating ${topics.length} topics...`)
   await prisma.topics.createMany({
     data: topics,
   })
-  console.log("Generating enrollments...")
+  console.log(`Generating ${enrollments.length} enrollments...`)
   await prisma.enrollments.createMany({
     data: enrollments,
   })
-  console.log("Generating contents...")
+  console.log(`Generating ${contents.length} contents...`)
   await prisma.content.createMany({
     data: contents,
   })
-  console.log("Generating quizzes...")
+  console.log(`Generating ${quizzes.length} quizzes...`)
   await prisma.quizzes.createMany({
     data: quizzes,
   })
-  console.log("Generating progress...")
+  console.log(`Generating ${progress.length} progress...`)
   await prisma.progress.createMany({
     data: progress,
   })
-  console.log("Generating questions...")
+  console.log(`Generating ${questions.length} questions...`)
   await prisma.questions.createMany({
     data: questions,
   })
-  console.log("Generating quiz score...")
+  console.log(`Generating ${quiz_score.length} quiz score...`)
   await prisma.quiz_score.createMany({
     data: quiz_score,
   })
-  console.log("Generating choices...")
+  console.log(`Generating ${choices.length} choices...`)
   await prisma.choices.createMany({
     data: choices,
   })
