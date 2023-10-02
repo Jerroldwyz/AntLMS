@@ -32,7 +32,7 @@
             <v-list-item
               :value="content.title"
               :prepend-icon="onContentComplete(content.complete)"
-              to="?"
+              :to="contentPath(topic.id, content.id)"
             >
               {{ content.title }}</v-list-item
             >
@@ -44,16 +44,16 @@
 </template>
 
 <script setup lang="ts">
-// "mdi-circle-outline"
-// "mdi-check"
-import { ICourse } from "~/interfaces"
+const props = defineProps(["course"])
 
-const props = defineProps<{
-  course: ICourse
-}>()
+console.log(props.course)
 
 const onContentComplete = (complete: boolean) => {
   return complete ? "mdi-check" : "mdi-circle-outline"
+}
+
+const contentPath = (topicId: number, contentId: number) => {
+  return `/demo/topics/${topicId}/content/${contentId}`
 }
 </script>
 
