@@ -7,6 +7,7 @@ export const getCourseById = (course_id: number) => {
       id: course_id,
     },
     select: {
+      id: true,
       title: true,
       thumbnail: true,
       creator: {
@@ -16,6 +17,7 @@ export const getCourseById = (course_id: number) => {
       },
       topics: {
         select: {
+          id: true,
           title: true,
           content: {
             select: {
