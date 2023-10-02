@@ -348,7 +348,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   await prisma.questions.createMany({
     data: questions,
   })
-  console.log(`Generating ${quiz_progress.length} quiz progresses`)
+  console.log(`Generating ${quiz_progress.length} quiz progress...`)
   await prisma.quiz_progress.createMany({
     data: quiz_progress,
   })
