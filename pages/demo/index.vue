@@ -4,13 +4,15 @@
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
       <v-row justify="center">
-        <FormQuizCreate :topicId="169652537" :topicPosition="12" @submit="handleSubmit"
-          @close="createCourseDialog = false" />
-      </v-row>                                
+        <FormQuizCreate :topicId="1" :topicPosition="11" @submit="handleSubmit" @close="createCourseDialog = false" />
+      </v-row>
     </v-container>
   </v-dialog> -->
   <!-- User Question form component like this for creation and pass id as props for updating<FormQuestion/> -->
-  <Quiz :id="702097645" />
+  <!-- <Quiz :id="1" enrollmentId="1" userId="1" /> -->
+  <FormQuestion :quiz-id="1" />
 </template>
 
-<script setup></script>
+<script setup>
+const createCourseDialog = ref(false)
+</script>

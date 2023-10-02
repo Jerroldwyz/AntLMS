@@ -1,9 +1,17 @@
 <template>
   <v-container>
-    <v-form
-      ref="form"
-      v-model="valid"
+    <v-alert
+      v-model="choiceAlert"
+      border="start"
+      variant="tonal"
+      closable
+      close-label="Close Alert"
+      color="red"
+      title="Error"
     >
+      You need to have more than 1 choices
+    </v-alert>
+    <v-form ref="form">
       <v-card-title class="text-h5">{{ pageTitle }}</v-card-title>
       <v-text-field
         v-model="questionText"
@@ -47,10 +55,28 @@
       >
     </v-form>
   </v-container>
+  <div class="text-center">
+    <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <v-card>
+        <v-card-text> The Quiz has been successfully created </v-card-text>
+        <v-btn
+          color="primary"
+          block
+          @click="dialog = false"
+          >Close Dialog</v-btn
+        >
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script setup>
-const props = defineProps(["id"])
+const props = defineProps(["id", "quizId"])
+const choiceAlert = ref(false)
+const dialog = ref(false)
 
 const choices = ref([])
 const pageTitle = ref("Create Question")
@@ -82,16 +108,28 @@ const addChoice = () => {
 const handleSubmit = async () => {
   choices.value[correctAns.value].isCorrect = true
   const question = {
+    quizId: props.quizId,
     questionText: questionText.value,
     explanation: explanation.value,
     choices: choices.value,
   }
-  const questionData = await useFetch(`/api/question/`, {
-    method: "post",
-    body: {
-      ...question,
-    },
-  })
+
+  if (choices.value.length < 2) {
+    choiceAlert.value = true
+    return
+  }
+
+  try {
+    await $fetch(`/api/question`, {
+      method: props.id ? "put" : "post",
+      body: {
+        ...question,
+      },
+    })
+    dialog.value = true
+  } catch (e) {
+    console.log(e)
+  }
 }
 </script>
 

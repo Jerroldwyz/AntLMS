@@ -79,13 +79,14 @@ enum content_type {
 }
 
 model quizzes {
-  id             Int          @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   topic_id       Int
   title          String
-  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic          topics          @relation(fields: [topic_id], references: [id], onDelete: Cascade)
   questions      questions[]
   topic_position Int
-  quiz_score     quiz_score[]
+  threshold      Int
+  progress       quiz_progress[]
 }
 
 model questions {
@@ -106,13 +107,13 @@ model choices {
 }
 
 model enrollments {
-  id         Int          @id @default(autoincrement())
-  user_id    String
-  course_id  Int
-  user       users        @relation(fields: [user_id], references: [uid], onDelete: Cascade)
-  course     courses      @relation(fields: [course_id], references: [id], onDelete: Cascade)
-  progress   progress[]
-  quiz_score quiz_score[]
+  id            Int             @id @default(autoincrement())
+  user_id       String
+  course_id     Int
+  user          users           @relation(fields: [user_id], references: [uid], onDelete: Cascade)
+  course        courses         @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  progress      progress[]
+  quiz_progress quiz_progress[]
 
   @@unique([user_id, course_id])
 }
@@ -127,11 +128,9 @@ model progress {
   user          users       @relation(fields: [user_id], references: [uid], onDelete: Cascade)
 }
 
-model quiz_score {
+model quiz_progress {
   id            Int         @id @default(autoincrement())
   enrollment_id Int
-  score         Int
-  total_marks   Int
   enrollment    enrollments @relation(fields: [enrollment_id], references: [id], onDelete: Cascade)
   quiz_id       Int
   quiz          quizzes     @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
