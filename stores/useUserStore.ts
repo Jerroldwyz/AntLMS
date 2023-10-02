@@ -44,7 +44,7 @@ export const useUserStore = defineStore("current-user-store", {
         contact_details: this.user?.contact_details,
       }
 
-      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+      const updatedUser: any = await updateAccount(this.user?.uid, userToUpdate)
 
       this.user = {
         uid: updatedUser.uid,
@@ -66,7 +66,7 @@ export const useUserStore = defineStore("current-user-store", {
         contact_details: userData.contact_details,
       }
 
-      const updatedUser = await updateAccount(this.user?.uid, userToUpdate)
+      const updatedUser: any = await updateAccount(this.user?.uid, userToUpdate)
 
       this.user = {
         uid: updatedUser.uid,

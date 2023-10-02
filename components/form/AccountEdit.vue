@@ -97,27 +97,21 @@ const onFormattedPhoneNumber = (value: string) => {
 const saveChange = async () => {
   if (valid.value) {
     try {
-      await userStore
-        .updateDetails({
-          name: name.value,
-          email: email.value,
-          contact_details: {
-            pronoun: pronoun.value,
-            phone_number: formattedPhoneNumber.value,
-          },
-        })
-        .then((result) => {
-          showSuccess.value = true
-        })
-        .catch((error) => {
-          showFailure.value = true
-          throw new Error(
-            "An error has occurred while updated your profile",
-            error,
-          )
-        })
+      await userStore.updateDetails({
+        name: name.value,
+        email: email.value,
+        contact_details: {
+          pronoun: pronoun.value,
+          phone_number: formattedPhoneNumber.value,
+        },
+      })
+      showSuccess.value = true
     } catch (error) {
-      throw new Error("failed to update")
+      showFailure.value = true
+      throw new Error(
+        "An error has occurred while updated your profile",
+        error as Error,
+      )
     }
   }
 }

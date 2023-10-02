@@ -19,10 +19,10 @@ model users {
   enrollments            enrollments[]
   courses                courses[]
   progress               progress[]
-  quiz_score             quiz_score[]
   is_admin               Boolean                  @default(false)
   admin_role_attachments admin_role_attachments[]
   enabled                Boolean                  @default(true)
+  quiz_progress          quiz_progress[]
 }
 
 model courses {
@@ -142,7 +142,7 @@ model quiz_progress {
 
 model roles {
   id                          Int                            @id @default(autoincrement())
-  name                        String @unique
+  name                        String                         @unique
   admin_role_attachments      admin_role_attachments[]
   role_permission_attachments role_permissions_attachments[]
 }

@@ -42,7 +42,7 @@ export const getUserById = (user_id: string) => {
   })
 }
 
-export const updateUser = (
+export const updateUserById = (
   user_id: string,
   name: string,
   thumbnail: string,
