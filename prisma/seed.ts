@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 const seed = async () => {
   // Insert all data here
-  await generateData(prisma, 10)
+  await generateData(prisma, 50)
 }
 
 const main = async () => {
