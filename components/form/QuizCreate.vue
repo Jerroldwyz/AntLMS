@@ -16,29 +16,26 @@ const titleRules = [
   },
 ]
 
-const loading = ref(false)
-const valid = ref(false)
-
 const title = ref("")
 
 const submitQuiz = async () => {
-  if (valid.value === true) {
-    loading.value = true
-    try {
-      const quiz = await $fetch("/api/quiz", {
-        method: "post",
-        body: {
-          title: title.value,
-          topicId: props.topicId,
-          topicPosition: props.topicPosition,
-        },
-      })
-      loading.value = false
-      emit("close")
-      emit("submit", true)
-    } catch (e) {}
-    emit("submit", false)
+  try {
+    const quiz = await $fetch("/api/quiz", {
+      method: "post",
+      body: {
+        title: title.value,
+        topicId: props.topicId,
+        topicPosition: props.topicPosition,
+        threshold: 4,
+      },
+    })
+    alert(quiz)
+    emit("close")
+    emit("submit", true)
+  } catch (e) {
+    alert(e)
   }
+  emit("submit", false)
 }
 </script>
 
@@ -77,7 +74,6 @@ const submitQuiz = async () => {
         <v-btn
           class="text-capitalize bg-primary"
           type="submit"
-          :loading="loading"
           @click="submitQuiz"
         >
           Create Quiz

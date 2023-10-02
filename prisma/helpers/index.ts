@@ -6,7 +6,7 @@ import {
   courses_tags,
   topics,
   content,
-  quiz_score,
+  quiz_progress,
   quizzes,
   questions,
   choices,
@@ -25,13 +25,13 @@ import { createTag } from "./createTag"
 import { createCoursetag } from "./createCoursetag"
 import { createTopic, createMultipleTopics } from "./createTopic"
 import { createContent, createMultipleContent } from "./createContent"
-import { createQuiz } from "./createQuiz"
+import { createQuizProgress } from "./createQuizProgress"
 import { createQuestion, createMultipleQuestions } from "./createQuestion"
 import { createChoice, createMultipleChoices } from "./createChoice"
 import { createEnrollment } from "./createEnrollment"
 import { createProgress } from "./createProgress"
-import { createQuizscore } from "./createQuizscore"
 import { createAdminRoleAttachment } from "./createAdminRoleAttachment"
+import { createQuiz } from "./createQuiz"
 
 import { faker } from "./faker"
 
@@ -198,7 +198,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   let quizzes: quizzes[] = []
   let questions: questions[] = []
   let progress: progress[] = []
-  let quiz_score: quiz_score[] = []
+  let quiz_progress: quiz_progress[] = []
   let choices: choices[] = []
   let roles: roles[] = []
   let permissions: permissions[] = []
@@ -266,7 +266,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   for (let i = 0; i < amount; i++) {
     // TODO
     progress.push(createProgress(users, enrollments, contents))
-    quiz_score.push(createQuizscore(enrollments, quizzes, users))
+    quiz_progress.push(createQuizProgress(enrollments, quizzes, users))
   }
   quizzes.forEach((quiz) => {
     createMultipleQuestions(quiz).forEach((question) =>
@@ -274,8 +274,8 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
     )
   })
   progress = _.unique(progress, (x) => x.id)
+  quiz_progress = _.unique(quiz_progress, (x) => x.id)
   questions = _.unique(questions, (x) => x.id)
-  quiz_score = _.unique(quiz_score, (x) => `${x.quiz_id}${x.user_id}`)
 
   questions.forEach((question) => {
     createMultipleChoices(question).forEach((choice) => choices.push(choice))
@@ -348,9 +348,9 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   await prisma.questions.createMany({
     data: questions,
   })
-  console.log(`Generating ${quiz_score.length} quiz score...`)
-  await prisma.quiz_score.createMany({
-    data: quiz_score,
+  console.log(`Generating ${quiz_progress.length} quiz progress...`)
+  await prisma.quiz_progress.createMany({
+    data: quiz_progress,
   })
   console.log(`Generating ${choices.length} choices...`)
   await prisma.choices.createMany({
