@@ -17,13 +17,15 @@ export const getCreatorCourseById = (course_id: number) => {
       },
       topics: {
         select: {
+          id: true,
           title: true,
+          position: true,
           content: {
             select: {
               title: true,
               type: true,
               content: true,
-              topic_position: true,
+              position: true,
             },
           },
           quizzes: {

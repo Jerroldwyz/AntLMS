@@ -10,6 +10,8 @@ const props = defineProps<{
   course: any
 }>()
 
+console.log(props.course)
+
 const emit = defineEmits<{
   (e: "showModal", modal: "content" | "topic"): void
   (e: "update:course", course: any): void
@@ -78,7 +80,9 @@ async function handleDelete(topicId: string) {
                       icon="mdi-plus"
                       variant="flat"
                       @click="
-                        navigateTo(`${route.params.id}/topic/2/newcontent`)
+                        navigateTo(
+                          `${route.params.id}/topic/${topic.id}/newcontent`,
+                        )
                       "
                     >
                     </v-btn>
