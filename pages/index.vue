@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+// const courses = await fetchAllUserCourses()
+// temp for testing
+const courses = await fetchAllCourses()
 </script>
 
 <template>

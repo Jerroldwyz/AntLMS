@@ -1,3 +1,4 @@
+import { content, quizzes, topics, progress } from "@prisma/client"
 import { useUserStore } from "~/stores/useUserStore"
 import { Course } from "~~/types"
 
@@ -95,4 +96,57 @@ export async function enableCourseById(id: number): Promise<any> {
       enabled: true,
     },
   })
+}
+
+export async function isEnrolled(userUid: string, courseId: number) {
+  const enrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
+    method: "GET",
+  })
+  if (enrollments !== null) {
+    const courseIds = enrollments.map((enrollment) => enrollment.id)
+    const userIsEnrolled = courseIds.includes(courseId)
+    return userIsEnrolled
+  } else {
+    return false
+  }
+}
+
+export async function getCourseProgress(userUid: string, courseId: number) {
+  const enrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
+    method: "GET",
+  })
+  // console.log()
+  if (enrollments !== null) {
+    const courses = enrollments.filter(
+      (enrollment) => enrollment.id === courseId,
+    )
+    if (courses.length > 0) {
+      const course = courses[0].course
+      const contentAndQuizIds = []
+      course.topics.forEach((topic: any) => {
+        topic.content.forEach((content: content) => {
+          contentAndQuizIds.push(content.id)
+        })
+        topic.quizzes.forEach((quiz: quizzes) => {
+          contentAndQuizIds.push(quiz.id)
+        })
+      })
+      const completedContentAndQuizIds = []
+      courses[0].quiz_progress.forEach((quiz_progresses: any) => {
+        quiz_progresses.forEach((lProgress: any) => {
+          completedContentAndQuizIds.push(lProgress.id)
+        })
+      })
+      courses[0].progress.forEach((progresses: any) => {
+        progresses.forEach((lProgress: any) => {
+          completedContentAndQuizIds.push(lProgress.id)
+        })
+      })
+      return (
+        (contentAndQuizIds.length / completedContentAndQuizIds.length) * 100
+      )
+    }
+  } else {
+    return 0
+  }
 }

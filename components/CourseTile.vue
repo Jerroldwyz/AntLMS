@@ -7,6 +7,21 @@ const data = defineProps<{
 
 const fetchedThumbnail = ref<string>("")
 
+let courseProgressPercentage: number = 0
+let userIsEnrolled = false
+
+const userStore = useUserStore()
+const userUid = userStore.user?.uid
+
+if (userUid !== undefined) {
+  if (await isEnrolled(userUid, data.id)) {
+    // if (await isEnrolled("f5df4622-ec74-4f56-b4e9-9bc635fc05fa", data.id)) {
+    userIsEnrolled = true
+    // courseProgressPercentage = (await getCourseProgress("f5df4622-ec74-4f56-b4e9-9bc635fc05fa", data.id)) ?? 0
+    courseProgressPercentage = (await getCourseProgress(userUid, data.id)) ?? 0
+  }
+}
+
 const thumbnail = computed(() => {
   if (data.thumbnail) {
     getImage(data.thumbnail).then((url) => (fetchedThumbnail.value = url))
@@ -57,7 +72,7 @@ onMounted(async () => {
                   </template>
 
                   <v-list>
-                    <v-list-item> Remove course </v-list-item>
+                    <v-list-item>Remove course</v-list-item>
                   </v-list>
                 </v-menu>
               </template>
@@ -68,6 +83,12 @@ onMounted(async () => {
             <v-card-title class="text-h6 text-left font-weight-medium">{{
               data.title
             }}</v-card-title>
+            <div v-if="userIsEnrolled">
+              <p>{{ courseProgressPercentage }}%</p>
+              <v-progress-linear
+                v-model:model-value="courseProgressPercentage"
+              ></v-progress-linear>
+            </div>
           </v-container>
         </v-card>
       </template>

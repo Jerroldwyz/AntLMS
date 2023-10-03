@@ -84,7 +84,7 @@ const courses = await fetchAllUserCourses()
 const browse = ["Browse all", "Creative", "Technology", "Business"]
 const hovered = ref(true)
 
-console.log(courses)
+// console.log(courses)
 </script>
 
 <style>

@@ -35,8 +35,16 @@ export const getEnrollment = (user_id: string) => {
               name: true,
             },
           },
+          topics: {
+            select: {
+              content: true,
+              quizzes: true,
+            },
+          },
         },
       },
+      progress: true,
+      quiz_progress: true,
     },
   })
 }
