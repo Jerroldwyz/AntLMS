@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-const emit = defineEmits<{
-  (e: "toggleModal", value: boolean): void
-}>()
 
 const titleRules = [
   (value: string) => {
@@ -31,7 +28,7 @@ function addContent() {
   switch (contentType.value) {
     case "quiz":
       navigateTo({
-        path: `${route.params.id}/content/newquiz`,
+        path: `${route.params.id}/newcontent/quiz`,
         query: {
           title: title.value,
         },
@@ -39,7 +36,7 @@ function addContent() {
       break
     case "text":
       navigateTo({
-        path: `${route.params.id}/content/newtext`,
+        path: `${route.params.id}/newcontent/text`,
         query: {
           title: title.value,
         },
@@ -47,7 +44,7 @@ function addContent() {
       break
     case "video":
       navigateTo({
-        path: `${route.params.id}/content/newvideo`,
+        path: `${route.params.id}/bewcontent/video`,
         query: {
           title: title.value,
         },
@@ -72,7 +69,7 @@ function addContent() {
             <v-btn
               icon="mdi-close"
               variant="flat"
-              @click="$emit('toggleModal', false)"
+              @click="navigateTo(`/editcourse/${$route.params.id}`)"
             ></v-btn>
           </v-col>
         </v-row>
@@ -106,7 +103,7 @@ function addContent() {
           <v-btn
             class="text-capitalize"
             variant="text"
-            @click="$emit('toggleModal', false)"
+            @click="navigateTo(`/editcourse/${$route.params.id}`)"
           >
             Cancel
           </v-btn>
