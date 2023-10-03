@@ -10,7 +10,10 @@
   </v-dialog> -->
   <!-- User Question form component like this for creation and pass id as props for updating<FormQuestion/> -->
   <!-- <Quiz :id="1" enrollmentId="1" userId="1" /> -->
-  <FormQuestion :quiz-id="1" />
+  <FormQuestion
+    id="11"
+    quiz-id="1"
+  />
 </template>
 
 <script setup>

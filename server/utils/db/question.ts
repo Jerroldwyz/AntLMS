@@ -40,13 +40,29 @@ export const updateQuestion = (
   })
 }
 
-export const updateChoice = (question_id: number, choice_data: any) => {
+export const updateChoice = async (question_id: number, choice_data: any) => {
+  await prisma.choices.deleteMany({
+    where: {
+      question_id,
+    },
+  })
+
   return prisma.questions.update({
     where: {
       id: question_id,
     },
     data: {
-      choices: choice_data,
+      choices: {
+        createMany: {
+          data: choice_data.map((choice: any) => {
+            const modifiedChoice: any = {
+              choice_text: choice.choiceText,
+              is_correct: choice.isCorrect,
+            }
+            return modifiedChoice
+          }),
+        },
+      },
     },
   })
 }
