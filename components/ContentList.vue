@@ -77,7 +77,9 @@ async function handleDelete(topicId: string) {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
-                      @click="navigateTo(`${route.params.id}/newcontent/1`)"
+                      @click="
+                        navigateTo(`${route.params.id}/topic/2/newcontent`)
+                      "
                     >
                     </v-btn>
                     <v-btn
