@@ -7,20 +7,11 @@ const data = defineProps<{
 
 const fetchedThumbnail = ref<string>("")
 
-let courseProgressPercentage: number = 0
-let userIsEnrolled = false
+const courseProgressPercentage = ref(0)
+const userIsEnrolled = ref(false)
 
 const userStore = useUserStore()
 const userUid = userStore.user?.uid
-
-if (userUid !== undefined) {
-  if (await isEnrolled(userUid, data.id)) {
-    // if (await isEnrolled("f5df4622-ec74-4f56-b4e9-9bc635fc05fa", data.id)) {
-    userIsEnrolled = true
-    // courseProgressPercentage = (await getCourseProgress("f5df4622-ec74-4f56-b4e9-9bc635fc05fa", data.id)) ?? 0
-    courseProgressPercentage = (await getCourseProgress(userUid, data.id)) ?? 0
-  }
-}
 
 const thumbnail = computed(() => {
   if (data.thumbnail) {
@@ -38,6 +29,13 @@ onMounted(async () => {
       console.error("Error fetching thumbnail:", error)
       fetchedThumbnail.value =
         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    }
+  }
+  if (userUid !== undefined) {
+    if (await isEnrolled(userUid, data.id)) {
+      userIsEnrolled.value = true
+      courseProgressPercentage.value =
+        (await getCourseProgress(userUid, data.id)) ?? 0
     }
   }
 })
