@@ -23,6 +23,17 @@ export async function fetchAllUserCourses(): Promise<any> {
   return allCourses
 }
 
+export async function fetchUserEnrollment(userId?: string): Promise<any> {
+  const allEnrollments = await $fetch("/api/courses/getEnrollment", {
+    method: "GET",
+    query: {
+      userId,
+    },
+  })
+
+  return allEnrollments
+}
+
 // TODO: change any to proper type
 export async function fetchUserCourse(
   courseId: string | string[],
