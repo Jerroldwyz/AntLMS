@@ -31,7 +31,7 @@
         <div class="content-area">
           <!-- Modules -->
           <div v-if="selectedNavItem === 'modules'">
-            <v-expansion-panels variant="accordion">
+            <v-expansion-panels>
               <v-expansion-panel
                 v-for="(module, moduleIndex) in modules"
                 :key="moduleIndex"
@@ -39,9 +39,10 @@
                 <v-expansion-panel-title class="module-title">{{
                   module.title
                 }}</v-expansion-panel-title>
-                <v-expansion-panel-text>
+                <v-expansion-panel-text :expanded="moduleIndex === 0">
+                  <!-- Set expanded to true for the first module -->
                   <!-- Headings -->
-                  <v-expansion-panels variant="accordion">
+                  <v-expansion-panels>
                     <v-expansion-panel
                       v-for="(heading, headingIndex) in module.headings"
                       :key="headingIndex"
@@ -51,7 +52,7 @@
                       }}</v-expansion-panel-title>
                       <v-expansion-panel-text>
                         <!-- Subheadings -->
-                        <v-expansion-panels variant="accordion">
+                        <v-expansion-panels>
                           <v-expansion-panel
                             v-for="(
                               subheading, subheadingIndex
