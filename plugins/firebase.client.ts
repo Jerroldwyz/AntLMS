@@ -11,7 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const userStore = useUserStore()
 
-  nuxtApp.hooks.hook("app:mounted", async () => {
+  nuxtApp.hooks.hook("app:beforeMount", async () => {
     if (appConfig() === "development") {
       const dummyUser = await $fetch("/api/me")
       userStore.user = dummyUser as User
@@ -19,6 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     } else {
       auth.onIdTokenChanged(async (user) => {
         if (user) {
+          console.log(user)
           const token = await user.getIdToken(true)
           await setServerSession(token)
           userStore.setUser(await formatUser(user))

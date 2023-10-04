@@ -33,14 +33,38 @@
               >
             </div>
           </div>
-          <v-btn
-            color="primary"
-            block
-            class="py-6"
-            type="submit"
-            :disabled="disabled"
-            >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
-          >
+          <div>
+            <v-btn
+              class="mb-4"
+              color="primary"
+              block
+              type="submit"
+              :disabled="disabled"
+              >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
+            >
+            <v-btn
+              class="mb-4"
+              block
+              @click="googleSignIn"
+            >
+              <v-icon
+                start
+                icon="mdi-google"
+              ></v-icon>
+              Continue with Google
+            </v-btn>
+            <v-btn
+              class="mb-4"
+              block
+              @click="facebookSignIn"
+            >
+              <v-icon
+                start
+                icon="mdi-facebook"
+              ></v-icon>
+              Continue with Facebook
+            </v-btn>
+          </div>
         </v-form>
         <h6 class="text-subtitle-1 text-grey-darken-1">
           Don't have an account?
@@ -61,7 +85,7 @@ definePageMeta({
   middleware: "guest",
 })
 
-const { login } = useAuth()
+const { login, signInWithGoogle, signInWithFacebook } = useAuth()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
@@ -78,6 +102,16 @@ const signIn = async () => {
     alert(error)
   }
   disabled.value = false
+}
+
+const googleSignIn = () => {
+  signInWithGoogle()
+}
+
+const facebookSignIn = () => {
+  signInWithFacebook().then(() => {
+    router.push("/")
+  })
 }
 </script>
 

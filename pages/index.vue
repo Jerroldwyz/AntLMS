@@ -1,15 +1,15 @@
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+// const courses = await fetchAllUserCourses()
 </script>
 
 <template>
   <v-row>
-    <CourseTile
+    <!-- <CourseTile
       v-for="course in courses"
       :id="course.id"
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
-    />
+    /> -->
   </v-row>
 </template>

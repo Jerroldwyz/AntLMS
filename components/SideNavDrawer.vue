@@ -57,7 +57,7 @@
           </v-list-item>
         </template>
 
-        <v-list-item
+        <!-- <v-list-item
           v-for="course in courses"
           :id="course.id"
           :key="course.id"
@@ -65,7 +65,7 @@
           prepend-icon="mdi-circle-small"
           to=""
         >
-        </v-list-item>
+        </v-list-item> -->
       </v-list-group>
     </v-list>
 
@@ -80,11 +80,11 @@
 </template>
 
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+// const courses = await fetchAllUserCourses()
 const browse = ["Browse all", "Creative", "Technology", "Business"]
 const hovered = ref(true)
 
-console.log(courses)
+// console.log(courses)
 </script>
 
 <style>
