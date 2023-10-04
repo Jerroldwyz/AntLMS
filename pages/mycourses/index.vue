@@ -3,7 +3,7 @@ definePageMeta({
   middleware: ["user"],
 })
 
-const courses = ref(await fetchAllUserCourses())
+const courses = ref(await fetchAllUserCreatedCourses())
 
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
@@ -11,7 +11,7 @@ const alertError = ref(false)
 
 async function handleSubmit(status: boolean) {
   status ? (alertError.value = status) : (alertSuccess.value = status)
-  courses.value = await fetchAllUserCourses()
+  courses.value = await fetchAllUserCreatedCourses()
 }
 </script>
 
