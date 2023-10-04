@@ -114,22 +114,26 @@ export async function isEnrolled(userUid: string, courseId: number) {
   }
 }
 
-export async function enrollUser(userUid: string, courseId: number) {
-  return await $fetch(`/api/user/${userUid}/enrollments`, {
+export async function enrollUser(
+  userUid: string,
+  courseId: number,
+): Promise<any> {
+  return await $fetch(`/api/users/${userUid}/enrollments`, {
     method: "POST",
     body: {
       courseId,
-      userId: userUid,
     },
   })
 }
 
-export async function unenrollUser(userUid: string, courseId: number) {
-  return await $fetch(`/api/user/${userUid}/enrollments`, {
+export async function unenrollUser(
+  userUid: string,
+  courseId: number,
+): Promise<any> {
+  return await $fetch(`/api/users/${userUid}/enrollments`, {
     method: "DELETE",
     body: {
       courseId,
-      userId: userUid,
     },
   })
 }

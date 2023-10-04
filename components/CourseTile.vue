@@ -86,13 +86,13 @@ const enrollUserNow = async () => {
                   <v-list-item>
                     <v-btn
                       v-if="userIsEnrolled"
-                      @click="enrollUserNow"
-                      >Enroll</v-btn
+                      @click="unenrollUserNow"
+                      >Unenroll</v-btn
                     >
                     <v-btn
                       v-if="!userIsEnrolled"
-                      @click="unenrollUserNow"
-                      >Unenroll</v-btn
+                      @click="enrollUserNow"
+                      >Enroll</v-btn
                     >
                   </v-list-item>
                 </v-list>

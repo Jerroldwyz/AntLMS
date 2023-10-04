@@ -1,11 +1,10 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-
+  const userUid = getRouterParam(event, "id")
   const courseId = body.courseId
-  const userId = body.userId
 
   try {
-    return await unenrollUser(userId as string, parseInt(courseId as string))
+    return await unenrollUser(userUid as string, parseInt(courseId as string))
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }
