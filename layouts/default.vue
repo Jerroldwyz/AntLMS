@@ -12,7 +12,6 @@
         <v-card
           class="pa-7 m-10 w-100 h-100"
           rounded="lg"
-          style="min-height: 568px"
         >
           <slot />
         </v-card>

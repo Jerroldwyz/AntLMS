@@ -4,15 +4,15 @@
     :width="300"
   >
     <v-divider></v-divider>
-    <v-list-item
-      :title="props.course.title"
-      :subtitle="props.course.creator"
-      class="text-h3"
-    ></v-list-item>
     <v-list nav>
+      <v-list-item
+        :title="props.course.title"
+        :subtitle="props.course.creator.name"
+        :to="`/courses/${props.course.id}`"
+      ></v-list-item>
       <template
         v-for="topic in props.course.topics"
-        :key="topic.title"
+        :key="topic.id"
       >
         <v-divider class="border-opacity-100"></v-divider>
         <v-list-group :value="topic.title">
@@ -25,13 +25,13 @@
           </template>
 
           <template
-            v-for="(content, i) in topic.content"
-            :key="i"
+            v-for="content in topic.content"
+            :key="content.topic_position"
           >
             <v-divider class="border-opacity-25"></v-divider>
             <v-list-item
               :value="content.title"
-              :prepend-icon="onContentComplete(content.complete)"
+              :prepend-icon="onContentComplete(false)"
               :to="contentPath(topic.id, content.id)"
             >
               {{ content.title }}</v-list-item
@@ -45,15 +45,14 @@
 
 <script setup lang="ts">
 const props = defineProps(["course"])
-
-console.log(props.course)
+const courseNavigation = useCourseNavigation(props.course.topics)
 
 const onContentComplete = (complete: boolean) => {
   return complete ? "mdi-check" : "mdi-circle-outline"
 }
 
 const contentPath = (topicId: number, contentId: number) => {
-  return `/demo/topics/${topicId}/content/${contentId}`
+  return `/courses/${props.course.id}/topics/${topicId}/content/${contentId}`
 }
 </script>
 

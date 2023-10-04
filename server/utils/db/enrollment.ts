@@ -38,7 +38,15 @@ export const getEnrollment = (user_id: string) => {
           },
           topics: {
             select: {
-              content: true,
+              id: true,
+              title: true,
+              content: {
+                select: {
+                  id: true,
+                  title: true,
+                  topic_position: true,
+                },
+              },
               quizzes: true,
             },
           },
@@ -87,4 +95,19 @@ export const getEnrollmentProgress = async (
   } else {
     return 0
   }
+}
+
+export const getEnrolledCourse = async (userUid: string, courseId: number) => {
+  const enrollments = await getEnrollment(userUid)
+
+  if (enrollments !== null) {
+    const courses = enrollments.filter((enrollment) => {
+      return enrollment.course.id === courseId
+    })
+    if (courses.length > 0) {
+      return courses[0]
+    }
+  }
+
+  return null
 }

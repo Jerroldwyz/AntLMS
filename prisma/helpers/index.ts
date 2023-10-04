@@ -265,7 +265,7 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
 
   for (let i = 0; i < amount; i++) {
     // TODO
-    progress.push(createProgress(users, enrollments, contents))
+    progress.push(createProgress(users, enrollments, contents, topics))
     quiz_progress.push(createQuizProgress(enrollments, quizzes, users))
   }
   quizzes.forEach((quiz) => {
