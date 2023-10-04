@@ -1,7 +1,7 @@
 import { content, quizzes } from "@prisma/client"
 import { prisma } from "."
 
-export const enrollUser = (course_id: number, user_id: string) => {
+export const enrollUser = (user_id: string, course_id: number) => {
   return prisma.enrollments.create({
     data: {
       user_id,
@@ -10,7 +10,7 @@ export const enrollUser = (course_id: number, user_id: string) => {
   })
 }
 
-export const unenrollUser = (course_id: number, user_id: string) => {
+export const unenrollUser = (user_id: string, course_id: number) => {
   return prisma.enrollments.deleteMany({
     where: {
       course_id,

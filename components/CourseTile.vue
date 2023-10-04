@@ -9,6 +9,9 @@ const fetchedThumbnail = ref<string>("")
 const courseProgressPercentage = ref(0)
 const userIsEnrolled = ref(false)
 
+const userStore = useUserStore()
+const userUid = userStore.user?.uid
+
 onMounted(async () => {
   if (data.thumbnail) {
     try {
@@ -21,8 +24,6 @@ onMounted(async () => {
     }
   }
 
-  const userStore = useUserStore()
-  const userUid = userStore.user?.uid
   if (userUid !== undefined) {
     if (await isEnrolled(userUid, data.id)) {
       userIsEnrolled.value = true
@@ -38,6 +39,20 @@ const thumbnail = computed(() => {
   }
   return fetchedThumbnail.value
 })
+
+const unenrollUserNow = async () => {
+  if (userUid !== undefined) {
+    await unenrollUser(userUid, data.id)
+    userIsEnrolled.value = false
+  }
+}
+
+const enrollUserNow = async () => {
+  if (userUid !== undefined) {
+    await enrollUser(userUid, data.id)
+    userIsEnrolled.value = true
+  }
+}
 </script>
 
 <template>
@@ -68,7 +83,18 @@ const thumbnail = computed(() => {
                 </template>
 
                 <v-list>
-                  <v-list-item>Unenroll</v-list-item>
+                  <v-list-item>
+                    <v-btn
+                      v-if="userIsEnrolled"
+                      @click="enrollUserNow"
+                      >Enroll</v-btn
+                    >
+                    <v-btn
+                      v-if="!userIsEnrolled"
+                      @click="unenrollUserNow"
+                      >Unenroll</v-btn
+                    >
+                  </v-list-item>
                 </v-list>
               </v-menu>
             </template>
