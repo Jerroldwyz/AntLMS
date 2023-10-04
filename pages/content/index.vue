@@ -21,7 +21,6 @@
             >
               <v-list-item-title>Quizzes</v-list-item-title>
             </v-list-item>
-            <!-- Add other navigation items here (e.g., discussions) -->
           </v-list>
         </v-card>
       </v-col>
@@ -40,7 +39,7 @@
                   {{ module.title }}
                 </v-expansion-panel-title>
                 <v-expansion-panel-text :expanded="moduleIndex === 0">
-                  <!-- Set expanded to true for the first module -->
+                  <!-- Set expanded to true for the first module *not working*-->
                   <!-- Headings -->
                   <v-expansion-panels>
                     <v-expansion-panel
@@ -80,7 +79,7 @@
             </div>
           </div>
 
-          <!-- Add other content sections for discussions, assignments, etc. -->
+          <!-- Add other content sections if required -->
         </div>
       </v-col>
     </v-row>
@@ -118,7 +117,7 @@ export default {
                 { text: "More content goes here..." },
               ],
             },
-            // Add more headings here
+            // get headings from api
           ],
         },
         {
