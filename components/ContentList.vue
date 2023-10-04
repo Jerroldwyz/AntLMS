@@ -13,7 +13,7 @@ const props = defineProps<{
 console.log(props.course)
 
 const emit = defineEmits<{
-  (e: "showModal", modal: "content" | "topic"): void
+  (e: "delete"): void
   (e: "update:course", course: any): void
 }>()
 
@@ -29,8 +29,9 @@ function getIcon(content: any): string {
   }
 }
 
-async function handleDelete(topicId: string) {
+async function handleTopicDelete(topicId: string) {
   await removeTopic(topicId)
+  emit("delete")
 }
 </script>
 
@@ -89,7 +90,7 @@ async function handleDelete(topicId: string) {
                     <v-btn
                       icon="mdi-delete"
                       variant="flat"
-                      @click="handleDelete(topic.id)"
+                      @click="handleTopicDelete(topic.id)"
                     >
                     </v-btn>
                   </template>

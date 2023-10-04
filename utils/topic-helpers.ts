@@ -10,7 +10,7 @@ export async function addTopic(courseId: string, title: string) {
 
 export async function removeTopic(topicId: string) {
   console.log(topicId)
-  await $fetch(`api/topics/${topicId}`, {
+  await $fetch(`/api/topics/${topicId}`, {
     method: "DELETE",
   })
 }

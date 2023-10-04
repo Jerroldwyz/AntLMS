@@ -77,7 +77,10 @@ function validRoute() {
             v-model:course="course"
             v-model:file="file"
           />
-          <ContentList v-model:course="course" />
+          <ContentList
+            v-model:course="course"
+            @delete="refreshNuxtData"
+          />
         </template>
       </v-container>
       <v-container
