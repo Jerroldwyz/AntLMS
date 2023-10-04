@@ -12,7 +12,19 @@ export async function fetchAllCourses() {
 }
 
 // TODO: change any to proper type
-export async function fetchAllUserCourses(): Promise<any> {
+export async function fetchAllUserCreatedCourses(): Promise<any> {
+  const userStore = useUserStore()
+
+  // TODO: add type
+  const allCourses = await $fetch("/api/mycourses", {
+    method: "get",
+    query: { userId: userStore.user?.uid },
+  })
+
+  return allCourses
+}
+
+export async function fetchAllEnrolledCourses(): Promise<any> {
   const userStore = useUserStore()
   const userUid = userStore.user?.uid
 
