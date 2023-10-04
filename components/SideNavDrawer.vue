@@ -80,9 +80,11 @@
 </template>
 
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+const courses = await fetchAllEnrolledCourses()
 const browse = ["Browse all", "Creative", "Technology", "Business"]
 const hovered = ref(true)
+
+// console.log(courses)
 </script>
 
 <style>

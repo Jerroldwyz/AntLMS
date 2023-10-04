@@ -1,6 +1,7 @@
+import { content, quizzes } from "@prisma/client"
 import { prisma } from "."
 
-export const enrollUser = (course_id: number, user_id: string) => {
+export const enrollUser = (user_id: string, course_id: number) => {
   return prisma.enrollments.create({
     data: {
       user_id,
@@ -9,7 +10,7 @@ export const enrollUser = (course_id: number, user_id: string) => {
   })
 }
 
-export const unenrollUser = (course_id: number, user_id: string) => {
+export const unenrollUser = (user_id: string, course_id: number) => {
   return prisma.enrollments.deleteMany({
     where: {
       course_id,
@@ -35,8 +36,55 @@ export const getEnrollment = (user_id: string) => {
               name: true,
             },
           },
+          topics: {
+            select: {
+              content: true,
+              quizzes: true,
+            },
+          },
         },
       },
+      progress: true,
+      quiz_progress: true,
     },
   })
+}
+
+export const getEnrollmentProgress = async (
+  userUid: string,
+  courseId: number,
+) => {
+  const enrollments = await getEnrollment(userUid)
+  if (enrollments !== null) {
+    // console.log(enrollments)
+    const courses = enrollments.filter(
+      (enrollment) => enrollment.course.id === courseId,
+    )
+    // console.log(courses)
+    if (courses.length > 0) {
+      const course = courses[0].course
+
+      const contentAndQuizIds = []
+      course.topics.forEach((topic: any) => {
+        topic.content.forEach((content: content) => {
+          contentAndQuizIds.push(content.id)
+        })
+        topic.quizzes.forEach((quiz: quizzes) => {
+          contentAndQuizIds.push(quiz.id)
+        })
+      })
+      const completedContentAndQuizIds = []
+      courses[0].quiz_progress.forEach((quiz_progresses: any) => {
+        completedContentAndQuizIds.push(quiz_progresses.id)
+      })
+      courses[0].progress.forEach((progresses: any) => {
+        completedContentAndQuizIds.push(progresses.id)
+      })
+      return (
+        (completedContentAndQuizIds.length / contentAndQuizIds.length) * 100
+      )
+    }
+  } else {
+    return 0
+  }
 }

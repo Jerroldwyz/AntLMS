@@ -1,22 +1,15 @@
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
-const userStore = useUserStore()
-const enrollments = await fetchUserEnrollment(userStore.user?.uid)
-console.log(enrollments)
-const onClickCourse = (courseId: number) => {
-  navigateTo(`/courses/${courseId}`)
-}
+const courses = await fetchAllEnrolledCourses()
 </script>
 
 <template>
   <v-row>
     <CourseTile
-      v-for="course in enrollments"
+      v-for="course in courses"
       :id="course.id"
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
-      @click="onClickCourse(course.id)"
     />
   </v-row>
 </template>
