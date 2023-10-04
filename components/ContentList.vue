@@ -33,6 +33,11 @@ async function handleTopicDelete(topicId: string) {
   await removeTopic(topicId)
   emit("delete")
 }
+
+async function handleContentDelete(contentId: string) {
+  await deleteContent(contentId)
+  emit("delete")
+}
 </script>
 
 <template>
@@ -113,6 +118,7 @@ async function handleTopicDelete(topicId: string) {
                       <v-btn
                         icon="mdi-delete"
                         variant="flat"
+                        @click="handleContentDelete(content.id)"
                       >
                       </v-btn>
                     </template>

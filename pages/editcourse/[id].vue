@@ -17,6 +17,8 @@ const { data: course } = useFetch<Course>(
   () => `/api/mycourses/${route.params.id}`,
 )
 
+console.log(course.value)
+
 const file = ref<File[]>([])
 
 async function submitCourse() {

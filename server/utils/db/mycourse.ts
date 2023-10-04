@@ -22,6 +22,7 @@ export const getCreatorCourseById = (course_id: number) => {
           position: true,
           content: {
             select: {
+              id: true,
               title: true,
               type: true,
               content: true,
