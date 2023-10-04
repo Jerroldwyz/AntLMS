@@ -36,9 +36,9 @@
                 v-for="(module, moduleIndex) in modules"
                 :key="moduleIndex"
               >
-                <v-expansion-panel-title class="module-title">{{
-                  module.title
-                }}</v-expansion-panel-title>
+                <v-expansion-panel-title class="module-title">
+                  {{ module.title }}
+                </v-expansion-panel-title>
                 <v-expansion-panel-text :expanded="moduleIndex === 0">
                   <!-- Set expanded to true for the first module -->
                   <!-- Headings -->
@@ -47,29 +47,19 @@
                       v-for="(heading, headingIndex) in module.headings"
                       :key="headingIndex"
                     >
-                      <v-expansion-panel-title class="heading-title">{{
-                        heading.title
-                      }}</v-expansion-panel-title>
+                      <v-expansion-panel-title class="heading-title">
+                        {{ heading.title }}
+                      </v-expansion-panel-title>
                       <v-expansion-panel-text>
-                        <!-- Subheadings -->
-                        <v-expansion-panels>
-                          <v-expansion-panel
-                            v-for="(
-                              subheading, subheadingIndex
-                            ) in heading.subheadings"
-                            :key="subheadingIndex"
+                        <!-- Content -->
+                        <div class="content-textbox">
+                          <div
+                            v-for="(content, contentIndex) in heading.content"
+                            :key="contentIndex"
                           >
-                            <v-expansion-panel-title class="subheading-title">{{
-                              subheading.title
-                            }}</v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                              <!-- Content -->
-                              <div class="content-textbox">
-                                {{ subheading.content }}
-                              </div>
-                            </v-expansion-panel-text>
-                          </v-expansion-panel>
-                        </v-expansion-panels>
+                            {{ content.text }}
+                          </div>
+                        </div>
                       </v-expansion-panel-text>
                     </v-expansion-panel>
                   </v-expansion-panels>
@@ -109,69 +99,50 @@ export default {
           headings: [
             {
               title: "Heading 1.1",
-              subheadings: [
-                { title: "Subheading 1.1.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 1.1.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             {
               title: "Heading 1.2",
-              subheadings: [
-                { title: "Subheading 1.2.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 1.2.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             {
               title: "Heading 1.3",
-              subheadings: [
-                { title: "Subheading 1.3.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 1.3.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             // Add more headings here
           ],
         },
-
         {
           title: "Module 2",
           headings: [
             {
               title: "Heading 2.1",
-              subheadings: [
-                { title: "Subheading 2.1.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 2.1.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             {
               title: "Heading 2.2",
-              subheadings: [
-                { title: "Subheading 2.2.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 2.2.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             {
               title: "Heading 2.3",
-              subheadings: [
-                { title: "Subheading 2.3.1", content: "Content goes here..." },
-                {
-                  title: "Subheading 2.3.2",
-                  content: "More content goes here...",
-                },
+              content: [
+                { text: "Content goes here..." },
+                { text: "More content goes here..." },
               ],
             },
             // Add more headings here
