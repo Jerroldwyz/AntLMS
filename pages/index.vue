@@ -1,8 +1,13 @@
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+const courses = ref<any[]>([])
+
 // temp for testing
 // const courses = await fetchAllCourses()
-console.log(courses)
+// console.log(courses)
+
+onMounted(async () => {
+  courses.value = await fetchAllUserCourses()
+})
 </script>
 
 <template>
