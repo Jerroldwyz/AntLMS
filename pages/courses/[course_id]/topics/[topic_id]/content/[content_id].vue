@@ -1,8 +1,11 @@
 <template>
   <div>
-    <pre>
-        {{ data }}
-    </pre>
+    <div class="text-h2 mb-6">{{ data?.title }}</div>
+    <v-divider
+      :thickness="7"
+      class="border-opacity-100"
+    ></v-divider>
+    <div v-html="data?.content"></div>
   </div>
 </template>
 

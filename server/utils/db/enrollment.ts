@@ -44,6 +44,7 @@ export const getEnrollment = (user_id: string) => {
                 select: {
                   id: true,
                   title: true,
+                  type: true,
                   topic_position: true,
                 },
               },

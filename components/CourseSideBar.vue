@@ -33,6 +33,7 @@
               active-color="primary"
               :value="content.title"
               :prepend-icon="onContentComplete(false)"
+              :append-icon="setContentIcon(content)"
               :to="contentPath(topic.id, content.id)"
             >
               {{ content.title }}</v-list-item
@@ -53,6 +54,18 @@ const onContentComplete = (complete: boolean) => {
 
 const contentPath = (topicId: number, contentId: number) => {
   return `/courses/${props.course.id}/topics/${topicId}/content/${contentId}`
+}
+
+function setContentIcon(content: any): string {
+  console.log(content.type)
+  switch (content.type) {
+    case "TEXT":
+      return "mdi-text-box-outline"
+    case "VIDEO":
+      return "mdi-video-box"
+    default:
+      return "mdi-pencil-circle"
+  }
 }
 </script>
 
