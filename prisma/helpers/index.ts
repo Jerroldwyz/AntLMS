@@ -21,7 +21,6 @@ import * as _ from "radash"
 import { createTempDir, cleanupTempDir } from "./fileHelpers"
 import { createUser } from "./createUser"
 import { createCoursePromise } from "./createCourse"
-import { createTag } from "./createTag"
 import { createCoursetag } from "./createCoursetag"
 import { createTopic, createMultipleTopics } from "./createTopic"
 import { createContent, createMultipleContent } from "./createContent"
@@ -184,6 +183,21 @@ const admin_role_attachments_list: admin_role_attachments[] = [
   },
 ]
 
+const tags_list = [
+  {
+    id: 1,
+    name: "creative",
+  },
+  {
+    id: 2,
+    name: "technology",
+  },
+  {
+    id: 3,
+    name: "business",
+  },
+]
+
 export const generateData = async (prisma: PrismaClient, amount: number) => {
   createTempDir()
 
@@ -235,22 +249,20 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
 
   for (let i = 0; i < amount; i++) {
     coursePromises.push(createCoursePromise(users))
-    tags.push(createTag())
   }
+  tags_list.forEach((tag) => tags.push(tag))
   courses = await Promise.all(coursePromises)
   courses = _.unique(courses, (x) => x.id)
   tags = _.unique(tags, (x) => x.name)
 
-  for (let i = 0; i < amount; i++) {
-    courses_tags.push(createCoursetag(courses, tags))
-  }
+  for (let i = 0; i < amount; i++) {}
   courses.forEach((course: any) => {
     createMultipleTopics(course).forEach((topic) => topics.push(topic))
+    courses_tags.push(createCoursetag(course, tags))
   })
   users.forEach((user) => {
     enrollments.push(createEnrollment(user, courses))
   })
-
   courses_tags = _.unique(courses_tags, (x) => `${x.course_id}${x.tag_id}`)
   topics = _.unique(topics, (x) => `${x.course_id}${x.id}`)
   enrollments = _.unique(enrollments, (x) => `${x.course_id}${x.user_id}`)
