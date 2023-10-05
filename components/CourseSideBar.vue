@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    color="grey-lighten-2"
+    color="surface"
     :width="300"
   >
     <v-divider></v-divider>
@@ -30,6 +30,7 @@
           >
             <v-divider class="border-opacity-25"></v-divider>
             <v-list-item
+              active-color="primary"
               :value="content.title"
               :prepend-icon="onContentComplete(false)"
               :to="contentPath(topic.id, content.id)"
@@ -45,7 +46,6 @@
 
 <script setup lang="ts">
 const props = defineProps(["course"])
-const courseNavigation = useCourseNavigation(props.course.topics)
 
 const onContentComplete = (complete: boolean) => {
   return complete ? "mdi-check" : "mdi-circle-outline"
