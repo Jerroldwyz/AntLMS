@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
       },
     },
   }
-
   try {
     const question = await createQuestion(prismaData)
 

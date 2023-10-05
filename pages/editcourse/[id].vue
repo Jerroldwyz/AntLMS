@@ -110,4 +110,5 @@ function validRoute() {
   </template>
 
   <NuxtPage />
+
 </template>

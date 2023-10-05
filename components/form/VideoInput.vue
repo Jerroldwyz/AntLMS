@@ -1,34 +1,20 @@
 <script setup lang="ts">
-const props = defineProps(["label", "accept"])
-const emit = defineEmits(["upload-status"])
+const props = defineProps<{
+  label?: string
+  accept?: string
+  modelValue: File[]
+}>()
+defineEmits(["update:modelValue"])
 
 const label = props.label ?? "Video Input"
 const mimeAccept = props.accept ?? "video/*"
-
-const selectedFile = ref<File[]>([])
-
-const uploadFile = async () => {
-  if (!selectedFile) {
-    // No file selected, handle this case as needed
-    console.log("No file to upload")
-    throw new Error("No file to upload")
-  } else {
-    const path = await uploadVideo(selectedFile.value[0], "video")
-    emit("upload-status", path)
-  }
-}
 </script>
 
 <template>
   <v-file-input
-    v-model="selectedFile"
+    :model-value="props.modelValue"
     :label="label"
     :accept="mimeAccept"
-    class="mt-4"
+    @change="$emit('update:modelValue', [...$event.target.files])"
   ></v-file-input>
-  <v-btn
-    block
-    @click="uploadFile"
-    >Upload File</v-btn
-  >
 </template>
