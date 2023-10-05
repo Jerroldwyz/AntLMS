@@ -57,20 +57,21 @@ model topics {
   id        Int       @id @default(autoincrement())
   course_id Int
   title     String
+  position  Int       @default(autoincrement())
   course    courses   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   quizzes   quizzes[]
   content   content[]
 }
 
 model content {
-  id             Int          @id @default(autoincrement())
-  title          String
-  type           content_type
-  content        String?
-  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
-  topic_id       Int
-  topic_position Int
-  progress       progress[]
+  id       Int          @id @default(autoincrement())
+  title    String
+  type     content_type
+  content  String?
+  topic    topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic_id Int
+  position Int          @default(autoincrement())
+  progress progress[]
 }
 
 enum content_type {
