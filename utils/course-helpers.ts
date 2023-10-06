@@ -1,3 +1,4 @@
+import { content, quizzes, topics, progress } from "@prisma/client"
 import { useUserStore } from "~/stores/useUserStore"
 import { Course } from "~~/types"
 
@@ -11,7 +12,7 @@ export async function fetchAllCourses() {
 }
 
 // TODO: change any to proper type
-export async function fetchAllUserCourses(): Promise<any> {
+export async function fetchAllUserCreatedCourses(): Promise<any> {
   const userStore = useUserStore()
 
   // TODO: add type
@@ -21,6 +22,21 @@ export async function fetchAllUserCourses(): Promise<any> {
   })
 
   return allCourses
+}
+
+export async function fetchAllEnrolledCourses(): Promise<any> {
+  const userStore = useUserStore()
+  const userUid = userStore.user?.uid
+
+  if (userUid) {
+    const allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
+      method: "get",
+    })
+
+    return allEnrollments.map((enrollment) => enrollment.course)
+  }
+  // TODO: Throw error?
+  return "ERROR: Not logged in"
 }
 
 // TODO: change any to proper type
@@ -93,6 +109,52 @@ export async function enableCourseById(id: number): Promise<any> {
     method: "PUT",
     body: {
       enabled: true,
+    },
+  })
+}
+
+export async function isEnrolled(userUid: string, courseId: number) {
+  const enrollments = await $fetch(`/api/users/${userUid}/enrollments/`, {
+    method: "GET",
+  })
+  if (enrollments !== null) {
+    const courseIds = enrollments.map((enrollment) => enrollment.course.id)
+    const userIsEnrolled = courseIds.includes(courseId)
+    return userIsEnrolled
+  } else {
+    return false
+  }
+}
+
+export async function enrollUser(
+  userUid: string,
+  courseId: number,
+): Promise<any> {
+  return await $fetch(`/api/users/${userUid}/enrollments`, {
+    method: "POST",
+    body: {
+      courseId,
+    },
+  })
+}
+
+export async function unenrollUser(
+  userUid: string,
+  courseId: number,
+): Promise<any> {
+  return await $fetch(`/api/users/${userUid}/enrollments`, {
+    method: "DELETE",
+    body: {
+      courseId,
+    },
+  })
+}
+
+export async function getCourseProgress(userUid: string, courseId: number) {
+  return await $fetch(`/api/users/${userUid}/progress`, {
+    method: "GET",
+    query: {
+      courseId,
     },
   })
 }

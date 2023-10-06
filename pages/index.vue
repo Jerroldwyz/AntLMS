@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const courses = await fetchAllUserCourses()
+const courses = await fetchAllEnrolledCourses()
 </script>
 
 <template>
