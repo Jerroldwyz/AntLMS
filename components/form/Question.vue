@@ -45,8 +45,6 @@
                 () => {
                   showEditor = true
                   activeChoice = index
-                  choices[activeChoice].choiceText =
-                    choices[activeChoice].choiceText
                 }
               "
             >
@@ -88,7 +86,10 @@
       width="auto"
     >
       <v-card>
-        <v-card-text> The Quiz has been successfully created </v-card-text>
+        <v-card-text>
+          The Quiz has been successfully
+          {{ props.id ? "updated" : "created" }}</v-card-text
+        >
         <v-btn
           color="primary"
           block
@@ -114,6 +115,7 @@ const activeChoice = ref(0)
 
 // props
 const props = defineProps(["id", "quizId"])
+const emit = defineEmits(["changed"])
 
 // popups and dialog boxes
 const choiceAlert = ref(false)
@@ -165,16 +167,15 @@ const handleSubmit = async () => {
   }
 
   try {
-    await $fetch(`/api/question/${props.id ?? ""}`, {
+    const questionData = await $fetch(`/api/question/${props.id ?? ""}`, {
       method: props.id ? "put" : "post",
       body: {
         ...question,
       },
     })
+    props.id ? emit("changed", questionData) : emit()
     dialog.value = true
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 }
 </script>
 
