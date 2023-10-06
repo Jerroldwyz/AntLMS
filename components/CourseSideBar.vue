@@ -24,21 +24,20 @@
             >
           </template>
 
-          <template
-            v-for="content in topic.content"
+          <div
+            v-for="content in combineList(topic)"
             :key="content.topic_position"
           >
             <v-divider class="border-opacity-25"></v-divider>
             <v-list-item
-              active-color="primary"
+              color="primary"
               :value="content.title"
               :prepend-icon="onContentComplete(false)"
               :append-icon="setContentIcon(content)"
-              :to="contentPath(topic.id, content.id)"
+              :to="contentPath(content.type, topic.id, content.id)"
+              >{{ content.title }}</v-list-item
             >
-              {{ content.title }}</v-list-item
-            >
-          </template>
+          </div>
         </v-list-group>
       </template>
     </v-list>
@@ -52,12 +51,15 @@ const onContentComplete = (complete: boolean) => {
   return complete ? "mdi-check" : "mdi-circle-outline"
 }
 
-const contentPath = (topicId: number, contentId: number) => {
-  return `/courses/${props.course.id}/topics/${topicId}/content/${contentId}`
+const contentPath = (type: string, topicId: number, contentId: number) => {
+  let path = `/courses/${props.course.id}/topics/${topicId}/content/${contentId}`
+  if (type !== "TEXT") {
+    path = `/courses/${props.course.id}/topics/${topicId}/quizzes/${contentId}`
+  }
+  return path
 }
 
 function setContentIcon(content: any): string {
-  console.log(content.type)
   switch (content.type) {
     case "TEXT":
       return "mdi-text-box-outline"
@@ -66,6 +68,10 @@ function setContentIcon(content: any): string {
     default:
       return "mdi-pencil-circle"
   }
+}
+
+const combineList = (topic: any) => {
+  return topic.content.concat(topic.quizzes)
 }
 </script>
 
