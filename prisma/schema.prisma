@@ -64,14 +64,14 @@ model topics {
 }
 
 model content {
-  id       Int          @id @default(autoincrement())
-  title    String
-  type     content_type
-  content  String?
-  topic    topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
-  topic_id Int
-  position Int          @default(autoincrement())
-  progress progress[]
+  id             Int          @id @default(autoincrement())
+  title          String
+  type           content_type
+  content        String?
+  topic          topics       @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  topic_id       Int
+  topic_position Int          @default(autoincrement())
+  progress       progress[]
 }
 
 enum content_type {

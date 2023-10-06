@@ -15,7 +15,7 @@ export async function submitContent(
   })
 }
 
-export async function deleteContent(contentId: string) {
+export async function deleteContent(contentId: number) {
   await $fetch(`/api/content/${contentId}`, {
     method: "DELETE",
   })

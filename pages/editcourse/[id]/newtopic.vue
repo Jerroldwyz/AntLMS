@@ -17,7 +17,7 @@ const title = ref("")
 
 async function submitTopic() {
   if (typeof route.params.id === "string") {
-    await addTopic(route.params.id, title.value)
+    await addTopic(parseInt(route.params.id), title.value)
     await navigateTo(`/editcourse/${route.params.id}`)
   }
 }

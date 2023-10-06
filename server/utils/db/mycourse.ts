@@ -26,7 +26,7 @@ export const getCreatorCourseById = (course_id: number) => {
               title: true,
               type: true,
               content: true,
-              position: true,
+              topic_position: true,
             },
           },
           quizzes: {

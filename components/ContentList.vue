@@ -29,12 +29,12 @@ function getIcon(content: any): string {
   }
 }
 
-async function handleTopicDelete(topicId: string) {
+async function handleTopicDelete(topicId: number) {
   await removeTopic(topicId)
   emit("delete")
 }
 
-async function handleContentDelete(contentId: string) {
+async function handleContentDelete(contentId: number) {
   await deleteContent(contentId)
   emit("delete")
 }
