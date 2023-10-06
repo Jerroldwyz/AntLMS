@@ -13,7 +13,7 @@ const uploadFile = async () => {
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
-    const path = await uploadVideo(selectedFile.value[0], "video")
+    const path = await uploadVideo(selectedFile.value[0])
     emit("upload-status", path)
   }
 }

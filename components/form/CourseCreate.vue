@@ -41,12 +41,12 @@ const course = ref<Course>({
 })
 
 const uploadFile = async () => {
-  if (!file.value[0]) {
+  if (file.value.length <= 0) {
     // No file selected, handle this case as needed
     console.log("No file to upload")
     throw new Error("No file to upload")
   } else {
-    course.value.thumbnail = await uploadImage(file.value[0], "image")
+    course.value.thumbnail = await uploadImage(file.value[0])
   }
 }
 
