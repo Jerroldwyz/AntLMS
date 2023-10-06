@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import draggable from "vuedraggable"
+import { removeTopic } from "~/utils/topic-helpers"
+const route = useRoute()
 const drag = ref(false)
 const changed = ref(false)
 
@@ -8,7 +10,12 @@ const props = defineProps<{
   course: any
 }>()
 
-const course = ref(props.course)
+console.log(props.course)
+
+const emit = defineEmits<{
+  (e: "delete"): void
+  (e: "update:course", course: any): void
+}>()
 
 // TODO: add proper type
 function getIcon(content: any): string {
@@ -20,6 +27,16 @@ function getIcon(content: any): string {
     default:
       return "mdi-pencil-circle"
   }
+}
+
+async function handleTopicDelete(topicId: number) {
+  await removeTopic(topicId)
+  emit("delete")
+}
+
+async function handleContentDelete(contentId: number) {
+  await deleteContent(contentId)
+  emit("delete")
 }
 </script>
 
@@ -34,6 +51,7 @@ function getIcon(content: any): string {
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
+            @click="navigateTo(`${route.params.id}/newtopic`)"
           ></v-btn>
         </v-col>
       </v-row>
@@ -44,10 +62,13 @@ function getIcon(content: any): string {
         height="400"
       >
         <draggable
-          v-model="course.topics"
+          :model-value="props.course.topics"
           group="topics"
           item-key="id"
           animation="200"
+          @update:model-value="
+            (topics) => $emit('update:course', { ...course, topics })
+          "
           @change="changed = true"
           @start="drag = true"
           @end="drag = false"
@@ -64,11 +85,17 @@ function getIcon(content: any): string {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
+                      @click="
+                        navigateTo(
+                          `${route.params.id}/topic/${topic.id}/newcontent`,
+                        )
+                      "
                     >
                     </v-btn>
                     <v-btn
                       icon="mdi-delete"
                       variant="flat"
+                      @click="handleTopicDelete(topic.id)"
                     >
                     </v-btn>
                   </template>
@@ -91,6 +118,7 @@ function getIcon(content: any): string {
                       <v-btn
                         icon="mdi-delete"
                         variant="flat"
+                        @click="handleContentDelete(content.id)"
                       >
                       </v-btn>
                     </template>

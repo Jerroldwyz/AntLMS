@@ -1,10 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{
-  label?: string
-  accept?: string
-  modelValue: File[]
-}>()
-defineEmits(["update:modelValue"])
+const props = defineProps(["label", "accept", "file"])
+defineEmits(["update:file"])
 
 const label = props.label ?? "Video Input"
 const mimeAccept = props.accept ?? "video/*"
@@ -12,9 +8,9 @@ const mimeAccept = props.accept ?? "video/*"
 
 <template>
   <v-file-input
-    :model-value="props.modelValue"
+    :model-value="file"
     :label="label"
     :accept="mimeAccept"
-    @change="$emit('update:modelValue', [...$event.target.files])"
+    @update:model-value="$emit('update:file', $event)"
   ></v-file-input>
 </template>

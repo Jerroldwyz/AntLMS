@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
   const prismaQuery = {
-    course_id: body.courseId,
+    course_id: parseInt(body.courseId),
     title: body.title,
   }
 

@@ -6,6 +6,7 @@ export const createTopic = (courses: courses[]): topics => {
     id: faker.number.int(2147483647),
     course_id: courses[Math.floor(Math.random() * courses.length)].id,
     title: faker.company.buzzPhrase(),
+    position: faker.number.int(2147483647),
   }
 }
 
@@ -16,6 +17,7 @@ export const createMultipleTopics = (course: courses): topics[] => {
       id: faker.number.int(2147483647),
       course_id: course.id,
       title: faker.company.buzzPhrase(),
+      position: faker.number.int(2147483647),
     })
   }
   return topics
