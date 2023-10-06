@@ -30,11 +30,14 @@ export default defineNuxtConfig({
       },
       firebaseAuthCookie: {
         name: "fb",
-        lifetime: 60 * 60 * 8,
+        lifetime: 60 * 60 * 24 * 5,
         domain: "",
         path: "/",
         sameSite: "lax",
       },
     },
+  },
+  imports: {
+    dirs: ["stores", "utils"],
   },
 })

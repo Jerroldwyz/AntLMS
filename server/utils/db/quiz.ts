@@ -1,7 +1,7 @@
 import { prisma } from "."
 
 export const getQuizById = (quiz_id: number) => {
-  return prisma.quizzes.findUnique({
+  const quiz = prisma.quizzes.findUnique({
     where: {
       id: quiz_id,
     },
@@ -24,6 +24,8 @@ export const getQuizById = (quiz_id: number) => {
       },
     },
   })
+
+  return quiz
 }
 
 export const createQuiz = (quiz_data: any) => {
@@ -70,45 +72,20 @@ export const evaluateQuiz = (result: number[]) => {
   })
 }
 
-export const storeQuizResult = (
-  result: any,
-  enrollment_id: number,
-  user_id: string,
-  quiz_id: number,
-) => {
-  return prisma.quiz_score.create({
-    data: {
-      enrollment_id,
-      user_id,
-      quiz_id,
-      score: result.correctAnswer,
-      total_marks: result.totalQuestion,
-    },
-  })
-}
+// TODO is there a equivalent function now Sahil?
 
-export const storeExistingQuizResult = (result: any, quiz_score_id: number) => {
-  return prisma.quiz_score.update({
-    where: {
-      id: quiz_score_id,
-    },
-    data: {
-      score: result.correctAnswer,
-      total_marks: result.totalQuestion,
-    },
-  })
-}
-
-export const getQuizResult = (user_id: string, quiz_id: number) => {
-  return prisma.quiz_score.findMany({
-    where: {
-      user_id,
-      quiz_id,
-    },
-    select: {
-      id: true,
-      score: true,
-      total_marks: true,
-    },
-  })
+export const quizPassed = async (data: any) => {
+  // TODO ????
+  // const progress = await prisma.quiz_progress.findMany({
+  //   where: {
+  //     user_id: data.user_id,
+  //     quiz_id: data.quiz_id,
+  //   },
+  // })
+  // if (progress.length === 0) {
+  //   console.log("x")
+  //   return await prisma.quiz_progress.create({
+  //     data,
+  //   })
+  // }
 }

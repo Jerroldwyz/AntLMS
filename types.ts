@@ -19,6 +19,7 @@ export type User = {
   uid: string
   name: string
   email: string
+  thumbnail: string | null
   contact_details: JsonObject
 }
 
@@ -27,4 +28,20 @@ export type Course = {
   thumbnail: string
   tags: string[]
   creatorId: string
+}
+
+export type ApiRole = {
+  id: number
+  name: string
+  permissions: {
+    id: number
+    name: string
+  }[]
+}
+
+export type ApiManager = {
+  uid: string
+  name: string
+  email: string
+  roles: ApiRole[]
 }

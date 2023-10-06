@@ -10,6 +10,7 @@ export const createUser = async (user: User) => {
         uid: user.uid,
         name: user.name,
         email: user.email,
+        thumbnail: user.thumbnail,
         contact_details: user.contact_details,
       },
     })
@@ -35,17 +36,25 @@ export const getUserById = (user_id: string) => {
     select: {
       email: true,
       name: true,
+      thumbnail: true,
       contact_details: true,
     },
   })
 }
 
-export const updateUser = (user_id: string, contact_details = {}) => {
+export const updateUserById = (
+  user_id: string,
+  name: string,
+  thumbnail: string,
+  contact_details = {},
+) => {
   return prisma.users.update({
     where: {
       uid: user_id,
     },
     data: {
+      name,
+      thumbnail,
       contact_details,
     },
   })
