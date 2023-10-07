@@ -71,7 +71,7 @@ export const deleteRolePermissionMapping = async (
 export const createManager = async (
   name: string,
   email: string,
-  roleId: number = -1,
+  roleId?: number,
 ): Promise<any> => {
   const manager = await prisma.users.create({
     data: {
@@ -82,7 +82,7 @@ export const createManager = async (
     },
   })
   if (typeof roleId === "number") {
-    if (roleId !== -1) {
+    if (roleId !== undefined) {
       await prisma.admin_role_attachments.create({
         data: {
           user_id: manager.uid,
