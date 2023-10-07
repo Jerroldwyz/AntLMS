@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
     await deleteFile(path as string)
     return { success: true }
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

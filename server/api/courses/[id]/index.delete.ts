@@ -5,6 +5,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await deleteCourseById(parseInt(id as string))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

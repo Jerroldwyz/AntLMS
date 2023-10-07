@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from "uuid"
-import { apiManagerTransformer } from "../transformers/admin"
+import {
+  apiManagerTransformer,
+  apiRoleTransformer,
+} from "../transformers/admin"
 import { prisma } from "."
 import { ApiRole } from "~~/types"
 
@@ -16,7 +19,7 @@ export const getRolePermissionMappings = async (
 export const createRole = async (
   roleName: string,
   permission_ids: number[],
-): Promise<any> => {
+) => {
   const role = await prisma.roles.create({
     data: {
       name: roleName,
@@ -54,7 +57,7 @@ export const updateRolePermissionMappings = async (
 export const deleteRolePermissionMapping = async (
   roleId: number,
   permissionId: number,
-): Promise<any> => {
+) => {
   return await prisma.role_permissions_attachments.delete({
     where: {
       permission_id_role_id: {
@@ -128,7 +131,7 @@ export const updateManagerRoleMapping = async (
   })
 }
 
-export const getRoleById = async (roleId: number): Promise<ApiRole> => {
+export const getRoleById = async (roleId: number): Promise<ApiRole | null> => {
   const role = await prisma.roles.findUnique({
     where: {
       id: roleId,
@@ -168,7 +171,7 @@ export const getRoles = async (): Promise<ApiRole[]> => {
       },
     },
   })
-  return roles.map((role) => apiRoleTransformer(role))
+  return roles.map((role) => apiRoleTransformer(role) as ApiRole)
 }
 
 export const deleteRoleById = (role_id: number) => {

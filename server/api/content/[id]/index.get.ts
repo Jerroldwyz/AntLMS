@@ -4,6 +4,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await getContentById(parseInt(contentId as string))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

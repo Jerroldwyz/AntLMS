@@ -13,6 +13,6 @@ export default defineEventHandler(async (event) => {
 
     return "Nothing to do"
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

@@ -7,6 +7,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await updateTopicTitle(parseInt(topicId as string), title as string)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

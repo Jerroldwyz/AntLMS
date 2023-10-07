@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
       contactDetails,
     )
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

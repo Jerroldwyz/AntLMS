@@ -3,6 +3,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await deleteContent(parseInt(contentId as string))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

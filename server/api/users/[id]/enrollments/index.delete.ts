@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await unenrollUser(userUid as string, parseInt(courseId as string))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

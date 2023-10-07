@@ -1,9 +1,31 @@
+import { parseParams } from "~/server/utils/validation/validator"
+import { getRoleById } from "~/server/utils/db/admin"
+
 export default defineEventHandler(async (event) => {
   const roleId = getRouterParam(event, "id")
 
+  parseParams({
+    routeParams: [
+      {
+        name: "id",
+        value: roleId,
+        type: "number",
+      },
+    ],
+  })
+
+  let data
   try {
-    return await getRoleById(parseInt(roleId as string))
+    data = await getRoleById(parseInt(roleId as string))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+  if (data === null) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Role ID does not exist",
+    })
+  }
+
+  return data
 })

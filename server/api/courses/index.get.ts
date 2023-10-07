@@ -28,6 +28,6 @@ export default defineEventHandler(async (event) => {
     }
     return await getAllCourses(queryStatus)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

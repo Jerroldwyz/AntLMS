@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
     const course = await getCourseById(parseInt(id as string))
     return courseTransformer(course, query.userId as string)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

@@ -9,6 +9,6 @@ export default defineEventHandler(async (event) => {
 
     return quizTransformer(quiz)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

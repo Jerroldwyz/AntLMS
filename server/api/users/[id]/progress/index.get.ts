@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
       parseInt(courseId as string),
     )
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

@@ -5,6 +5,6 @@ export default defineEventHandler(async (event) => {
     const quiz = await deleteQuiz(parseInt(quizId as string))
     return quizTransformer(quiz)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

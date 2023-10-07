@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
 
     return questionsTransformer(question)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

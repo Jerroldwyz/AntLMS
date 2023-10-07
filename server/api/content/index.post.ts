@@ -12,6 +12,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await createContent(prismaData)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

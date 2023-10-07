@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await deleteManagerRoleMapping(managerId as string, roleId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

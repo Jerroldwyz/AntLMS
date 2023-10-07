@@ -7,6 +7,6 @@ export default defineEventHandler(async (event) => {
   try {
     return await createCourse(course)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

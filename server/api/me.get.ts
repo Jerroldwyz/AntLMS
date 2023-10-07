@@ -5,6 +5,6 @@ export default defineEventHandler(async (event) => {
     const allUser = await getAllUsers()
     return await allUser[0]
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

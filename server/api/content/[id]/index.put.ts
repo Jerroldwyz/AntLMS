@@ -20,6 +20,6 @@ export default defineEventHandler(async (event) => {
 
     return 0
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
     const presignedUrl = await generatePresignedUrlPUT(path)
     return { success: true, presignedUrl, path }
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })
