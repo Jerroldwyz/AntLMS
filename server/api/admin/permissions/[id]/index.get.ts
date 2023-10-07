@@ -1,22 +1,26 @@
+import { ValidationError, number } from "yup"
 import { getPermissionById } from "~/server/utils/db/admin"
-import { parseParams } from "~/server/utils/validation/validator"
 
 export default defineEventHandler(async (event) => {
-  const permissionId = getRouterParam(event, "id")
+  const unvalidatedPermissionId = getRouterParam(event, "id")
+  const permissionIdType = number().required().min(1)
+  let permissionId
 
-  parseParams({
-    routeParams: [
-      {
-        name: "id",
-        value: permissionId,
-        type: "number",
-      },
-    ],
-  })
+  try {
+    permissionId = await permissionIdType.validate(unvalidatedPermissionId)
+  } catch (e) {
+    const error = e as unknown as ValidationError
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Bad Request router params: ${JSON.stringify(
+        error.errors,
+      )}`,
+    })
+  }
 
   let data
   try {
-    data = await getPermissionById(parseInt(permissionId as string))
+    data = await getPermissionById(permissionId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

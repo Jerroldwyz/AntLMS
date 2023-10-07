@@ -1,21 +1,32 @@
+import { object, number, ValidationError } from "yup"
 import { deleteRoleById } from "~/server/utils/db/admin"
-import { parseParams } from "~/server/utils/validation/validator"
 
 export default defineEventHandler(async (event) => {
-  const roleId = getRouterParam(event, "id")
-
-  parseParams({
-    routeParams: [
-      {
-        name: "id",
-        value: roleId,
-        type: "number",
-      },
-    ],
+  // Route params
+  const unvalidatedRouterParams = getRouterParams(event)
+  const routerParamsType = object({
+    id: number().required().min(1),
   })
+  let roleId
+
+  // Validation
+  try {
+    const routerParams = await routerParamsType.validate(
+      unvalidatedRouterParams,
+    )
+    roleId = routerParams.id
+  } catch (e) {
+    const error = e as unknown as ValidationError
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Bad Request router params: ${JSON.stringify(
+        error.errors,
+      )}`,
+    })
+  }
 
   try {
-    return await deleteRoleById(parseInt(roleId as string))
+    return await deleteRoleById(roleId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
