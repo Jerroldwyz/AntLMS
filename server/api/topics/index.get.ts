@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const body = await getQuery(event)
+  const body = getQuery(event)
 
   try {
     return await getTopics(parseInt(body.courseId as string))

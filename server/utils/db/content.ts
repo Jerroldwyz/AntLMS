@@ -40,36 +40,7 @@ export const updateContent = (content_id: number, content_data: any) => {
     where: {
       id: content_id,
     },
-    data: {
-      content: content_data,
-    },
-  })
-}
-
-export const updateContentPosition = (
-  content_id: number,
-  content_position: number,
-) => {
-  return prisma.content.update({
-    where: {
-      id: content_id,
-    },
-    data: {
-      topic_position: content_position,
-    },
-  })
-}
-
-export const updateTitle = (content_id: number, content_title: string) => {
-  console.log(content_id)
-
-  return prisma.content.update({
-    where: {
-      id: content_id,
-    },
-    data: {
-      title: content_title,
-    },
+    data: content_data,
   })
 }
 

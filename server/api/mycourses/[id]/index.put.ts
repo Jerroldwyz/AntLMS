@@ -1,23 +1,15 @@
+import { updateCourse } from "~/server/utils/db/mycourse"
+
 export default defineEventHandler(async (event) => {
   const courseId = getRouterParam(event, "id")
   const body = await readBody(event)
+
+  const course = camelCaseToUnderscore(body)
   try {
-    if (body.thumbnail) {
-      await updateCourseThumbnail(
-        parseInt(courseId as string),
-        body.thumbnail as string,
-      )
-    }
-
-    if (body.title) {
-      await updateCourseTitle(
-        parseInt(courseId as string),
-        body.title as string,
-      )
-    }
-
-    return 0
+    return await updateCourse(parseInt(courseId as string), course)
   } catch (e) {
+    console.log(e)
+
     return sendError(event, prismaErrorHandler(e))
   }
 })
