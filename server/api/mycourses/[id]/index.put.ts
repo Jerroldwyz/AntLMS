@@ -6,7 +6,8 @@ export default defineEventHandler(async (event) => {
 
   const course = camelCaseToUnderscore(body)
   try {
-    return await updateCourse(parseInt(courseId as string), course)
+    const mycourse = await updateCourse(parseInt(courseId as string), course)
+    return mycourseTransformer(mycourse)
   } catch (e) {
     console.log(e)
 

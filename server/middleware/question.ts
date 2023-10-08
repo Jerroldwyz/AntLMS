@@ -1,22 +1,21 @@
 import * as yup from "yup"
 
+import UrlPattern from "url-pattern"
 import { validator } from "../utils/validation/validator"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = [
-    "/api/question",
-    "/api/question/updateChoices",
-    "/api/question/updateQuestion",
-    "/api/question/dummy",
-  ]
+  const endpoints = /\/api\/question(\/?.)*/
 
-  if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
+  const url = event.node.req.url as string
+
+  const isHandledByThisMiddleware = new UrlPattern(endpoints).match(url)
+
+  if (!isHandledByThisMiddleware) {
     return
   }
 
   const questionSchema = yup.object().shape({
-    questionId: yup.number().strict(),
     quizId: yup.number().strict(),
     questionText: yup.string().strict(),
     explanation: yup.string().strict(),

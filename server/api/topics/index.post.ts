@@ -4,7 +4,8 @@ export default defineEventHandler(async (event) => {
   const prismaQuery = camelCaseToUnderscore(body)
 
   try {
-    return await createTopic(prismaQuery)
+    const topic = await createTopic(prismaQuery)
+    return topicsTransformer(topic)
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }

@@ -1,19 +1,17 @@
 import * as yup from "yup"
 import { content_type } from "@prisma/client"
+import UrlPattern from "url-pattern"
 import { validator } from "../utils/validation/validator"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = [
-    "/api/content",
-    "/api/content/updateContent",
-    "/api/content/updateContentPosition",
-    "/api/content/updateTitle",
-    "/api/content/complete",
-    "/api/content/dummy",
-  ]
+  const endpoints = /\/api\/content(\/?.)*/
 
-  if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
+  const url = event.node.req.url as string
+
+  const isHandledByThisMiddleware = new UrlPattern(endpoints).match(url)
+
+  if (!isHandledByThisMiddleware) {
     return
   }
 

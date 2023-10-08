@@ -5,19 +5,17 @@ import { validator } from "../utils/validation/validator"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = ["/api/topic", "/api/topic/dummy"]
+  const endpoints = /\/api\/topic(\/?.)*/
 
-  if (
-    !isHandledByThisMiddleware(endpoints, event.node.req.url as string) ||
-    new UrlPattern(/\/api\/topic\/[0-9a-zA-Z]+$/).match(
-      event.node.req.url as string,
-    )
-  ) {
+  const url = event.node.req.url as string
+
+  const isHandledByThisMiddleware = new UrlPattern(endpoints).match(url)
+
+  if (!isHandledByThisMiddleware) {
     return
   }
 
   const topicSchema = yup.object().shape({
-    topicId: yup.number().strict(),
     title: yup.string().strict(),
     courseId: yup.string().strict(),
   })

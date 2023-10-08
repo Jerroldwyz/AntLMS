@@ -1,7 +1,7 @@
 import UrlPattern from "url-pattern"
 
 export default defineEventHandler((event) => {
-  const endpoints = /\/api\/course\/.+/
+  const endpoints = /\/api\/course(\/?.)*/
 
   const url = event.node.req.url as string
 

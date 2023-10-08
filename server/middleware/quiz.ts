@@ -1,24 +1,21 @@
 import * as yup from "yup"
 import { content_type } from "@prisma/client"
+import UrlPattern from "url-pattern"
 import { validator } from "../utils/validation/validator"
 import { isHandledByThisMiddleware } from "../utils/isHandledByThisMiddleware"
 
 export default defineEventHandler(async (event) => {
-  const endpoints = [
-    "/api/quiz",
-    "/api/quiz/evaluate",
-    "/api/quiz/getResult",
-    "/api/quiz/updateQuizPosition",
-    "/api/quiz/updateQuizTitle",
-    "/api/quiz/dummy",
-  ]
+  const endpoints = /\/api\/quiz(\/?.)*/
 
-  if (!isHandledByThisMiddleware(endpoints, event.node.req.url as string)) {
+  const url = event.node.req.url as string
+
+  const isHandledByThisMiddleware = new UrlPattern(endpoints).match(url)
+
+  if (!isHandledByThisMiddleware) {
     return
   }
 
   const quizSchema = yup.object().shape({
-    quizId: yup.number().strict(),
     userId: yup.string().strict(),
     result: yup.array(),
     quizScoreId: yup.number().strict(),

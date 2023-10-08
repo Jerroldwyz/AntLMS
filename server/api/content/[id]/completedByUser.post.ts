@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const prismaData = camelCaseToUnderscore(body)
   try {
-    return await completeContent(prismaData)
+    await completeContent(prismaData)
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }

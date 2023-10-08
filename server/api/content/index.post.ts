@@ -4,7 +4,8 @@ export default defineEventHandler(async (event) => {
   const prismaData = camelCaseToUnderscore(body)
 
   try {
-    return await createContent(prismaData)
+    const content = await createContent(prismaData)
+    return contentTransformer(content)
   } catch (e) {
     console.log(e)
 
