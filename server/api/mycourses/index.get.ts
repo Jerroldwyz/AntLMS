@@ -2,7 +2,8 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
 
   try {
-    return await getCreatorCourses(query.userId as string)
+    const course = await getCreatorCourses(query.userId as string)
+    return mycourseTransformer(course)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

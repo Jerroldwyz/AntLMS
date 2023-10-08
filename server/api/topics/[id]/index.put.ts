@@ -5,7 +5,11 @@ export default defineEventHandler(async (event) => {
   const title = body.title
 
   try {
-    return await updateTopicTitle(parseInt(topicId as string), title as string)
+    const topic = await updateTopicTitle(
+      parseInt(topicId as string),
+      title as string,
+    )
+    return topicsTransformer(topic)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

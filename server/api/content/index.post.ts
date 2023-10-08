@@ -3,15 +3,11 @@ import { content_type } from "@prisma/client"
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const prismaData = {
-    title: body.title as string,
-    type: body.type as content_type,
-    content: body.content as string,
-    topic_id: body.topicId as number,
-  }
+  const prismaData = camelCaseToUnderscore(body)
 
   try {
-    return await createContent(prismaData)
+    const content = await createContent(prismaData)
+    return contentTransformer(content)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

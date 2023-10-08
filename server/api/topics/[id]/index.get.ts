@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
   const topicId = getRouterParam(event, "id")
   try {
-    return await getTopicById(parseInt(topicId as string))
+    const topic = await getTopicById(parseInt(topicId as string))
+    return topicsTransformer(topic)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

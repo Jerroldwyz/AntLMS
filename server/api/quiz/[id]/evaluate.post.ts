@@ -1,4 +1,5 @@
 import { rmSync } from "fs"
+import { quizPassed } from "~/server/utils/db/quiz"
 
 export default defineEventHandler(async (event) => {
   const quizId = getRouterParam(event, "id")
