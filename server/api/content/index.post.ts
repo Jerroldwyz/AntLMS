@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
       .required()
       .matches(/(TEXT|VIDEO)/, { excludeEmptyString: true }),
     content: string().nullable(),
-    topicId: number().required().min(1),
-    topicPosition: number().required().min(1),
+    topicId: number().required().integer().min(1),
+    topicPosition: number().required().integer().min(1),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({

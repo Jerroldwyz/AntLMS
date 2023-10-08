@@ -1,33 +1,21 @@
-import { ValidationError, number, object } from "yup"
+import { InferType, number } from "yup"
 import { getQuestionById } from "~/server/utils/db/question"
 
 export default defineEventHandler(async (event) => {
   // Route params
-  const unvalidatedRouterParams = getRouterParams(event)
-  const routerParamsType = object({
-    id: number().required().min(1),
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
   })
-  let questionId
-
-  // Validation
-  try {
-    const routerParams = await routerParamsType.validate(
-      unvalidatedRouterParams,
-    )
-    questionId = routerParams.id
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request router params: ${JSON.stringify(
-        error.errors,
-      )}`,
-    })
-  }
 
   // Query DB
   let data
   try {
+    const questionId = id
     data = await getQuestionById(questionId)
   } catch (e) {
     throw prismaErrorHandler(e)

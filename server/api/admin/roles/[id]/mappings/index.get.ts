@@ -5,7 +5,7 @@ import { validateAndParse } from "~/server/utils/validation/validator"
 export default defineEventHandler(async (event) => {
   // Route params
   const unvalidatedId = getRouterParam(event, "id")
-  const IdSchema = number().required().min(1)
+  const IdSchema = number().required().integer().min(1)
   type IdType = InferType<typeof IdSchema>
   const id = await validateAndParse<IdType>({
     schema: IdSchema,

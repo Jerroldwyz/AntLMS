@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
     name: string().required(),
-    permission_ids: array().required().of(number().required().min(1)),
+    permission_ids: array().required().of(number().required().integer().min(1)),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({

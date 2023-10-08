@@ -5,8 +5,8 @@ export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
-    enrollmentId: number().required().min(1),
-    contentId: number().required().min(1),
+    enrollmentId: number().required().integer().min(1),
+    contentId: number().required().integer().min(1),
     userId: string().required().uuid(),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
