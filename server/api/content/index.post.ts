@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
     type: body.type as content_type,
     content: body.content as string,
     topic_id: body.topicId as number,
-    topic_position: body.topicPosition as number,
   }
 
   try {

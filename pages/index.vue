@@ -1,27 +1,15 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: ["user"],
-})
-let imagePath: string = ""
-let videoPath: string = ""
-
-const imageCallback = (x: string) => {
-  imagePath = x
-  alert(imagePath)
-}
-
-const videoCallback = (x: string) => {
-  videoPath = x
-  alert(videoPath)
-}
+const courses = await fetchAllEnrolledCourses()
 </script>
 
 <template>
-  <h1>Example index page</h1>
-  <NuxtLink to="/mycourses"> View Courses </NuxtLink>
-
-  <FormImageInput @upload-status="imageCallback"></FormImageInput>
-  <FormVideoInput @upload-status="videoCallback"></FormVideoInput>
-  <DemoGetUrl></DemoGetUrl>
-  <DemoDeleteFile></DemoDeleteFile>
+  <v-row>
+    <CourseTile
+      v-for="course in courses"
+      :id="course.id"
+      :key="course.id"
+      :title="course.title"
+      :thumbnail="course.thumbnail"
+    />
+  </v-row>
 </template>
