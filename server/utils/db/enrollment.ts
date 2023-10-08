@@ -43,12 +43,13 @@ export const getEnrollment = (user_id: string) => {
               content: {
                 select: {
                   id: true,
-                  title: true,
-                  type: true,
-                  topic_position: true,
                 },
               },
-              quizzes: true,
+              quizzes: {
+                select: {
+                  id: true,
+                },
+              },
             },
           },
         },
@@ -98,17 +99,49 @@ export const getEnrollmentProgress = async (
   }
 }
 
-export const getEnrolledCourse = async (userUid: string, courseId: number) => {
-  const enrollments = await getEnrollment(userUid)
-
-  if (enrollments !== null) {
-    const courses = enrollments.filter((enrollment) => {
-      return enrollment.course.id === courseId
-    })
-    if (courses.length > 0) {
-      return courses[0]
-    }
-  }
-
-  return null
+export const getEnrolledCourse = async (user_id: string, course_id: number) => {
+  return await prisma.enrollments.findFirst({
+    where: {
+      user_id,
+      course_id,
+    },
+    select: {
+      id: true,
+      course: {
+        select: {
+          id: true,
+          title: true,
+          thumbnail: true,
+          creator: {
+            select: {
+              name: true,
+            },
+          },
+          topics: {
+            select: {
+              id: true,
+              title: true,
+              content: {
+                select: {
+                  id: true,
+                  title: true,
+                  type: true,
+                  topic_position: true,
+                  topic_id: true,
+                },
+              },
+              quizzes: {
+                select: {
+                  id: true,
+                  title: true,
+                  topic_position: true,
+                  topic_id: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
 }
