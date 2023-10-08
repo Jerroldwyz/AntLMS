@@ -1,42 +1,31 @@
-import { ValidationError, number, object } from "yup"
+import { InferType, number } from "yup"
 import { getContentById } from "~/server/utils/db/content"
 
 export default defineEventHandler(async (event) => {
   // Route params
-  const unvalidatedRouterParams = getRouterParams(event)
-  const routerParamsType = object({
-    id: number().required().min(1),
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
   })
-  let contentId
 
-  // Validation
-  try {
-    const routerParams = await routerParamsType.validate(
-      unvalidatedRouterParams,
-    )
-    contentId = routerParams.id
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request router params: ${JSON.stringify(
-        error.errors,
-      )}`,
-    })
-  }
-
+  // Query DB
   let data
   try {
+    const contentId = id
     data = await getContentById(contentId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
   if (data === null) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Content ID does not exist",
+      statusMessage: "Role ID does not exist",
     })
   }
-
   return data
 })

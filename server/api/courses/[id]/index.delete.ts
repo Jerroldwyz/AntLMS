@@ -1,9 +1,19 @@
+import { InferType, number } from "yup"
+
 export default defineEventHandler(async (event) => {
-  // TODO add logic to ensure a user can only change their own course
-  const id = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    const course = await deleteCourse(parseInt(id as string))
+    const courseId = id
+    const course = await deleteCourse(courseId)
     return courseTransformer(course)
   } catch (e) {
     throw prismaErrorHandler(e)

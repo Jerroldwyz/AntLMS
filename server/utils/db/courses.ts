@@ -59,9 +59,7 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = (
-  status: CourseQueryStatus = CourseQueryStatus.all,
-) => {
+export const getAllCourses = (status: string = "all") => {
   const select = {
     id: true,
     title: true,
@@ -76,22 +74,31 @@ export const getAllCourses = (
   let where
 
   switch (status) {
-    case CourseQueryStatus.all:
+    case "all":
       where = {}
       break
-    case CourseQueryStatus.enabled:
+    case "enabled":
       where = { enabled: { equals: true } }
       break
-    case CourseQueryStatus.disabled:
+    case "disabled":
       where = { enabled: { equals: false } }
       break
-
     default:
+      where = {}
       break
   }
 
   return prisma.courses.findMany({
     where,
     select,
+  })
+}
+
+export const updateCourseById = (courseId: number, data: any) => {
+  prisma.courses.update({
+    where: {
+      id: courseId,
+    },
+    data,
   })
 }

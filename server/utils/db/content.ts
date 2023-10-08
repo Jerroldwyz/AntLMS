@@ -1,3 +1,4 @@
+import { content } from "@prisma/client"
 import { prisma } from "."
 
 export const getContentById = (content_id: number) => {

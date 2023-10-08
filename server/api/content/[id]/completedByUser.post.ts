@@ -1,17 +1,28 @@
-import { camelCaseToUnderscore } from "~/server/utils/camelCaseToUnderscore"
+import { InferType, object, string, number } from "yup"
+import { completeContent } from "~/server/utils/db/progress"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    enrollmentId: number().required().min(1),
+    contentId: number().required().min(1),
+    userId: string().required().uuid(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
-  // const prismaData = {
-  //   enrollment_id: parseInt(body.enrollmentId),
-  //   content_id: parseInt(body.contentId),
-  //   user_id: body.userId,
-  // }
-
-  const prismaData = camelCaseToUnderscore(body)
   try {
-    await completeContent(prismaData)
+    const prismaProgressObj = {
+      enrollment_id: body.enrollmentId,
+      content_id: body.contentId,
+      user_id: body.userId,
+    }
+    await completeContent(prismaProgressObj)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
