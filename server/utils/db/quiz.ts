@@ -1,5 +1,35 @@
 import { prisma } from "."
 
+export const getQuizzes = (topicId: number) => {
+  const quiz = prisma.quizzes.findMany({
+    where: {
+      topic_id: topicId,
+    },
+    select: {
+      id: true,
+      title: true,
+      topic_id: true,
+      threshold: true,
+      questions: {
+        select: {
+          id: true,
+          question_text: true,
+          explanation: true,
+          choices: {
+            select: {
+              id: true,
+              choice_text: true,
+              is_correct: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return quiz
+}
+
 export const getQuizById = (quiz_id: number) => {
   const quiz = prisma.quizzes.findUnique({
     where: {

@@ -1,5 +1,6 @@
-import { content, quizzes } from "@prisma/client"
 import { prisma } from "."
+import { getQuizzes } from "~/server/utils/db/quiz"
+import { getContents } from "~/server/utils/db/content"
 
 export const enrollUser = (user_id: string, course_id: number) => {
   return prisma.enrollments.create({
@@ -50,23 +51,28 @@ export const getEnrollmentProgress = async (
 ) => {
   const enrollments = await getEnrollment(userUid)
   if (enrollments !== null) {
-    // console.log(enrollments)
     const courses = enrollments.filter(
       (enrollment) => enrollment.course.id === courseId,
     )
-    // console.log(courses)
     if (courses.length > 0) {
       const course = courses[0].course
+      const topics = await getTopics(course.id)
 
       const contentAndQuizIds = []
-      course.topics.forEach((topic: any) => {
-        topic.content.forEach((content: content) => {
-          contentAndQuizIds.push(content.id)
-        })
-        topic.quizzes.forEach((quiz: quizzes) => {
-          contentAndQuizIds.push(quiz.id)
-        })
-      })
+
+      await Promise.all(
+        topics.map(async (topic) => {
+          const contents = await getContents(topic.id)
+          const quizzes = await getQuizzes(topic.id)
+          contents.forEach((content) => {
+            contentAndQuizIds.push(content.id)
+          })
+          quizzes.forEach((quiz) => {
+            contentAndQuizIds.push(quiz.id)
+          })
+        }),
+      )
+
       const completedContentAndQuizIds = []
       courses[0].quiz_progress.forEach((quiz_progresses: any) => {
         completedContentAndQuizIds.push(quiz_progresses.id)
