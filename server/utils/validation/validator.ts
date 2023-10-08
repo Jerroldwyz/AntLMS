@@ -1,10 +1,11 @@
-import { ValidationError } from "yup"
+import { Schema, ValidationError } from "yup"
 
-export const validateAndParse = async (
-  schema: any,
-  value: any,
-  msgOnError: string,
-) => {
+export const validateAndParse = async (schemaObject: {
+  schema: Schema
+  value: any
+  msgOnError: string
+}) => {
+  const { schema, value, msgOnError } = schemaObject
   try {
     const parsedData = await schema.validate(value, { abortEarly: false })
     return parsedData
