@@ -6,6 +6,7 @@ export const topicsTransformer = (topic: any) => {
     courseId: topic.course_id,
     title: topic.title,
     content: topic.content.map(contentTransformer),
+    position: topic.position,
   }
 
   return val

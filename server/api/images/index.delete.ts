@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const path = body.path
-    await deleteFile(path as string)
+    await deleteFile(path)
     return { success: true }
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))

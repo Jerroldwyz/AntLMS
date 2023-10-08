@@ -5,13 +5,18 @@ export const formatUser = async <TypeUser>(
   user: FirebaseUser | DecodedIdToken,
 ) => {
   const { data } = await useFetch("/api/signin", {
-    query: { userId: user.uid },
+    method: "post",
+    body: {
+      uid: user.uid,
+      email: user.email,
+    },
   })
 
   return <TypeUser>{
     uid: user.uid,
     email: user.email,
     name: data.value?.name,
+    thumbnail: data.value?.thumbnail,
     contact_details: data.value?.contact_details,
   }
 }

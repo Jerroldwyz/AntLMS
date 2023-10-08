@@ -5,10 +5,24 @@ import { tags } from "~~/constants"
 // TODO: change any to real type
 const props = defineProps<{
   course: Course
+  file: File[]
 }>()
 
-// TODO is this suppose to emit anything back to the parent??
-const course = props.course
+const emit = defineEmits<{
+  (e: "update:course", course: Course): void
+  (e: "update:file", file: File[]): void
+  (e: "changed"): void
+}>()
+
+function formatThumbnail(thumbnail: string) {
+  if (props.file[0]) {
+    return props.file[0].name
+  }
+
+  const split = thumbnail.split(".")
+  split.shift()
+  return split.join(".")
+}
 </script>
 
 <template>
@@ -29,19 +43,32 @@ const course = props.course
           ></v-btn>
         </v-col>
       </v-row>
-      <v-divider class="mb-2"></v-divider>
+      <v-divider class="my-2"></v-divider>
       <v-form>
-        <v-text-field variant="outlined">{{ course.title }}</v-text-field>
+        <v-text-field
+          :model-value="course.title"
+          variant="outlined"
+          @update:model-value="
+            (title) => $emit('update:course', { ...course, title })
+          "
+        ></v-text-field>
         <v-select
-          v-model="course.tags"
+          :model-value="course.tags"
           multiple
           :items="tags"
           variant="outlined"
           chips
+          @update:model-value="
+            (tags) => $emit('update:course', { ...course, tags: [...tags] })
+          "
         ></v-select>
         <v-file-input
-          label="Thumbnail"
+          class="overflow-hidden"
+          :model-value="file"
+          :label="formatThumbnail(course.thumbnail)"
           variant="outlined"
+          @update:model-value="(file) => $emit('update:file', file)"
+          @click:clear="$emit('update:file', [])"
           >{{ course.thumbnail }}</v-file-input
         >
       </v-form>
