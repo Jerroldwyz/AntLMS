@@ -65,6 +65,15 @@ export const createQuiz = (quiz_data: any) => {
   })
 }
 
+export const updateQuiz = (quiz_id: number, quiz_data: any) => {
+  return prisma.quizzes.update({
+    where: {
+      id: quiz_id,
+    },
+    data: quiz_data,
+  })
+}
+
 export const updateQuizTitle = (quiz_id: number, quiz_title: string) => {
   return prisma.quizzes.update({
     where: {

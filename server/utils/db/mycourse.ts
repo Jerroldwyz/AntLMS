@@ -1,5 +1,4 @@
 import { prisma } from "."
-import { Course } from "~~/types"
 
 export const getCreatorCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
@@ -66,22 +65,10 @@ export const getCreatorCourses = (creator_id: string) => {
   })
 }
 
-export const createCourse = (course_data: Course) => {
+export const createCourse = (course_data: any) => {
   return prisma.courses.create({
     data: {
-      title: course_data.title,
-      creator_id: course_data.creatorId,
-      thumbnail: course_data.thumbnail,
-      course_tags: {
-        create: course_data.tags.map((tag: string) => ({
-          tag: {
-            connectOrCreate: {
-              where: { name: tag },
-              create: { name: tag },
-            },
-          },
-        })),
-      },
+      ...course_data,
     },
     include: {
       course_tags: true,
@@ -89,24 +76,13 @@ export const createCourse = (course_data: Course) => {
   })
 }
 
-export const updateCourseTitle = (account_id: number, course_title: string) => {
-  return prisma.courses.update({
-    where: {
-      id: account_id,
-    },
-    data: {
-      title: course_title,
-    },
-  })
-}
-
-export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
+export const updateCourse = (course_id: number, course_data: any) => {
   return prisma.courses.update({
     where: {
       id: course_id,
     },
     data: {
-      thumbnail,
+      ...course_data,
     },
   })
 }

@@ -1,12 +1,7 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const prismaData = {
-    topic_id: parseInt(body.topicId as string),
-    title: body.title as string,
-    topic_position: parseInt(body.topicPosition as string),
-    threshold: parseInt(body.threshold as string),
-  }
+  const prismaData = camelCaseToUnderscore(body)
 
   try {
     const quiz = await createQuiz(prismaData)
