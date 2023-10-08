@@ -1,49 +1,33 @@
-import { ValidationError, number, object } from "yup"
+import { InferType, number, object } from "yup"
 import { deleteRolePermissionMapping } from "~/server/utils/db/admin"
 
 export default defineEventHandler(async (event) => {
   // Route params
-  const unvalidatedRouterParams = getRouterParams(event)
-  const routerParamsType = object({
-    id: number().required().min(1),
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
   })
-  let roleId
 
   // Body params
   const unvalidatedBody = await readBody(event)
-  const requestBodyType = object({
+  const requestBodySchema = object({
     permission_id: number().required().min(1),
   })
-  let permissionId
-
-  // Validation
-  try {
-    const routerParams = await routerParamsType.validate(
-      unvalidatedRouterParams,
-    )
-    roleId = routerParams.id
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request router params: ${JSON.stringify(
-        error.errors,
-      )}`,
-    })
-  }
-  try {
-    const body = await requestBodyType.validate(unvalidatedBody)
-    permissionId = body.permission_id
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request body params: ${JSON.stringify(error.errors)}`,
-    })
-  }
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
   // Query database
   try {
+    const permissionId = body.permission_id
+    const roleId = id
     return await deleteRolePermissionMapping(roleId, permissionId)
   } catch (e) {
     throw prismaErrorHandler(e)

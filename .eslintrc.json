@@ -10,6 +10,7 @@
     "plugin:vue/vue3-recommended",
     "@nuxtjs/eslint-config-typescript",
     "plugin:nuxt/recommended",
+    "plugin:import/typescript",
     "prettier"
   ],
 

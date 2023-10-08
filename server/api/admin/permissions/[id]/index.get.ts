@@ -1,12 +1,13 @@
-import { ValidationError, number } from "yup"
+import { InferType, number } from "yup"
 import { getPermissionById } from "~/server/utils/db/admin"
 import { validateAndParse } from "~/server/utils/validation/validator"
 
 export default defineEventHandler(async (event) => {
   const unvalidatedId = getRouterParam(event, "id")
   const IdSchema = number().required().min(1)
+  type IdType = InferType<typeof IdSchema>
 
-  const id = await validateAndParse({
+  const id = await validateAndParse<IdType>({
     schema: IdSchema,
     value: unvalidatedId,
     msgOnError: "Bad request router params",
@@ -14,16 +15,17 @@ export default defineEventHandler(async (event) => {
 
   let data
   try {
-    data = await getPermissionById(id)
+    const permissionId = id
+    data = await getPermissionById(permissionId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
   if (data === null) {
     throw createError({
       statusCode: 404,
       statusMessage: "Permission ID does not exist",
     })
   }
-
   return data
 })

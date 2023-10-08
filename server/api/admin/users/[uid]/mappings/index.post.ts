@@ -1,48 +1,32 @@
-import { ValidationError, object, string, number } from "yup"
+import { InferType, object, string, number } from "yup"
 
 export default defineEventHandler(async (event) => {
   // Route params
-  const unvalidatedRouterParams = getRouterParams(event)
-  const routerParamsType = object({
-    uid: string().required().uuid(),
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
   })
-  let managerId
 
   // Body params
   const unvalidatedBody = await readBody(event)
-  const requestBodyType = object({
+  const requestBodySchema = object({
     roleId: number().required().min(1),
   })
-  let roleId
-
-  // Validation
-  try {
-    const routerParams = await routerParamsType.validate(
-      unvalidatedRouterParams,
-    )
-    managerId = routerParams.uid
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request router params: ${JSON.stringify(
-        error.errors,
-      )}`,
-    })
-  }
-  try {
-    const body = await requestBodyType.validate(unvalidatedBody)
-    roleId = body.roleId
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad Request body params: ${JSON.stringify(error.errors)}`,
-    })
-  }
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
   try {
-    return await createManagerRoleMapping(managerId as string, roleId)
+    const managerId = id
+    const roleId = body.roleId
+    return await createManagerRoleMapping(managerId, roleId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

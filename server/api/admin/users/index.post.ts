@@ -1,36 +1,24 @@
-import { ValidationError, number, object, string } from "yup"
+import { InferType, number, object, string } from "yup"
 import { createManager } from "~/server/utils/db/admin"
 
 export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
-  const requestBodyType = object({
+  const requestBodySchema = object({
     name: string().required(),
     email: string().email().required(),
     roleId: number().optional().min(1),
   })
-  let name, email, roleId
-
-  // Validate
-  try {
-    const body = await requestBodyType.validate(unvalidatedBody, {
-      abortEarly: false,
-    })
-    name = body.name
-    email = body.email
-    roleId = body.roleId
-  } catch (e) {
-    const error = e as unknown as ValidationError
-    console.log(error)
-    throw createError({
-      statusCode: 400,
-      statusMessage: `Bad request body: ${JSON.stringify(error.errors)}`,
-      cause: error.errors,
-    })
-  }
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
   // Query DB
   try {
+    const { name, email, roleId } = body
     return await createManager(name, email, roleId)
   } catch (e) {
     throw prismaErrorHandler(e)
