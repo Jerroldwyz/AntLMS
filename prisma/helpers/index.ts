@@ -255,7 +255,6 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   courses = _.unique(courses, (x) => x.id)
   tags = _.unique(tags, (x) => x.name)
 
-  for (let i = 0; i < amount; i++) {}
   courses.forEach((course: any) => {
     createMultipleTopics(course).forEach((topic) => topics.push(topic))
     courses_tags.push(createCoursetag(course, tags))
