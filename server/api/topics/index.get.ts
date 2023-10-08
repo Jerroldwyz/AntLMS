@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
-  const body = await getQuery(event)
+  const body = getQuery(event)
 
   try {
-    return await getTopics(parseInt(body.courseId as string))
+    const topic = await getTopics(parseInt(body.courseId as string))
+    return topicsTransformer(topic)
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }

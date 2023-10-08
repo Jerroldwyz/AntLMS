@@ -1,5 +1,35 @@
 import { prisma } from "."
 
+export const getQuizzes = (topicId: number) => {
+  const quiz = prisma.quizzes.findMany({
+    where: {
+      topic_id: topicId,
+    },
+    select: {
+      id: true,
+      title: true,
+      topic_id: true,
+      threshold: true,
+      questions: {
+        select: {
+          id: true,
+          question_text: true,
+          explanation: true,
+          choices: {
+            select: {
+              id: true,
+              choice_text: true,
+              is_correct: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return quiz
+}
+
 export const getQuizById = (quiz_id: number) => {
   const quiz = prisma.quizzes.findUnique({
     where: {
@@ -8,6 +38,7 @@ export const getQuizById = (quiz_id: number) => {
     select: {
       title: true,
       topic_id: true,
+      threshold: true,
       questions: {
         select: {
           id: true,
@@ -30,6 +61,15 @@ export const getQuizById = (quiz_id: number) => {
 
 export const createQuiz = (quiz_data: any) => {
   return prisma.quizzes.create({
+    data: quiz_data,
+  })
+}
+
+export const updateQuiz = (quiz_id: number, quiz_data: any) => {
+  return prisma.quizzes.update({
+    where: {
+      id: quiz_id,
+    },
     data: quiz_data,
   })
 }
@@ -72,20 +112,18 @@ export const evaluateQuiz = (result: number[]) => {
   })
 }
 
-// TODO is there a equivalent function now Sahil?
-
 export const quizPassed = async (data: any) => {
-  // TODO ????
-  // const progress = await prisma.quiz_progress.findMany({
-  //   where: {
-  //     user_id: data.user_id,
-  //     quiz_id: data.quiz_id,
-  //   },
-  // })
-  // if (progress.length === 0) {
-  //   console.log("x")
-  //   return await prisma.quiz_progress.create({
-  //     data,
-  //   })
-  // }
+  const progress = await prisma.quiz_progress.findMany({
+    where: {
+      user_id: data.user_id,
+      quiz_id: data.quiz_id,
+    },
+  })
+  if (progress.length === 0) {
+    console.log("x")
+
+    return await prisma.quiz_progress.create({
+      data,
+    })
+  }
 }
