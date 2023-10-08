@@ -1,8 +1,19 @@
+import { InferType, number } from "yup"
+
 export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    const mycourse = await deleteCourse(parseInt(id as string))
+    const courseId = id
+    const mycourse = await deleteCourse(courseId)
     return mycourseTransformer(mycourse)
   } catch (e) {
     throw prismaErrorHandler(e)

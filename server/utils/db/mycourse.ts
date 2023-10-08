@@ -65,11 +65,9 @@ export const getCreatorCourses = (creator_id: string) => {
   })
 }
 
-export const createCourse = (course_data: any) => {
+export const createCourse = (data: any) => {
   return prisma.courses.create({
-    data: {
-      ...course_data,
-    },
+    data,
     include: {
       course_tags: true,
     },
