@@ -1,4 +1,4 @@
-import { getAllUsers } from "../utils/db/users"
+import { getAllUsers } from "~/server/utils/db/users"
 
 export default defineEventHandler(async (event) => {
   try {

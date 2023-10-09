@@ -1,26 +1,9 @@
 import { prisma } from "."
-import { User } from "~~/types"
 
-// TODO create user
-export const createUser = async (user: User) => {
-  let newUser = null
-  try {
-    newUser = await prisma.users.create({
-      data: {
-        uid: user.uid,
-        name: user.name,
-        email: user.email,
-        thumbnail: user.thumbnail,
-        contact_details: user.contact_details,
-      },
-    })
-  } catch (error) {
-    throw createError({
-      statusCode: 500, // internal server error
-      statusMessage: "Unable to create new user",
-    })
-  }
-
+export const createUser = async (data: any) => {
+  const newUser = await prisma.users.create({
+    data,
+  })
   return newUser
 }
 
@@ -42,21 +25,12 @@ export const getUserById = (user_id: string) => {
   })
 }
 
-export const updateUserById = (
-  user_id: string,
-  name: string,
-  thumbnail: string,
-  contact_details = {},
-) => {
+export const updateUserById = (user_id: string, data: any) => {
   return prisma.users.update({
     where: {
       uid: user_id,
     },
-    data: {
-      name,
-      thumbnail,
-      contact_details,
-    },
+    data,
   })
 }
 

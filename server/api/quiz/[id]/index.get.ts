@@ -12,11 +12,19 @@ export default defineEventHandler(async (event) => {
   })
 
   // Query DB
+  let data
   try {
     const quizId = id
-    const quiz = await getQuizById(quizId)
-    return quizTransformer(quiz)
+    data = await getQuizById(quizId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  if (data === null) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Question ID does not exist",
+    })
+  }
+
+  return quizTransformer(data)
 })

@@ -1,8 +1,20 @@
+import { InferType, string } from "yup"
+import { deleteUser } from "~/server/utils/db/users"
+
 export default defineEventHandler(async (event) => {
-  const userId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    return await deleteUser(userId as string)
+    const userId = id
+    return await deleteUser(userId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

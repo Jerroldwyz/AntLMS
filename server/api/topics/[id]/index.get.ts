@@ -12,11 +12,20 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request router params",
   })
 
+  // Query DB
+  let data
   try {
     const topicId = id
-    const topic = await getTopicById(topicId)
-    return topicsTransformer(topic)
+    data = await getTopicById(topicId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  if (data === null) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Question ID does not exist",
+    })
+  }
+
+  return topicsTransformer(data)
 })
