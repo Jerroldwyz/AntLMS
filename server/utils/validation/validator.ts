@@ -2,6 +2,10 @@ import { H3Event } from "h3"
 import { ValidationError } from "yup"
 
 export const validator = async (schema: any, event: H3Event) => {
+  if (event.req.method === "GET") {
+    return
+  }
+
   const body = await readBody(event)
 
   try {

@@ -132,6 +132,8 @@ export const getEnrolledCourse = async (user_id: string, course_id: number) => {
           },
         },
       },
+      progress: true,
+      quiz_progress: true,
     },
   })
 }
