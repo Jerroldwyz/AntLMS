@@ -13,18 +13,23 @@
     </v-alert>
     <v-form ref="form">
       <v-card-title class="text-h5">{{ pageTitle }}</v-card-title>
-      <v-text-field
-        v-model="questionText"
-        label="Question Text"
-        variant="outlined"
-        required
-      />
-      <v-text-field
-        v-model="explanation"
-        label="Explanation"
-        variant="outlined"
-        required
-      />
+      <v-card>
+        <v-card-subtitle>Question Text</v-card-subtitle>
+        <QuillEditor
+          v-model:content="questionText"
+          theme="snow"
+          content-type="html"
+        />
+      </v-card>
+      <!-- <v-text-field v-model="questionText" label="Question Text" variant="outlined" required /> -->
+      <v-card>
+        <v-card-subtitle>Explanation</v-card-subtitle>
+        <QuillEditor
+          v-model:content="explanation"
+          theme="snow"
+          content-type="html"
+        />
+      </v-card>
       <h4>Choices</h4>
       <v-radio-group v-model="correctAns">
         <v-radio
@@ -173,7 +178,7 @@ const handleSubmit = async () => {
         ...question,
       },
     })
-    props.id ? emit("changed", questionData) : emit()
+    props.id ? emit("changed", questionData) : emit("changed", questionData)
     dialog.value = true
   } catch (e) {}
 }

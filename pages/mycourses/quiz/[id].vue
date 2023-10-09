@@ -1,6 +1,5 @@
 <script setup>
 const route = useRoute()
-const quiz = ref(await fetchUserQuiz(route.params.id))
 const quizChange = ref(false)
 
 const id = ref(undefined)
@@ -8,8 +7,8 @@ const handleClick = (questionId) => {
   id.value = questionId
 }
 
-const handleChange = async () => {
-  quiz.value = await fetchUserQuiz(route.params.id)
+const handleChange = () => {
+  quizChange.value = !quizChange.value
 }
 </script>
 <template>
@@ -22,12 +21,12 @@ const handleChange = async () => {
       <FormQuestion
         :id="id"
         :key="id"
-        :quiz-id="route.params.id"
+        :quiz-id="parseInt(route.params.id)"
         @changed="handleChange"
       />
       <QuizList
         :key="quizChange"
-        :quiz="quiz"
+        :quiz-id="parseInt(route.params.id)"
         @clicked="handleClick"
       />
     </v-container>
