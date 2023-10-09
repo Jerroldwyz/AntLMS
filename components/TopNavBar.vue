@@ -24,6 +24,7 @@
       >
         <v-card-text>
           <v-text-field
+            v:model="searchQuery"
             :loading="loading"
             density="compact"
             variant="solo"
@@ -31,32 +32,30 @@
             append-inner-icon="mdi-magnify"
             single-line
             hide-details
-            @click:append-inner="onClick"
+            @click:append-inner="performSearch"
+            @keyup.enter="performSearch"
           ></v-text-field>
         </v-card-text>
       </v-responsive>
-
       <UserProfileMenu></UserProfileMenu>
     </v-container>
   </v-app-bar>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    loaded: false,
-    loading: false,
-  }),
+<script setup lang="ts">
+const loaded = ref(false)
+const loading = ref(false)
+const searchQuery = ref("")
+const router = useRouter()
 
-  methods: {
-    onClick() {
-      this.loading = true
+function performSearch() {
+  loading.value = true
 
-      setTimeout(() => {
-        this.loading = false
-        this.loaded = true
-      }, 2000)
-    },
-  },
+  setTimeout(() => {
+    loading.value = false
+    loaded.value = true
+
+    router.push({ path: "/search", query: { query: searchQuery.value } })
+  }, 2000)
 }
 </script>

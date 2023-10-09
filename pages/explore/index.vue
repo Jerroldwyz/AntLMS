@@ -17,7 +17,7 @@ const courses = await fetchAllCourses()
   <v-btn
     v-for="(title, n) in browse"
     :key="n"
-    class="mr-4 text-none text-left"
+    class="mr-4 my-1 text-none text-left"
     size="large"
     variant="flat"
     color="#ECEFF1"

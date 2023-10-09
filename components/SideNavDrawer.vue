@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 const courses = await fetchAllEnrolledCourses()
-const browse = ["Browse all", "Creative", "Technology", "Business"]
+const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 
 // console.log(courses)
