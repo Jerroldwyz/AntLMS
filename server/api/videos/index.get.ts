@@ -1,8 +1,22 @@
+import { InferType, object, string } from "yup"
+import { generatePresignedUrl } from "~/server/utils/backend-s3-helpers"
+
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
+  // Query params
+  const unvalidatedQueryParams = getQuery(event)
+  const queryParamsSchema = object({
+    path: string().required(),
+  })
+  type queryParamsType = InferType<typeof queryParamsSchema>
+  const queryParams = await validateAndParse<queryParamsType>({
+    schema: queryParamsSchema,
+    value: unvalidatedQueryParams,
+    msgOnError: "Bad query params",
+  })
+
   try {
-    const path = query.path
-    const presignedUrl = await generatePresignedUrl(path as string)
+    const path = queryParams.path
+    const presignedUrl = await generatePresignedUrl(path)
     return { success: true, presignedUrl }
   } catch (e) {
     throw prismaErrorHandler(e)
