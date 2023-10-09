@@ -6,14 +6,17 @@
       indeterminate
       :height="12"
     ></v-progress-linear>
-    <div v-else>
-      <div class="text-h2 mb-6">{{ quiz.value.title }}</div>
+    <div
+      v-else
+      class="d-flex flex-column justify-center"
+    >
+      <div class="text-h2 mb-6">{{ quiz?.title }}</div>
       <v-divider
         :thickness="7"
         class="border-opacity-100"
       ></v-divider>
 
-      <v-dialog
+      <!-- <v-dialog
         v-model="invalid"
         width="auto"
       >
@@ -69,43 +72,73 @@
           </v-card-text>
           <v-btn @click="dialogBox = false">Close</v-btn>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
 
       <QuizQuestionBox
-        v-for="(question, index) in quiz.value.questions"
+        v-for="(question, index) in quiz?.questions"
         :id="question.id"
         :key="index"
         v-model:answer="answers[question.id]"
+        :key-index="index"
         :text="question.questionText"
         :explanation="question.explanation"
         :choices="question.choices"
       />
 
-      <v-btn @click="handleSubmit">Submit Quiz</v-btn>
+      <v-btn
+        class="mx-auto"
+        color="primary"
+        :disabled="!isValid"
+        variant="flat"
+        @click="handleSubmit"
+      >
+        <span v-if="isValid">Submit Quiz</span>
+        <span v-else>Please answer all questions</span>
+      </v-btn>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps(["id", "enrollmentId", "userId"])
 
-const quiz = ref({
-  title: "",
-  questions: [],
-})
+interface Choice {
+  id: number
+  choiceText: string
+  isCorrect: boolean
+}
+
+interface Question {
+  id: number
+  questionText: string
+  explanation: string
+  choices: Choice[]
+}
+
+interface Quiz {
+  title: string
+  topicId: number
+  threshold: number
+  questions: Question[]
+}
+
+const quiz = ref<Quiz | null>(null)
 
 const fetchData = async () => {
-  const { data } = await useFetch(`/api/quiz/${props.id}`, {
+  const { data } = await useFetch<Quiz>(`/api/quiz/${props.id}`, {
     method: "GET",
   })
 
-  return data
+  return data.value
 }
 
 onMounted(async () => {
   isLoading.value = true
   try {
-    quiz.value = await fetchData()
+    const data = await fetchData()
+    if (data) {
+      quiz.value = data
+    }
   } finally {
     isLoading.value = false
   }
@@ -113,38 +146,37 @@ onMounted(async () => {
 
 const isLoading = ref(true)
 const dialogBox = ref(false)
-const answers = ref({})
+const answers = ref<{ [key: number]: any }>({})
 const result = ref({})
 const invalid = ref(false)
 
-const handleSubmit = async () => {
-  const questions = quiz.value.questions
-  console.log(questions)
-  const choices = quiz.value.questions.map((question) => {
+const isValid = computed(() => {
+  const choices = quiz.value?.questions.map((question) => {
     return answers.value[question.id]
   })
 
-  choices.forEach((choice) => {
-    if (choice === undefined) {
-      invalid.value = true
-    }
-  })
-
-  if (invalid.value !== true) {
-    try {
-      result.value = await $fetch(`/api/quiz/${props.id}/evaluate`, {
-        method: "post",
-        body: {
-          result: choices,
-          enrollmentId: props.enrollmentId,
-          userId: props.userId,
-        },
-      })
-      dialogBox.value = true
-    } catch (e) {
-      console.log(e)
+  for (const choice in choices) {
+    if (!choices[choice as unknown as number]) {
+      return false
     }
   }
+
+  return true
+})
+
+const handleSubmit = () => {
+  const router = useRouter()
+  const route = useRoute()
+  const choices =
+    quiz.value?.questions.map((question) => {
+      return answers.value[question.id]
+    }) || []
+
+  const quizStore = useQuizStore()
+  quizStore.setResult(choices)
+  router.push({
+    path: `${route.fullPath}/result`,
+  })
 }
 </script>
 <style scoped></style>

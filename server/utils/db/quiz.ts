@@ -119,6 +119,7 @@ export const quizPassed = async (data: any) => {
       quiz_id: data.quiz_id,
     },
   })
+  console.log(progress)
   if (progress.length === 0) {
     console.log("x")
 

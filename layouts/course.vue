@@ -37,8 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { tuple } from "yup"
-
 const route = useRoute()
 const router = useRouter()
 const { course_id, topic_id, content_id } = route.params
@@ -49,6 +47,8 @@ const enrollment = await $fetch(
     method: "GET",
   },
 )
+const quizStore = useQuizStore()
+quizStore.setEnrollmentId(enrollment.id)
 
 const topics = enrollment.course.topics
 const totalTopics = topics.length

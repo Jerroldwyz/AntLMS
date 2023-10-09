@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   const enrollmentSchema = yup.object().shape({
     userId: yup.string().strict(),
-    courseId: yup.object().strict(),
+    courseId: yup.number().strict(),
   })
 
   await validator(enrollmentSchema, event)
