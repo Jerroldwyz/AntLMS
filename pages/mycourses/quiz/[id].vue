@@ -1,13 +1,14 @@
 <script setup>
 const route = useRoute()
 const quiz = ref(await fetchUserQuiz(route.params.id))
+const quizChange = ref(false)
 
 const id = ref(undefined)
 const handleClick = (questionId) => {
   id.value = questionId
 }
 
-const handleChange = async (questionData) => {
+const handleChange = async () => {
   quiz.value = await fetchUserQuiz(route.params.id)
 }
 </script>
@@ -25,7 +26,7 @@ const handleChange = async (questionData) => {
         @changed="handleChange"
       />
       <QuizList
-        :key="quiz"
+        :key="quizChange"
         :quiz="quiz"
         @clicked="handleClick"
       />
