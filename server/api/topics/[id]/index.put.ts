@@ -1,5 +1,5 @@
 import { InferType, number, object, string } from "yup"
-import { updateTopicTitle } from "~/server/utils/db/topic"
+import { updateTopic } from "~/server/utils/db/topic"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -15,7 +15,9 @@ export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
-    title: string().required(),
+    title: string().optional(),
+    position: number().optional().integer().min(1),
+    courseId: number().optional().integer().min(1),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({
@@ -28,7 +30,7 @@ export default defineEventHandler(async (event) => {
   try {
     const topicId = id
     const title = body.title
-    data = await updateTopicTitle(topicId, title)
+    data = await updateTopic(topicId, camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }

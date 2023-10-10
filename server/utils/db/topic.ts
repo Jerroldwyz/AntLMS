@@ -37,17 +37,12 @@ export const createTopic = async (topic_data: any) => {
   return await getTopicById(createdTopic.id)
 }
 
-export const updateTopicTitle = async (
-  topic_id: number,
-  topic_title: string,
-) => {
+export const updateTopic = async (topic_id: number, data: any) => {
   const updatedData = await prisma.topics.update({
     where: {
       id: topic_id,
     },
-    data: {
-      title: topic_title,
-    },
+    data,
   })
   return await getTopicById(updatedData.id)
 }

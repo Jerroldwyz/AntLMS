@@ -27,10 +27,13 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
+  let data
   try {
     const courseId = id
-    return await updateCourseById(courseId, camelCaseToUnderscore(body))
+    data = await updateCourseById(courseId, camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return courseTransformer(data)
 })
