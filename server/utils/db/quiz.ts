@@ -120,8 +120,7 @@ export const quizPassed = async (data: any) => {
     },
   })
   if (progress.length === 0) {
-    console.log("x")
-
+    console.log("quiz progress recorded")
     return await prisma.quiz_progress.create({
       data,
     })

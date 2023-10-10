@@ -2,6 +2,9 @@
 import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
 
 const courses = await fetchAllEnrolledCourses()
+const handleOnClick = async (courseId: number) => {
+  await navigateTo(`/courses/${courseId}`)
+}
 </script>
 
 <template>
@@ -12,6 +15,7 @@ const courses = await fetchAllEnrolledCourses()
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      @click="handleOnClick(course.id)"
     />
   </v-row>
 </template>

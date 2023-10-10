@@ -2,7 +2,6 @@ export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, "id")
   const query = getQuery(event)
   const courseId = query.courseId
-  console.log(courseId)
 
   try {
     return await getEnrollmentProgress(

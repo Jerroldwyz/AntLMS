@@ -1,11 +1,15 @@
 <template>
-  <v-footer>
+  <v-footer
+    absolute
+    inset
+    app
+  >
     <v-row
       justify="center"
       no-gutters
     >
       <v-col
-        class="text-center mt-4"
+        class="text-center"
         cols="12"
       >
         AntLMS &copy; {{ new Date().getFullYear() }}

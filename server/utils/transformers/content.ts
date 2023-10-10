@@ -9,8 +9,6 @@ type Content = {
 }
 
 export const contentTransformer = (content: any) => {
-  console.log(content)
-
   const val: Content = {
     id: content.id,
     title: content.title,

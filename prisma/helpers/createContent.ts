@@ -25,7 +25,8 @@ export const createMultipleContent = (topic: topics): content[] => {
 <p>${faker.lorem.paragraph(4)}</p>`,
       type: "TEXT",
       topic_id: topic.id,
-      topic_position: faker.number.int(2147483647),
+      // topic_position: faker.number.int(2147483647),
+      topic_position: i + 1,
     })
   }
   return contents
