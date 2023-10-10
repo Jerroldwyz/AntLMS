@@ -137,3 +137,17 @@ export const getEnrolledCourse = async (user_id: string, course_id: number) => {
     },
   })
 }
+
+export const createEnrollmentProgress = (
+  enrollmentId: number,
+  contentId: number,
+  userId: string,
+) => {
+  return prisma.progress.create({
+    data: {
+      enrollment_id: enrollmentId,
+      content_id: contentId,
+      user_id: userId,
+    },
+  })
+}

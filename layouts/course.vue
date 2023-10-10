@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex flex-col">
-    <CourseSideBar :course="enrollment.course" />
+    <CourseSideBar :course-id="enrollment.course.id" />
     <div class="mx-16">
       <slot />
     </div>
@@ -49,6 +49,8 @@ const enrollment = await $fetch(
 )
 const quizStore = useQuizStore()
 quizStore.setEnrollmentId(enrollment.id)
+const courseProgressStore = useCourseProgressStore()
+courseProgressStore.enrollmentId = enrollment.id
 
 const topics = enrollment.course.topics
 const totalTopics = topics.length

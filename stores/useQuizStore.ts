@@ -12,5 +12,18 @@ export const useQuizStore = defineStore("quiz-result", {
     setResult(result: any[]) {
       this.result = result
     },
+    async evaluateQuiz(quizId: string) {
+      const userStore = useUserStore()
+      const data = await $fetch(`/api/quiz/${quizId}/evaluate`, {
+        method: "post",
+        body: {
+          result: this.result,
+          enrollmentId: this.enrollmentId,
+          userId: userStore.user?.uid,
+        },
+      })
+
+      return data
+    },
   },
 })

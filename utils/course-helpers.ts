@@ -39,6 +39,14 @@ export async function fetchAllEnrolledCourses(): Promise<any> {
   return "ERROR: Not logged in"
 }
 
+export async function fetchEnrolledCourse(courseId: string | string[]) {
+  const userStore = useUserStore()
+  const userUid = userStore.user?.uid
+  return await $fetch(`/api/users/${userUid}/enrollments/${courseId}`, {
+    method: "GET",
+  })
+}
+
 // TODO: change any to proper type
 export async function fetchUserCourse(
   courseId: string | string[],

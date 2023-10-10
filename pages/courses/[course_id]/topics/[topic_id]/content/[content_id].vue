@@ -13,6 +13,11 @@
         class="border-opacity-100"
       ></v-divider>
       <div v-html="fetchedContent.value?.content"></div>
+      <v-btn
+        color="secondary"
+        @click="handleContentDone"
+        >Mark as done</v-btn
+      >
     </div>
   </div>
 </template>
@@ -38,6 +43,27 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+const handleContentDone = async () => {
+  const userStore = useUserStore()
+  const courseProgressStore = useCourseProgressStore()
+  try {
+    const result = await $fetch(`/api/users/${userStore.user?.uid}/progress`, {
+      method: "POST",
+      body: {
+        enrollmentId: courseProgressStore.enrollmentId,
+        contentId: route.params.content_id,
+        userId: userStore.user?.uid,
+      },
+    })
+
+    if (result) {
+      courseProgressStore.updateContentProgress(route.params.course_id)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <style scoped></style>

@@ -47,17 +47,12 @@ const onClick = () => {
   router.back()
 }
 const quizStore = useQuizStore()
-const userStore = useUserStore()
-const result = ref(quizStore.result)
-const data = await $fetch(`/api/quiz/${route.params.quiz_id}/evaluate`, {
-  method: "post",
-  body: {
-    result: result.value,
-    enrollmentId: quizStore.enrollmentId,
-    userId: userStore.user?.uid,
-  },
-})
+const data = await quizStore.evaluateQuiz(route.params.quiz_id as string)
 const quizPassed = data.correctAnswer >= data.threshold
+if (quizPassed) {
+  const courseProgressStore = useCourseProgressStore()
+  courseProgressStore.updateQuizProgress(route.params.course_id)
+}
 </script>
 
 <style scoped></style>
