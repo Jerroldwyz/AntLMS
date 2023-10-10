@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
     contactDetails: object().optional(),
-    thumbnail: string().optional().min(1),
+    thumbnail: string().nullable().optional().default(null),
     name: string().optional().min(1),
   })
   type requestBodyType = InferType<typeof requestBodySchema>

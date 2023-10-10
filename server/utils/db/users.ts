@@ -21,6 +21,8 @@ export const getUserById = (user_id: string) => {
       name: true,
       thumbnail: true,
       contact_details: true,
+      is_admin: true,
+      enabled: true,
     },
   })
 }
