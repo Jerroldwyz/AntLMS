@@ -3,7 +3,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "test": "vitest",
+    "test": "vitest --run",
     "coverage": "vitest run --coverage",
     "lint": "eslint . --fix --ext .ts,.vue",
     "compile": "vue-tsc --noEmit",
