@@ -33,6 +33,7 @@
               color="primary"
               :value="content.title"
               :to="contentPath(content.type, topic.id, content.id)"
+              :append-icon="setContentIcon(content)"
             >
               <v-icon
                 v-if="onContentComplete(content.type, content.id)"
