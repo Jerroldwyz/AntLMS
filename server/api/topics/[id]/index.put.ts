@@ -24,12 +24,14 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
+  let data
   try {
     const topicId = id
     const title = body.title
-    const topic = await updateTopicTitle(topicId, title)
-    return topicsTransformer(topic)
+    data = await updateTopicTitle(topicId, title)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return topicsTransformer(data)
 })

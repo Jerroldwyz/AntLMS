@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     type: string()
       .required()
       .matches(/(TEXT|VIDEO)/, { excludeEmptyString: true }),
-    content: string().nullable(),
+    content: string().nullable().default(null),
     topicId: number().required().integer().min(1),
     topicPosition: number().required().integer().min(1),
   })

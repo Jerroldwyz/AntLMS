@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   const requestBodySchema = object({
     title: string().optional(),
     enabled: bool().optional(),
-    thumbnail: string().nullable().optional(),
+    thumbnail: string().nullable().optional().default(null),
     creator_id: string().optional().uuid(),
   })
   type requestBodyType = InferType<typeof requestBodySchema>

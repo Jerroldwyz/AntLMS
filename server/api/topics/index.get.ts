@@ -14,11 +14,13 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad query params",
   })
 
+  let data
   try {
     const courseId = queryParams.courseId
-    const topic = await getTopics(courseId)
-    return topicsTransformer(topic)
+    data = await getTopics(courseId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return data.map((topic) => topicsTransformer(topic))
 })

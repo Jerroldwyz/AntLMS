@@ -28,11 +28,13 @@ export default defineEventHandler(async (event) => {
   })
 
   // Query DB
+  let data
   try {
     const quizId = id
-    const quiz = await updateQuiz(quizId, camelCaseToUnderscore(body))
-    return quizTransformer(quiz)
+    data = await updateQuiz(quizId, camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return quizTransformer(data)
 })

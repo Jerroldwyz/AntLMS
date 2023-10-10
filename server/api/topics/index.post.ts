@@ -17,10 +17,13 @@ export default defineEventHandler(async (event) => {
   })
 
   const prismaQuery = camelCaseToUnderscore(body)
+
+  let data
   try {
-    const topic = await createTopic(prismaQuery)
-    return topicsTransformer(topic)
+    data = await createTopic(prismaQuery)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return topicsTransformer(data)
 })

@@ -6,7 +6,11 @@ export const getTopicById = (topic_id: number) => {
       id: topic_id,
     },
     select: {
+      id: true,
       title: true,
+      course_id: true,
+      content: true,
+      position: true,
     },
   })
 }
@@ -19,18 +23,25 @@ export const getTopics = (course_id: number) => {
     select: {
       id: true,
       title: true,
+      course_id: true,
+      content: true,
+      position: true,
     },
   })
 }
 
-export const createTopic = (topic_data: any) => {
-  return prisma.topics.create({
+export const createTopic = async (topic_data: any) => {
+  const createdTopic = await prisma.topics.create({
     data: topic_data,
   })
+  return await getTopicById(createdTopic.id)
 }
 
-export const updateTopicTitle = (topic_id: number, topic_title: string) => {
-  return prisma.topics.update({
+export const updateTopicTitle = async (
+  topic_id: number,
+  topic_title: string,
+) => {
+  const updatedData = await prisma.topics.update({
     where: {
       id: topic_id,
     },
@@ -38,12 +49,15 @@ export const updateTopicTitle = (topic_id: number, topic_title: string) => {
       title: topic_title,
     },
   })
+  return await getTopicById(updatedData.id)
 }
 
-export const deleteTopic = (topic_id: number) => {
-  return prisma.topics.delete({
+export const deleteTopic = async (topic_id: number) => {
+  const prefetchedTopic = await getTopicById(topic_id)
+  await prisma.topics.delete({
     where: {
       id: topic_id,
     },
   })
+  return prefetchedTopic
 }

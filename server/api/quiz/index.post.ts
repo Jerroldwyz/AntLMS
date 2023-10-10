@@ -18,10 +18,11 @@ export default defineEventHandler(async (event) => {
   })
 
   // Query DB
+  let data
   try {
-    const quiz = await createQuiz(camelCaseToUnderscore(body))
-    return quizTransformer(quiz)
+    data = await createQuiz(camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  return quizTransformer(data)
 })
