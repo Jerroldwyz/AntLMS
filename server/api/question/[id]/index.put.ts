@@ -18,8 +18,8 @@ export default defineEventHandler(async (event) => {
       .optional()
       .of(
         object({
-          choice_text: string().required(),
-          is_correct: bool().required(),
+          choiceText: string().required(),
+          isCorrect: bool().required(),
         }),
       ),
     questionText: string().optional(),
@@ -32,24 +32,23 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  const questionId = id
+  let data
   try {
+    const questionId = id
     // TODO, make this better, maybe one function?
-    let question
     if (body.choices) {
-      question = await updateChoice(questionId, body.choices)
+      data = await updateChoice(questionId, body.choices)
     }
-
     if (body.questionText && body.explanation) {
-      question = await updateQuestion(
+      data = await updateQuestion(
         questionId,
         body.questionText,
         body.explanation,
       )
     }
-
-    return questionsTransformer(question)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return questionsTransformer(data)
 })

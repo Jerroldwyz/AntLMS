@@ -41,10 +41,11 @@ export default defineEventHandler(async (event) => {
     },
   }
 
+  let data
   try {
-    const question = await createQuestion(prismaData)
-    return questionsTransformer(question)
+    data = await createQuestion(prismaData)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  return questionsTransformer(data)
 })

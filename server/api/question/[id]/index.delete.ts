@@ -12,11 +12,12 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request router params",
   })
 
+  let data
   try {
     const questionId = id
-    const question = await deleteQuestion(questionId)
-    return questionsTransformer(question)
+    data = await deleteQuestion(questionId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  return questionsTransformer(data)
 })

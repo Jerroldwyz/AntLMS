@@ -1,4 +1,5 @@
 import { InferType, number } from "yup"
+import { deleteCourse } from "~/server/utils/db/mycourse"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -11,11 +12,13 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request router params",
   })
 
+  let data
   try {
     const courseId = id
-    const mycourse = await deleteCourse(courseId)
-    return mycourseTransformer(mycourse)
+    data = await deleteCourse(courseId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return courseTransformer(data)
 })
