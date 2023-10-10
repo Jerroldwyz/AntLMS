@@ -22,6 +22,8 @@ export default defineEventHandler(async (event) => {
 
     return questionsTransformer(question)
   } catch (e) {
+    console.log(e)
+
     return sendError(event, prismaErrorHandler(e))
   }
 })

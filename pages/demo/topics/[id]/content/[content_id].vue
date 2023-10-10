@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const { data } = await useFetch(`/api/content/${route.params.id}`, {
+const { data } = await useFetch(`/api/content/${route.params.content_id}`, {
   method: "GET",
 })
 </script>

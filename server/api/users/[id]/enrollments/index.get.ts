@@ -1,8 +1,8 @@
 export default defineEventHandler(async (event) => {
-  const query = await getQuery(event)
+  const userId = getRouterParam(event, "id")
 
   try {
-    return await getEnrollment(query.userId as string)
+    return await getEnrollment(userId as string)
   } catch (e) {
     return sendError(event, prismaErrorHandler(e))
   }
