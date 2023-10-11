@@ -61,4 +61,13 @@ function performSearch() {
     })
   }, 1000)
 }
+
+// const searchResults = computed(() => {
+//   const query = router.currentRoute.value.query.searchQuery;
+//   if (query) {
+//     // Call your fetchSearchQuery function with the query and return the results
+//     return fetchSearchQuery(searchQuery.value.toLowerCase());
+//   }
+//   return [];
+// });
 </script>
