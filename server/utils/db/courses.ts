@@ -1,6 +1,21 @@
 import { prisma } from "."
 import { CourseQueryStatus } from "~/types"
 
+export const getCourseByName = (course_title: string) => {
+  return prisma.courses.findMany({
+    where: {
+      title: {
+        contains: course_title,
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+    },
+  })
+}
+
 export const getCourseByTagId = (tag_ids: number[]) => {
   return prisma.courses.findMany({
     where: {

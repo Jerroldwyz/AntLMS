@@ -14,7 +14,7 @@ export async function fetchAllCourses() {
 export async function fetchSearchQuery(searchQuery: string) {
   const allCourses = await $fetch("/api/courses/search", {
     method: "get",
-    query: { tag_name: searchQuery },
+    query: { searchQuery },
   })
 
   return allCourses
