@@ -1,58 +1,71 @@
-<script setup>
-const props = defineProps({
-  id: Number,
-  text: String,
-  explanation: String,
-  choices: Array,
-  answer: Number,
-})
+<script setup lang="ts">
+interface Choice {
+  id: number
+  choiceText: string
+  isCorrect: boolean
+}
+
+const props = defineProps<{
+  keyIndex: number
+  id: number
+  text: string
+  explanation: string
+  choices: Choice[]
+}>()
 
 const emit = defineEmits(["update:answer"])
+
+const onUpdate = (event: any) => {
+  emit("update:answer", event)
+}
 </script>
 
 <template>
-  <v-card class="quiz-box">
-    <v-card-title class="quiz-box-title">{{ props.text }}</v-card-title>
-    <v-card-text>{{ props.explanation }}</v-card-text>
-    <v-card-text class="quiz-box-body">
-      <v-list>
-        <v-radio-group @update:model-value="emit('update:answer', $event)">
-          <v-radio
-            v-for="choice in props.choices"
-            :key="choice.id"
-            class="quiz-box-radio"
-            :label="choice.choiceText"
-            :value="choice.id"
-          ></v-radio>
-        </v-radio-group>
-      </v-list>
-    </v-card-text>
-  </v-card>
+  <div class="ma-7">
+    <p class="text-body-1 font-weight-bold">
+      Question {{ props.keyIndex + 1 }}
+      <span class="text-red text-h5">*</span>
+    </p>
+    <v-card
+      class="elevation-10"
+      variant="elevated"
+      color="surface"
+    >
+      <v-card-title>{{ props.text }}</v-card-title>
+      <v-card-text>
+        <div class="text-body-1 py-3">
+          {{ props.explanation }}
+        </div>
+        <v-divider
+          :thickness="2"
+          class="border-opacity-75"
+        ></v-divider>
+        <v-list>
+          <v-radio-group @update:model-value="onUpdate($event)">
+            <div
+              v-for="choice in props.choices"
+              :key="choice.id"
+            >
+              <v-radio
+                :label="choice.choiceText"
+                :value="choice.id"
+                color="primary"
+              ></v-radio>
+              <v-divider
+                :thickness="1"
+                class="border-opacity-25"
+              ></v-divider>
+            </div>
+          </v-radio-group>
+        </v-list>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <style scoped>
-.quiz-box {
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid black;
-  border-radius: 4px;
-  margin: 16px;
-}
-
-.quiz-box-title {
-  background-color: lightblue;
-  color: white;
-  padding: 8px;
-  border-radius: 4px 4px 0 0;
-}
-
-.v-card-text {
-  color: black;
-  padding: 16px;
-}
-
-.quiz-box-radio {
-  border-bottom: 1px solid black;
-  padding: 2px;
+.v-card-title {
+  color: aliceblue;
+  background-color: #3700b3;
 }
 </style>

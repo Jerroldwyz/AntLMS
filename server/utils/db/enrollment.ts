@@ -88,3 +88,66 @@ export const getEnrollmentProgress = async (
     return 0
   }
 }
+
+export const getEnrolledCourse = async (user_id: string, course_id: number) => {
+  return await prisma.enrollments.findFirst({
+    where: {
+      user_id,
+      course_id,
+    },
+    select: {
+      id: true,
+      course: {
+        select: {
+          id: true,
+          title: true,
+          thumbnail: true,
+          creator: {
+            select: {
+              name: true,
+            },
+          },
+          topics: {
+            select: {
+              id: true,
+              title: true,
+              content: {
+                select: {
+                  id: true,
+                  title: true,
+                  type: true,
+                  topic_position: true,
+                  topic_id: true,
+                },
+              },
+              quizzes: {
+                select: {
+                  id: true,
+                  title: true,
+                  topic_position: true,
+                  topic_id: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      progress: true,
+      quiz_progress: true,
+    },
+  })
+}
+
+export const createEnrollmentProgress = (
+  enrollmentId: number,
+  contentId: number,
+  userId: string,
+) => {
+  return prisma.progress.create({
+    data: {
+      enrollment_id: enrollmentId,
+      content_id: contentId,
+      user_id: userId,
+    },
+  })
+}
