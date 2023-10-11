@@ -25,7 +25,7 @@ export const uploadImage = async (file: File): Promise<string> => {
 export const getImage = async (path: string): Promise<string> => {
   const { data } = await useFetch(`/api/images`, {
     method: "GET",
-    params: { path },
+    query: { path },
   })
   return data.value?.presignedUrl as string
 }
