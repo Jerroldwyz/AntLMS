@@ -1,25 +1,42 @@
+import { number, object, string, InferType } from "yup"
+import { camelCaseToUnderscore } from "~/server/utils/camelCaseToUnderscore"
+import { updateContent } from "~/server/utils/db/content"
+
 export default defineEventHandler(async (event) => {
-  const contentId = getRouterParam(event, "id")
-  const body = await readBody(event)
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    title: string().optional(),
+    type: string()
+      .optional()
+      .matches(/(TEXT|VIDEO)/, { excludeEmptyString: true }),
+    content: string().nullable().optional(),
+    topicId: number().optional().min(1),
+    topicPosition: number().optional().min(1),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
+
+  let data
   try {
-    if (body.content) {
-      await updateContent(parseInt(contentId as string), body.content as string)
-    }
-
-    if (body.contentPosition) {
-      await updateContentPosition(
-        parseInt(contentId as string),
-        parseInt(body.contentPosition as string),
-      )
-    }
-
-    if (body.title) {
-      await updateTitle(parseInt(contentId as string), body.title as string)
-    }
-
-    return 0
+    const contentId = id
+    data = await updateContent(contentId, camelCaseToUnderscore(body))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+  return contentTransformer(data)
 })

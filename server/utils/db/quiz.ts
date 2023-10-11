@@ -1,13 +1,16 @@
 import { prisma } from "."
 
-export const getQuizById = (quiz_id: number) => {
-  const quiz = prisma.quizzes.findUnique({
+export const getQuizzes = (topicId: number) => {
+  const quiz = prisma.quizzes.findMany({
     where: {
-      id: quiz_id,
+      topic_id: topicId,
     },
     select: {
+      id: true,
       title: true,
       topic_id: true,
+      threshold: true,
+      topic_position: true,
       questions: {
         select: {
           id: true,
@@ -28,40 +31,62 @@ export const getQuizById = (quiz_id: number) => {
   return quiz
 }
 
-export const createQuiz = (quiz_data: any) => {
-  return prisma.quizzes.create({
+export const getQuizById = (quiz_id: number) => {
+  const quiz = prisma.quizzes.findUnique({
+    where: {
+      id: quiz_id,
+    },
+    select: {
+      id: true,
+      title: true,
+      topic_id: true,
+      threshold: true,
+      topic_position: true,
+      questions: {
+        select: {
+          id: true,
+          question_text: true,
+          explanation: true,
+          choices: {
+            select: {
+              id: true,
+              choice_text: true,
+              is_correct: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return quiz
+}
+
+export const createQuiz = async (quiz_data: any) => {
+  const newQuiz = await prisma.quizzes.create({
     data: quiz_data,
   })
+  return await getQuizById(newQuiz.id)
 }
 
-export const updateQuizTitle = (quiz_id: number, quiz_title: string) => {
-  return prisma.quizzes.update({
+export const updateQuiz = async (quiz_id: number, quiz_data: any) => {
+  const updatedQuiz = await prisma.quizzes.update({
     where: {
       id: quiz_id,
     },
-    data: {
-      title: quiz_title,
-    },
+    data: quiz_data,
   })
+  return await getQuizById(updatedQuiz.id)
 }
 
-export const updateQuizPosition = (quiz_id: number, quiz_position: number) => {
-  return prisma.quizzes.update({
-    where: {
-      id: quiz_id,
-    },
-    data: {
-      topic_position: quiz_position,
-    },
-  })
-}
-
-export const deleteQuiz = (quiz_id: number) => {
-  return prisma.quizzes.delete({
+export const deleteQuiz = async (quiz_id: number) => {
+  const prefetchedQuiz = await getQuizById(quiz_id)
+  await prisma.quizzes.delete({
     where: {
       id: quiz_id,
     },
   })
+  return prefetchedQuiz
 }
 
 export const evaluateQuiz = (result: number[]) => {
@@ -72,20 +97,16 @@ export const evaluateQuiz = (result: number[]) => {
   })
 }
 
-// TODO is there a equivalent function now Sahil?
-
 export const quizPassed = async (data: any) => {
-  // TODO ????
-  // const progress = await prisma.quiz_progress.findMany({
-  //   where: {
-  //     user_id: data.user_id,
-  //     quiz_id: data.quiz_id,
-  //   },
-  // })
-  // if (progress.length === 0) {
-  //   console.log("x")
-  //   return await prisma.quiz_progress.create({
-  //     data,
-  //   })
-  // }
+  const progress = await prisma.quiz_progress.findMany({
+    where: {
+      user_id: data.user_id,
+      quiz_id: data.quiz_id,
+    },
+  })
+  if (progress.length === 0) {
+    return await prisma.quiz_progress.create({
+      data,
+    })
+  }
 }

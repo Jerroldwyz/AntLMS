@@ -1,9 +1,26 @@
-export default defineEventHandler(async (event) => {
-  const body = await getQuery(event)
+import { InferType, number, object } from "yup"
+import { getTopics } from "~/server/utils/db/topic"
 
+export default defineEventHandler(async (event) => {
+  // Query params
+  const unvalidatedQueryParams = getQuery(event)
+  const queryParamsSchema = object({
+    courseId: number().required().min(1).integer(),
+  })
+  type queryParamsType = InferType<typeof queryParamsSchema>
+  const queryParams = await validateAndParse<queryParamsType>({
+    schema: queryParamsSchema,
+    value: unvalidatedQueryParams,
+    msgOnError: "Bad query params",
+  })
+
+  let data
   try {
-    return await getTopics(parseInt(body.courseId as string))
+    const courseId = queryParams.courseId
+    data = await getTopics(courseId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+
+  return data.map((topic) => topicsTransformer(topic))
 })

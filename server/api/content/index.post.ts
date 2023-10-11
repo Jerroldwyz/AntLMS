@@ -1,17 +1,30 @@
-import { content_type } from "@prisma/client"
+import { string, object, number, InferType } from "yup"
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    title: string().required(),
+    type: string()
+      .required()
+      .matches(/(TEXT|VIDEO)/, { excludeEmptyString: true }),
+    content: string().nullable().default(null),
+    topicId: number().required().integer().min(1),
+    topicPosition: number().required().integer().min(1),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
-  const prismaData = {
-    title: body.title as string,
-    type: body.type as content_type,
-    content: body.content as string,
-    topic_id: body.topicId as number,
-  }
-
+  const prismaData = camelCaseToUnderscore(body)
+  let data
   try {
-    return await createContent(prismaData)
+    data = await createContent(prismaData)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+  return contentTransformer(data)
 })

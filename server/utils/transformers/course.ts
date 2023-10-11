@@ -1,9 +1,10 @@
 import { content_type } from "@prisma/client"
 
-export const courseTransformer = (course: any, user_id: string) => {
+export const courseTransformer = (course: any, user_id?: string) => {
   return {
     id: course.id,
     title: course.title,
+    enabled: course.enabled,
     thumbnail: course.thumbnail ?? "",
     creator: course.creator.name ?? "",
     topics: course.topics.map((topic: any) => {

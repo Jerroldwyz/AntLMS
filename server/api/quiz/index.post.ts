@@ -1,18 +1,28 @@
+import { InferType, number, object, string } from "yup"
+import { createQuiz } from "~/server/utils/db/quiz"
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    topic_id: number().required().integer().min(1),
+    title: string().required(),
+    topic_position: number().required().integer().min(1),
+    threshold: number().required().integer().positive(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
-  const prismaData = {
-    topic_id: parseInt(body.topicId as string),
-    title: body.title as string,
-    topic_position: parseInt(body.topicPosition as string),
-    threshold: parseInt(body.threshold as string),
-  }
-
+  // Query DB
+  let data
   try {
-    const quiz = await createQuiz(prismaData)
-
-    return quizTransformer(quiz)
+    data = await createQuiz(camelCaseToUnderscore(body))
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+  return quizTransformer(data)
 })

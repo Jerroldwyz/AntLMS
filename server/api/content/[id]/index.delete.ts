@@ -1,8 +1,24 @@
+import { InferType, number } from "yup"
+import { deleteContent } from "~/server/utils/db/content"
+
 export default defineEventHandler(async (event) => {
-  const contentId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
+
+  let data
   try {
-    return await deleteContent(parseInt(contentId as string))
+    const contentId = id
+    data = await deleteContent(contentId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+
+  return contentTransformer(data)
 })

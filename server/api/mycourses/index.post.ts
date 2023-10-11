@@ -1,12 +1,32 @@
-import { Course } from "~~/types"
+import { InferType, bool, object, string } from "yup"
+import { createCourse } from "~/server/utils/db/mycourse"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
-  const course: Course = body
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    title: string().required(),
+    enabled: bool().required().default(true),
+    thumbnail: string().nullable().optional().default(null),
+    creatorId: string().required().uuid(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
+  // Query DB
+  const course = camelCaseToUnderscore(body)
+
+  console.log(course)
+  let data
   try {
-    return await createCourse(course)
+    data = await createCourse(course)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+
+  return courseTransformer(data)
 })

@@ -1,5 +1,4 @@
 import { prisma } from "."
-import { Course } from "~~/types"
 
 export const getCreatorCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
@@ -7,6 +6,7 @@ export const getCreatorCourseById = (course_id: number) => {
       id: course_id,
     },
     select: {
+      id: true,
       title: true,
       enabled: true,
       thumbnail: true,
@@ -66,88 +66,34 @@ export const getCreatorCourses = (creator_id: string) => {
   })
 }
 
-export const createCourse = (course_data: Course) => {
-  return prisma.courses.create({
-    data: {
-      title: course_data.title,
-      creator_id: course_data.creatorId,
-      thumbnail: course_data.thumbnail,
-      course_tags: {
-        create: course_data.tags.map((tag: string) => ({
-          tag: {
-            connectOrCreate: {
-              where: { name: tag },
-              create: { name: tag },
-            },
-          },
-        })),
-      },
-    },
+export const createCourse = async (data: any) => {
+  const createdData = await prisma.courses.create({
+    data,
     include: {
       course_tags: true,
     },
   })
+  return await getCreatorCourseById(createdData.id)
 }
 
-export const updateCourseTitle = (account_id: number, course_title: string) => {
-  return prisma.courses.update({
-    where: {
-      id: account_id,
-    },
-    data: {
-      title: course_title,
-    },
-  })
-}
-
-export const updateCourseThumbnail = (course_id: number, thumbnail: string) => {
-  return prisma.courses.update({
+export const updateCourse = async (course_id: number, course_data: any) => {
+  const updatedData = await prisma.courses.update({
     where: {
       id: course_id,
     },
     data: {
-      thumbnail,
+      ...course_data,
     },
   })
+  return await getCreatorCourseById(updatedData.id)
 }
 
-export const disableCourse = (course_id: number) => {
-  return prisma.courses.update({
-    where: {
-      id: course_id,
-    },
-    data: {
-      enabled: false,
-    },
-  })
-}
-
-export const enableCourse = (course_id: number) => {
-  return prisma.courses.update({
-    where: {
-      id: course_id,
-    },
-    data: {
-      enabled: true,
-    },
-  })
-}
-
-export const setCourseEnabled = (course_id: number, enabled: boolean) => {
-  return prisma.courses.update({
-    where: {
-      id: course_id,
-    },
-    data: {
-      enabled,
-    },
-  })
-}
-
-export const deleteCourse = (course_id: number) => {
-  return prisma.courses.delete({
+export const deleteCourse = async (course_id: number) => {
+  const prefetchedData = await getCreatorCourseById(course_id)
+  await prisma.courses.delete({
     where: {
       id: course_id,
     },
   })
+  return prefetchedData
 }

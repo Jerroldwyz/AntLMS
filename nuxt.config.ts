@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       "process.env.DEBUG": true,
     },
   },
-  ssr: true,
+  ssr: false,
   // typescript: {
   //   typeCheck: true
   // },

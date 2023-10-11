@@ -1,16 +1,26 @@
+import { InferType, number, object, string } from "yup"
+import { createManager } from "~/server/utils/db/admin"
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    name: string().required(),
+    email: string().email().required(),
+    roleId: number().optional().min(1),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
-  // TODO VALIDATION REQUIRED
-  const name = body.name
-  const email = body.email
-  const roleId = body.role_id
-
-  console.log(body)
-
+  // Query DB
   try {
+    const { name, email, roleId } = body
     return await createManager(name, email, roleId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

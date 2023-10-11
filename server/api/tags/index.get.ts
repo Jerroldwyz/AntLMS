@@ -1,3 +1,9 @@
+import { getTags } from "~/server/utils/db/tags"
+
 export default defineEventHandler(async (event) => {
-  return await getTags()
+  try {
+    return await getTags()
+  } catch (e) {
+    throw prismaErrorHandler(e)
+  }
 })
