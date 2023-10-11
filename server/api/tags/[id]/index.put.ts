@@ -1,5 +1,36 @@
+import { InferType, number, object, string } from "yup"
+import { updateTag } from "~/server/utils/db/tags"
+
 export default defineEventHandler(async (event) => {
-  const tagId = getRouterParam(event, "id")
-  const body = await readBody(event)
-  return await updateTag(parseInt(tagId as string), body.name as string)
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
+
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    name: string().required(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
+
+  const prismaQuery = camelCaseToUnderscore(body)
+
+  // Query DB
+  try {
+    const tagId = id
+    return await updateTag(tagId, prismaQuery)
+  } catch (e) {
+    throw prismaErrorHandler(e)
+  }
 })

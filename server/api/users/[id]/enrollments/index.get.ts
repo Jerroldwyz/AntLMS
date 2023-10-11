@@ -1,9 +1,21 @@
+import { InferType, string } from "yup"
+import { getEnrollment } from "~/server/utils/db/enrollment"
+
 export default defineEventHandler(async (event) => {
-  const userId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    return await getEnrollment(userId as string)
+    const userUid = id
+    return await getEnrollment(userUid)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

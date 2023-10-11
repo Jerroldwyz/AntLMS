@@ -3,6 +3,8 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "test": "vitest --run",
+    "coverage": "vitest run --coverage",
     "lint": "eslint . --fix --ext .ts,.vue",
     "compile": "vue-tsc --noEmit",
     "generate": "nuxt generate",
@@ -34,13 +36,16 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@nuxt/test-utils": "^3.7.4",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/node": "^20.4.10",
     "@types/uuid": "^9.0.3",
     "@types/yup": "^0.32.0",
+    "@typescript-eslint/parser": "^6.7.4",
     "axios": "^1.5.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^9.17.0",
     "eslint-plugin-vuetify": "^2.0.5",
@@ -52,6 +57,7 @@
     "radash": "^11.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
+    "vitest": "^0.34.6",
     "vue-tsc": "^1.8.11"
   },
   "lint-staged": {

@@ -9,6 +9,7 @@ export const getCourseById = (course_id: number) => {
     select: {
       id: true,
       title: true,
+      enabled: true,
       thumbnail: true,
       creator: {
         select: {
@@ -59,9 +60,7 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = (
-  status: CourseQueryStatus = CourseQueryStatus.all,
-) => {
+export const getAllCourses = (status: string = "all") => {
   const select = {
     id: true,
     title: true,
@@ -76,17 +75,17 @@ export const getAllCourses = (
   let where
 
   switch (status) {
-    case CourseQueryStatus.all:
+    case "all":
       where = {}
       break
-    case CourseQueryStatus.enabled:
+    case "enabled":
       where = { enabled: { equals: true } }
       break
-    case CourseQueryStatus.disabled:
+    case "disabled":
       where = { enabled: { equals: false } }
       break
-
     default:
+      where = {}
       break
   }
 
@@ -94,4 +93,14 @@ export const getAllCourses = (
     where,
     select,
   })
+}
+
+export const updateCourseById = async (courseId: number, data: any) => {
+  await prisma.courses.update({
+    where: {
+      id: courseId,
+    },
+    data,
+  })
+  return await getCourseById(courseId)
 }

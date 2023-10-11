@@ -1,7 +1,7 @@
 import { Readable } from "stream"
 import * as Minio from "minio"
 
-const localConfig = {
+const localConfig: Minio.ClientOptions = {
   endPoint: "localhost", // Replace with your Minio server's endpoint
   port: 9000, // Specify the port (e.g., 9000 for Minio's default)
   useSSL: false, // Set to true if your Minio server uses SSL
@@ -17,7 +17,8 @@ const prodConfig: Minio.ClientOptions = {
   secretKey: process.env.AWS_SECRET_ACCESS_KEY!,
 }
 
-const config = process.env.NODE_ENV === "production" ? prodConfig : localConfig
+const config =
+  process.env.APPLICATION === "production" ? prodConfig : localConfig
 
 // Initialize the Minio client
 const minioClient = new Minio.Client(config)
