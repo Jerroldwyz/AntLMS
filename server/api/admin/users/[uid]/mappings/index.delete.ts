@@ -1,11 +1,33 @@
+import { InferType, object, string, number } from "yup"
+
 export default defineEventHandler(async (event) => {
-  const managerId = getRouterParam(event, "uid")
-  const body = await readBody(event)
-  const roleId = body.roleId
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
+
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    roleId: number().required().integer().min(1),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
   try {
-    return await deleteManagerRoleMapping(managerId as string, roleId)
+    const managerId = id
+    const roleId = body.roleId
+    return await deleteManagerRoleMapping(managerId, roleId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

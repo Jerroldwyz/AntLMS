@@ -1,9 +1,24 @@
+import { InferType, number } from "yup"
+import { deleteTopic } from "~/server/utils/db/topic"
+
 export default defineEventHandler(async (event) => {
-  const topicId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
+
+  let data
   try {
-    const topic = await deleteTopic(parseInt(topicId as string))
-    return topicsTransformer(topic)
+    const topicId = id
+    data = await deleteTopic(topicId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
+
+  return topicsTransformer(data)
 })

@@ -40,7 +40,7 @@ export const getPermissions = async (): Promise<any> => {
   return data
 }
 
-export const getPermissionById = async (id: number): Promise<any> => {
+export const getPermissionById = async (id: number) => {
   const { data } = await useFetch(`/api/admin/permissions/${id}`, {
     method: "get",
   })
