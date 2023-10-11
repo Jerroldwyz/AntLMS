@@ -11,6 +11,15 @@ export async function fetchAllCourses() {
   return data
 }
 
+export async function fetchSearchQuery(searchQuery: string) {
+  const allCourses = await $fetch("/api/courses", {
+    method: "get",
+    query: { searchQuery },
+  })
+
+  return allCourses
+}
+
 // TODO: change any to proper type
 export async function fetchAllUserCreatedCourses(): Promise<any> {
   const userStore = useUserStore()
@@ -37,6 +46,14 @@ export async function fetchAllEnrolledCourses(): Promise<any> {
   }
   // TODO: Throw error?
   return "ERROR: Not logged in"
+}
+
+export async function fetchEnrolledCourse(courseId: string | string[]) {
+  const userStore = useUserStore()
+  const userUid = userStore.user?.uid
+  return await $fetch(`/api/users/${userUid}/enrollments/${courseId}`, {
+    method: "GET",
+  })
 }
 
 // TODO: change any to proper type

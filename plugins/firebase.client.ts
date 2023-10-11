@@ -11,7 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const userStore = useUserStore()
 
-  nuxtApp.hooks.hook("app:mounted", async () => {
+  nuxtApp.hooks.hook("app:beforeMount", async () => {
     if (appConfig() === "development") {
       const dummyUser = await $fetch("/api/me")
       userStore.user = dummyUser as User

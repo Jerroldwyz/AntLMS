@@ -35,11 +35,18 @@
         </template>
 
         <v-list-item
+          title="Explore"
+          prepend-icon="mdi-circle-small"
+          to="/explore"
+        >
+        </v-list-item>
+
+        <v-list-item
           v-for="(browseTitle, i) in browse"
           :key="i"
           :title="browseTitle"
           prepend-icon="mdi-circle-small"
-          href="?"
+          @click="navigateToSearch(browseTitle)"
         >
         </v-list-item>
       </v-list-group>
@@ -81,10 +88,15 @@
 
 <script setup lang="ts">
 const courses = await fetchAllEnrolledCourses()
-const browse = ["Browse all", "Creative", "Technology", "Business"]
+const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 
-// console.log(courses)
+const router = useRouter()
+
+function navigateToSearch(title: string) {
+  title = title.toLowerCase()
+  router.push({ path: "/search", query: { searchQuery: title } })
+}
 </script>
 
 <style>

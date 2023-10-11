@@ -1,6 +1,48 @@
 import { prisma } from "."
 import { CourseQueryStatus } from "~/types"
 
+export const getCourseByName = (
+  course_title: string,
+  enabled: boolean | undefined = undefined,
+) => {
+  return prisma.courses.findMany({
+    where: {
+      title: {
+        contains: course_title,
+      },
+      enabled,
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+    },
+  })
+}
+
+export const getCourseByTagId = (
+  tag_ids: number[],
+  enabled: boolean | undefined = undefined,
+) => {
+  return prisma.courses.findMany({
+    where: {
+      enabled,
+      course_tags: {
+        some: {
+          tag_id: {
+            in: tag_ids,
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+    },
+  })
+}
+
 export const getCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
     where: {
@@ -60,38 +102,22 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = (status: string = "all") => {
-  const select = {
-    id: true,
-    title: true,
-    enabled: true,
-    thumbnail: true,
-    creator: {
-      select: {
-        name: true,
+export const getAllCourses = (status: boolean | undefined = undefined) => {
+  return prisma.courses.findMany({
+    where: {
+      enabled: status,
+    },
+    select: {
+      id: true,
+      title: true,
+      enabled: true,
+      thumbnail: true,
+      creator: {
+        select: {
+          name: true,
+        },
       },
     },
-  }
-  let where
-
-  switch (status) {
-    case "all":
-      where = {}
-      break
-    case "enabled":
-      where = { enabled: { equals: true } }
-      break
-    case "disabled":
-      where = { enabled: { equals: false } }
-      break
-    default:
-      where = {}
-      break
-  }
-
-  return prisma.courses.findMany({
-    where,
-    select,
   })
 }
 
