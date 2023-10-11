@@ -1,3 +1,4 @@
+import { getAuth } from "firebase-admin/auth"
 import { InferType, string } from "yup"
 import { deleteUser } from "~/server/utils/db/users"
 
@@ -14,6 +15,9 @@ export default defineEventHandler(async (event) => {
 
   try {
     const userId = id
+    const app = useFirebaseAdmin()!
+    const auth = getAuth(app)
+    await auth.deleteUser(userId as string)
     return await deleteUser(userId)
   } catch (e) {
     throw prismaErrorHandler(e)

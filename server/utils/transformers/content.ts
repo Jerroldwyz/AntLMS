@@ -1,6 +1,4 @@
 export const contentTransformer = (content: any) => {
-  console.log(content)
-
   const val: any = {
     id: content.id,
     topicId: content.topic_id,

@@ -47,14 +47,8 @@
 </template>
 
 <script setup lang="ts">
-const userStore = useUserStore()
-
-if (userStore.isAdmin) setPageLayout("admin")
-else setPageLayout("default")
-
 definePageMeta({
   middleware: ["user"],
-  layout: false,
 })
 
 const tab = ref("option-1")

@@ -4,6 +4,8 @@ const props = defineProps(["quizId"])
 const emit = defineEmits(["clicked"])
 const quiz = await fetchUserQuiz(props.quizId)
 const dialog = ref(false)
+const threshold = ref(0)
+const thresholdAlert = ref(false)
 
 const deleteQuestion = async (id, index) => {
   try {
@@ -11,21 +13,62 @@ const deleteQuestion = async (id, index) => {
     quiz.value.questions.splice(index, 1)
   } catch (e) {}
 }
+
+const setThreshold = async () => {
+  try {
+    await $fetch(`/api/quiz/${props.quizId}`, {
+      method: "put",
+      body: {
+        threshold: threshold.value,
+      },
+    })
+    thresholdAlert.value = true
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
 <template>
   <v-card class="w-100">
+    <v-alert
+      v-model="thresholdAlert"
+      border="start"
+      variant="tonal"
+      closable
+      close-label="Close Alert"
+      color="green"
+    >
+      Threshold has been set
+    </v-alert>
     <v-container>
       <v-row>
         <v-col class="d-flex justify-start align-center">
           <h4 class="text-h4">Quiz</h4>
         </v-col>
+        <v-col> </v-col>
         <v-col class="d-flex justify-end align-center">
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
             @click="emit('clicked', undefined)"
           ></v-btn>
+        </v-col>
+      </v-row>
+      <v-divider></v-divider>
+      <v-row style="padding: 10%">
+        <v-col class="d-flex justify-end align-center">
+          <v-text-field
+            v-model="threshold"
+            label="Threshold"
+            type="number"
+            variant="underlined"
+          />
+          <v-btn
+            variant="elevated"
+            @click="setThreshold"
+            >Set</v-btn
+          >
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -38,7 +81,7 @@ const deleteQuestion = async (id, index) => {
           @click="emit('clicked', question.id)"
         >
           <v-icon icon="mdi-help" />
-          {{ question.questionText }}
+          <div v-html="question.questionText"></div>
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <v-btn
