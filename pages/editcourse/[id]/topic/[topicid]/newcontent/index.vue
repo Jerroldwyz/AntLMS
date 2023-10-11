@@ -31,6 +31,7 @@ function addContent() {
         path: `newcontent/quiz`,
         query: {
           title: title.value,
+          position: route.query.position,
         },
       })
       break
@@ -39,6 +40,7 @@ function addContent() {
         path: `newcontent/text`,
         query: {
           title: title.value,
+          position: route.query.position,
         },
       })
       break
@@ -47,6 +49,7 @@ function addContent() {
         path: `newcontent/video`,
         query: {
           title: title.value,
+          position: route.query.position,
         },
       })
       break

@@ -51,7 +51,13 @@ async function handleContentDelete(contentId: number) {
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
-            @click="navigateTo(`${route.params.id}/newtopic`)"
+            @click="
+              navigateTo(
+                `${route.params.id}/newtopic?position=${
+                  course.topics.length + 1
+                }`,
+              )
+            "
           ></v-btn>
         </v-col>
       </v-row>
@@ -85,9 +91,11 @@ async function handleContentDelete(contentId: number) {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
-                      @click="
+                      @click.stop="
                         navigateTo(
-                          `${route.params.id}/topic/${topic.id}/newcontent`,
+                          `${route.params.id}/topic/${
+                            topic.id
+                          }/newcontent?position=${topic.content.length + 1}`,
                         )
                       "
                     >
@@ -95,7 +103,7 @@ async function handleContentDelete(contentId: number) {
                     <v-btn
                       icon="mdi-delete"
                       variant="flat"
-                      @click="handleTopicDelete(topic.id)"
+                      @click.stop="handleTopicDelete(topic.id)"
                     >
                     </v-btn>
                   </template>
