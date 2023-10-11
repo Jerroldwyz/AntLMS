@@ -15,13 +15,17 @@ export async function fetchAllCourses() {
 export async function fetchAllUserCreatedCourses(): Promise<any> {
   const userStore = useUserStore()
 
-  // TODO: add type
-  const allCourses = await $fetch("/api/mycourses", {
-    method: "get",
-    query: { userId: userStore.user?.uid },
-  })
+  if (userStore.user?.uid) {
+    // TODO: add type
+    const allCourses = await $fetch("/api/mycourses", {
+      method: "get",
+      query: { userId: userStore.user?.uid },
+    })
 
-  return allCourses
+    return allCourses
+  } else {
+    window.location.reload()
+  }
 }
 
 export async function fetchAllEnrolledCourses(): Promise<any> {
