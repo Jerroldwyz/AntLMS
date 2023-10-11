@@ -30,16 +30,19 @@ describe("My test", () => {
     })
   })
 
+  // Cleanup is not possible as the server shuts down automatically right before this step...
   afterAll(async () => {
     try {
-      await $fetch(`/api/users/${testUser.uid}`, {
-        method: "DELETE",
-      })
-    } catch (e) {}
-    try {
-      await $fetch(`/api/mycourses/${testCourse.id}`, {
-        method: "DELETE",
-      })
+      if (testUser) {
+        await $fetch(`/api/users/${testUser.uid}`, {
+          method: "DELETE",
+        })
+      }
+      if (testCourse) {
+        await $fetch(`/api/mycourses/${testCourse.id}`, {
+          method: "DELETE",
+        })
+      }
     } catch (e) {}
   })
 
