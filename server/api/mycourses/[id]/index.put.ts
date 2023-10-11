@@ -28,11 +28,13 @@ export default defineEventHandler(async (event) => {
   })
 
   const course = camelCaseToUnderscore(body)
+  let data
   try {
     const courseId = id
-    const mycourse = await updateCourseById(courseId, course)
-    return mycourseTransformer(mycourse)
+    data = await updateCourseById(courseId, course)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return mycourseTransformer(data)
 })
