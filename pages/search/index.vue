@@ -1,17 +1,26 @@
+<script setup lang="ts">
+const route = useRoute()
+const results = await fetchSearchQuery(route.query.searchQuery as string)
+</script>
+
 <template>
   <div>
-    <h1>Search Results for "{{ searchQuery }}"</h1>
-    <!-- Display your search results here -->
+    <div class="text-h4 font-weight-medium">Search</div>
+    <br />
+    <div class="text-h5 font-weight-bold py-2">
+      Search results for "{{ route.query.searchQuery }}""
+    </div>
+    <v-divider></v-divider>
+    <br />
+
+    <v-row>
+      <CourseTile
+        v-for="course in results"
+        :id="course.id"
+        :key="course.id"
+        :title="course.title"
+        :thumbnail="course.thumbnail"
+      />
+    </v-row>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    console.log(this.$route.query.query)
-    return {
-      searchQuery: this.$route.query.query || "", // Get the search query from the URL
-    }
-  },
-}
-</script>

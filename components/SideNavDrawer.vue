@@ -46,7 +46,7 @@
           :key="i"
           :title="browseTitle"
           prepend-icon="mdi-circle-small"
-          href="?"
+          @click="navigateToSearch(browseTitle)"
         >
         </v-list-item>
       </v-list-group>
@@ -91,7 +91,12 @@ const courses = await fetchAllEnrolledCourses()
 const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 
-// console.log(courses)
+const router = useRouter()
+
+function navigateToSearch(title: string) {
+  title = title.toLowerCase()
+  router.push({ path: "/search", query: { searchQuery: title } })
+}
 </script>
 
 <style>

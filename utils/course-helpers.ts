@@ -11,6 +11,15 @@ export async function fetchAllCourses() {
   return data
 }
 
+export async function fetchSearchQuery(searchQuery: string) {
+  const allCourses = await $fetch("/api/courses/search", {
+    method: "get",
+    query: { tag_name: searchQuery },
+  })
+
+  return allCourses
+}
+
 // TODO: change any to proper type
 export async function fetchAllUserCreatedCourses(): Promise<any> {
   const userStore = useUserStore()

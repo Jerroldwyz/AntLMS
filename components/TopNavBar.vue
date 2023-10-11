@@ -24,7 +24,7 @@
       >
         <v-card-text>
           <v-text-field
-            v:model="searchQuery"
+            v-model="searchQuery"
             :loading="loading"
             density="compact"
             variant="solo"
@@ -55,7 +55,10 @@ function performSearch() {
     loading.value = false
     loaded.value = true
 
-    router.push({ path: "/search", query: { query: searchQuery.value } })
-  }, 2000)
+    router.push({
+      path: "/search",
+      query: { searchQuery: searchQuery.value.toLowerCase() },
+    })
+  }, 1000)
 }
 </script>

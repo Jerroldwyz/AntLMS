@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const browse = ["Creative", "Technology", "Business"]
 const courses = await fetchAllCourses()
+const router = useRouter()
+
+function navigateToSearch(title: string) {
+  title = title.toLowerCase()
+  router.push({ path: "/search", query: { searchQuery: title } })
+}
 </script>
 
 <template>
@@ -23,6 +29,7 @@ const courses = await fetchAllCourses()
     color="#ECEFF1"
     min-width="275px"
     min-height="60px"
+    @click="navigateToSearch(title)"
   >
     {{ title }}
   </v-btn>
