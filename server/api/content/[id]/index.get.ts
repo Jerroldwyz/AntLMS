@@ -27,5 +27,5 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Role ID does not exist",
     })
   }
-  return data
+  return contentTransformer(data)
 })

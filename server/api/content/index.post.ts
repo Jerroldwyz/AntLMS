@@ -20,10 +20,11 @@ export default defineEventHandler(async (event) => {
   })
 
   const prismaData = camelCaseToUnderscore(body)
+  let data
   try {
-    const content = await createContent(prismaData)
-    return contentTransformer(content)
+    data = await createContent(prismaData)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  return contentTransformer(data)
 })

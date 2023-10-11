@@ -1,4 +1,5 @@
 import { InferType, number } from "yup"
+import { deleteContent } from "~/server/utils/db/content"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -11,11 +12,13 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request router params",
   })
 
+  let data
   try {
     const contentId = id
-    const content = await deleteContent(contentId)
-    return contentTransformer(content)
+    data = await deleteContent(contentId)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+
+  return contentTransformer(data)
 })

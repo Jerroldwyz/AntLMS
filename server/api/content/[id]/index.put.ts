@@ -31,10 +31,12 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
+  let data
   try {
     const contentId = id
-    return await updateContent(contentId, camelCaseToUnderscore(body))
+    data = await updateContent(contentId, camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }
+  return contentTransformer(data)
 })
