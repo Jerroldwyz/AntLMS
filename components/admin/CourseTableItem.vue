@@ -6,8 +6,10 @@ const enableDialog = ref(false)
 const deleteDialog = ref(false)
 const course = prop.course
 
-const presignedUrl = await getImage(course.thumbnail)
-console.log(presignedUrl)
+let presignedUrl = ""
+if (course.thumbnail) {
+  presignedUrl = await getImage(course.thumbnail)
+}
 
 const disableCourseNow = async () => {
   await disableCourseById(course.id)
