@@ -15,12 +15,8 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  try {
-    const fileName = body.name
-    const path = `videos/${uuidv4()}.${fileName}`
-    const presignedUrl = await generatePresignedUrlPUT(path)
-    return { success: true, presignedUrl, path }
-  } catch (e) {
-    throw prismaErrorHandler(e)
-  }
+  const fileName = body.name
+  const path = `videos/${uuidv4()}.${fileName}`
+  const presignedUrl = await generatePresignedUrlPUT(path)
+  return { success: true, presignedUrl, path }
 })

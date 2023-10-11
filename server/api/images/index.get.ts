@@ -14,11 +14,7 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad query params",
   })
 
-  try {
-    const path = queryParams.path
-    const presignedUrl = await generatePresignedUrl(path)
-    return { success: true, presignedUrl }
-  } catch (e) {
-    throw prismaErrorHandler(e)
-  }
+  const path = queryParams.path
+  const presignedUrl = await generatePresignedUrl(path)
+  return { success: true, presignedUrl }
 })

@@ -1,4 +1,5 @@
 import { InferType, object, string } from "yup"
+import { v4 as uuidv4 } from "uuid"
 import { generatePresignedUrlPUT } from "~/server/utils/backend-s3-helpers"
 
 export default defineEventHandler(async (event) => {
@@ -14,12 +15,8 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  try {
-    const name = body.name
-    const path = `images/${name}`
-    const presignedUrl = await generatePresignedUrlPUT(path)
-    return { success: true, presignedUrl, path }
-  } catch (e) {
-    throw prismaErrorHandler(e)
-  }
+  const name = body.name
+  const path = `images/${uuidv4()}-${name}`
+  const presignedUrl = await generatePresignedUrlPUT(path)
+  return { success: true, presignedUrl, path }
 })

@@ -14,11 +14,7 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  try {
-    const path = body.path
-    await deleteFile(path)
-    return { success: true }
-  } catch (e) {
-    throw prismaErrorHandler(e)
-  }
+  const path = body.path
+  await deleteFile(path)
+  return { success: true }
 })
