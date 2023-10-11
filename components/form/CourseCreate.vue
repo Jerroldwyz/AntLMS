@@ -56,11 +56,13 @@ async function submitCourse() {
     try {
       await uploadFile()
       await createCourse(course.value)
+      emit("submit", true)
+    } catch (e) {
+      emit("submit", false)
+    } finally {
       loading.value = false
       emit("close")
-      emit("submit", true)
-    } catch (e) {}
-    emit("submit", false)
+    }
   }
 }
 </script>

@@ -75,8 +75,6 @@ export async function createCourse(course: Course): Promise<any> {
     course.creatorId = userStore.user.uid
   }
 
-  console.log(course)
-
   await $fetch("/api/mycourses", {
     method: "post",
     body: {
