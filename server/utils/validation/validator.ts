@@ -1,27 +1,19 @@
-import { H3Event } from "h3"
-import { ValidationError } from "yup"
+import { AnySchema, InferType, ValidationError } from "yup"
 
-export const validator = async (schema: any, event: H3Event) => {
-  if (event.req.method === "GET") {
-    return
-  }
-
-  const body = await readBody(event)
-
+export const validateAndParse = async <T>(schemaObject: {
+  schema: AnySchema
+  value: any
+  msgOnError: string
+}): Promise<T> => {
+  const { schema, value, msgOnError } = schemaObject
   try {
-    schema.validateSync(body, {
-      abortEarly: false,
-      stripUnknown: true,
-    })
+    const parsedData = await schema.validate(value, { abortEarly: false })
+    return parsedData
   } catch (e) {
-    const error = e as ValidationError
-
-    return sendError(
-      event,
-      createError({
-        statusCode: 422,
-        statusMessage: JSON.stringify(error.errors),
-      }),
-    )
+    const error = e as unknown as ValidationError
+    throw createError({
+      statusCode: 400,
+      statusMessage: `${msgOnError}: ${JSON.stringify(error.errors)}`,
+    })
   }
 }

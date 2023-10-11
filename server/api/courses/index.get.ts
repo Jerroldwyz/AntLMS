@@ -1,33 +1,25 @@
-import { CourseQueryStatus } from "~/types"
+import { object, string, InferType } from "yup"
 
 export default defineEventHandler(async (event) => {
-  try {
-    const query = getQuery(event)
-    // all, enabled, disabled
-    const courseQueryString = query.status ?? "all"
-    let queryStatus: CourseQueryStatus = CourseQueryStatus.all
+  // Query params
+  const unvalidatedQueryParams = getQuery(event)
+  const queryParamsSchema = object({
+    status: string()
+      .optional()
+      .matches(/(all|enabled|disabled)/, { excludeEmptyString: true }),
+  })
+  type queryParamsType = InferType<typeof queryParamsSchema>
+  const queryParams = await validateAndParse<queryParamsType>({
+    schema: queryParamsSchema,
+    value: unvalidatedQueryParams,
+    msgOnError: "Bad query params",
+  })
+  const status = queryParams.status ?? "all"
 
-    switch (courseQueryString) {
-      case "all":
-        queryStatus = CourseQueryStatus.all
-        break
-      case "enabled":
-        queryStatus = CourseQueryStatus.enabled
-        break
-      case "disabled":
-        queryStatus = CourseQueryStatus.disabled
-        break
-      default:
-        return sendError(
-          event,
-          new Error(
-            `Query: status can only be "all", "enabled" or "disabled", ${courseQueryString} is not allowed`,
-          ),
-        )
-        break
-    }
-    return await getAllCourses(queryStatus)
+  try {
+    // all, enabled, disabled
+    return await getAllCourses(status)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

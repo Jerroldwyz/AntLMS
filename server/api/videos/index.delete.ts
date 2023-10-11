@@ -1,11 +1,20 @@
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+import { InferType, object, string } from "yup"
+import { deleteFile } from "~/server/utils/backend-s3-helpers"
 
-  try {
-    const path = body.path
-    await deleteFile(path as string)
-    return { success: true }
-  } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
-  }
+export default defineEventHandler(async (event) => {
+  // Body params
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    path: string().required(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
+
+  const path = body.path
+  await deleteFile(path)
+  return { success: true }
 })

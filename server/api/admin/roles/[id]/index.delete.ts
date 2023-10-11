@@ -1,9 +1,21 @@
+import { InferType, number } from "yup"
+import { deleteRoleById } from "~/server/utils/db/admin"
+
 export default defineEventHandler(async (event) => {
-  const roleId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = number().required().integer().min(1)
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    return await deleteRoleById(parseInt(roleId as string))
+    const roleId = id
+    return await deleteRoleById(roleId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

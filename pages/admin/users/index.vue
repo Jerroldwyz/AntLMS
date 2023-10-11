@@ -75,7 +75,6 @@ export default {
         const response = await fetchAllUsers()
         if (response.ok) {
           const userData = await response.json() // Parse the JSON response
-          console.log(userData) // Log the user data
           users.value = userData
         } else {
           console.warn("Request failed with status:", response.status)
