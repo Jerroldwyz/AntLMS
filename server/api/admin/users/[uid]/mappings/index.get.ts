@@ -1,9 +1,21 @@
+import { InferType, string } from "yup"
+import { getManagerRoleMapping } from "~/server/utils/db/admin"
+
 export default defineEventHandler(async (event) => {
-  const managerId = getRouterParam(event, "uid")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
 
   try {
-    return await getManagerRoleMapping(managerId as string)
+    const managerId = id
+    return await getManagerRoleMapping(managerId)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

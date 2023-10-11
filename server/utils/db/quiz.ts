@@ -10,6 +10,7 @@ export const getQuizzes = (topicId: number) => {
       title: true,
       topic_id: true,
       threshold: true,
+      topic_position: true,
       questions: {
         select: {
           id: true,
@@ -36,9 +37,11 @@ export const getQuizById = (quiz_id: number) => {
       id: quiz_id,
     },
     select: {
+      id: true,
       title: true,
       topic_id: true,
       threshold: true,
+      topic_position: true,
       questions: {
         select: {
           id: true,
@@ -59,49 +62,31 @@ export const getQuizById = (quiz_id: number) => {
   return quiz
 }
 
-export const createQuiz = (quiz_data: any) => {
-  return prisma.quizzes.create({
+export const createQuiz = async (quiz_data: any) => {
+  const newQuiz = await prisma.quizzes.create({
     data: quiz_data,
   })
+  return await getQuizById(newQuiz.id)
 }
 
-export const updateQuiz = (quiz_id: number, quiz_data: any) => {
-  return prisma.quizzes.update({
+export const updateQuiz = async (quiz_id: number, quiz_data: any) => {
+  const updatedQuiz = await prisma.quizzes.update({
     where: {
       id: quiz_id,
     },
     data: quiz_data,
   })
+  return await getQuizById(updatedQuiz.id)
 }
 
-export const updateQuizTitle = (quiz_id: number, quiz_title: string) => {
-  return prisma.quizzes.update({
-    where: {
-      id: quiz_id,
-    },
-    data: {
-      title: quiz_title,
-    },
-  })
-}
-
-export const updateQuizPosition = (quiz_id: number, quiz_position: number) => {
-  return prisma.quizzes.update({
-    where: {
-      id: quiz_id,
-    },
-    data: {
-      topic_position: quiz_position,
-    },
-  })
-}
-
-export const deleteQuiz = (quiz_id: number) => {
-  return prisma.quizzes.delete({
+export const deleteQuiz = async (quiz_id: number) => {
+  const prefetchedQuiz = await getQuizById(quiz_id)
+  await prisma.quizzes.delete({
     where: {
       id: quiz_id,
     },
   })
+  return prefetchedQuiz
 }
 
 export const evaluateQuiz = (result: number[]) => {
@@ -120,7 +105,6 @@ export const quizPassed = async (data: any) => {
     },
   })
   if (progress.length === 0) {
-    console.log("quiz progress recorded")
     return await prisma.quiz_progress.create({
       data,
     })

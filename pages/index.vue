@@ -8,9 +8,6 @@ const courses = await fetchAllEnrolledCourses()
 const handleOnClick = async (courseId: number) => {
   await navigateTo(`/courses/${courseId}`)
 }
-const userStore = useUserStore()
-
-userStore.$subscribe((mutate, state) => {})
 </script>
 
 <template>

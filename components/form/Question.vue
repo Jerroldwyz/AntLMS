@@ -13,47 +13,61 @@
     </v-alert>
     <v-form ref="form">
       <v-card-title class="text-h5">{{ pageTitle }}</v-card-title>
-      <v-text-field
-        v-model="questionText"
-        label="Question Text"
-        variant="outlined"
-        required
-      />
-      <v-text-field
-        v-model="explanation"
-        label="Explanation"
-        variant="outlined"
-        required
-      />
+      <v-card>
+        <v-card-subtitle>Question Text</v-card-subtitle>
+        <QuillEditor
+          v-model:content="questionText"
+          theme="snow"
+          content-type="html"
+        />
+      </v-card>
+      <v-card>
+        <v-card-subtitle>Explanation</v-card-subtitle>
+        <QuillEditor
+          v-model:content="explanation"
+          theme="snow"
+          content-type="html"
+        />
+      </v-card>
       <h4>Choices</h4>
-      <v-radio-group v-model="correctAns">
-        <v-radio
-          v-for="(choice, index) in choices"
-          :key="index"
-          :value="index"
-        >
-          <template #label>
-            <v-card
-              style="
-                width: 100%;
-                height: 80%;
-                background-color: #ededed;
-                border-bottom: 2px solid;
-              "
-              variant="tonal"
-              @click="
-                () => {
-                  showEditor = true
-                  activeChoice = index
-                }
-              "
-            >
-              <div v-html="choice.choiceText"></div>
-            </v-card>
-            <v-btn @click="choices.splice(index, 1)">x</v-btn>
-          </template>
-        </v-radio>
-      </v-radio-group>
+      <v-text-field
+        v-for="(choice, index) in choices"
+        :key="index"
+        v-model="choices[index].choiceText"
+        variant="underlined"
+        required
+      >
+        <template #prepend>
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon
+                v-bind="props"
+                @click="activeChoice = index"
+                >{{
+                  index === activeChoice
+                    ? "mdi-checkbox-marked-circle-outline"
+                    : "mdi-checkbox-blank-circle-outline"
+                }}</v-icon
+              >
+            </template>
+            Click to make it correct answer
+          </v-tooltip>
+        </template>
+
+        <template #append>
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon
+                v-bind="props"
+                icon="mdi-close-box"
+                color="red"
+                @click="choices.splice(index, 1)"
+              ></v-icon>
+            </template>
+            Delete Choice
+          </v-tooltip>
+        </template>
+      </v-text-field>
       <v-card v-if="showEditor">
         <QuillEditor
           v-model:content="choices[activeChoice].choiceText"
@@ -76,7 +90,7 @@
         style="align-self: center"
         variant="elevated"
         @click="handleSubmit"
-        >Add Question</v-btn
+        >{{ props.id ? "Update" : "Add" }} Question</v-btn
       >
     </v-form>
   </v-container>
@@ -173,8 +187,11 @@ const handleSubmit = async () => {
         ...question,
       },
     })
-    props.id ? emit("changed", questionData) : emit()
+    props.id ? emit("changed", questionData) : emit("changed", questionData)
     dialog.value = true
+    question.value = ""
+    explanation.value = ""
+    choices.value = []
   } catch (e) {}
 }
 </script>

@@ -1,19 +1,10 @@
-import { content_type } from "@prisma/client"
-
-type Content = {
-  id: number
-  title: string
-  type: content_type
-  content?: string
-  topicPosition: number
-}
-
 export const contentTransformer = (content: any) => {
-  const val: Content = {
+  const val: any = {
     id: content.id,
+    topicId: content.topic_id,
     title: content.title,
     type: content.type,
-    topicPosition: content.topic_position ?? 0,
+    topicPosition: content.topic_position ?? NaN,
   }
 
   if (content.content !== undefined) {

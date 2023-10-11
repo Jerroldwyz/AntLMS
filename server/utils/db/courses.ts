@@ -1,6 +1,48 @@
 import { prisma } from "."
 import { CourseQueryStatus } from "~/types"
 
+export const getCourseByName = (
+  course_title: string,
+  enabled: boolean | undefined = undefined,
+) => {
+  return prisma.courses.findMany({
+    where: {
+      title: {
+        contains: course_title,
+      },
+      enabled,
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+    },
+  })
+}
+
+export const getCourseByTagId = (
+  tag_ids: number[],
+  enabled: boolean | undefined = undefined,
+) => {
+  return prisma.courses.findMany({
+    where: {
+      enabled,
+      course_tags: {
+        some: {
+          tag_id: {
+            in: tag_ids,
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+    },
+  })
+}
+
 export const getCourseById = (course_id: number) => {
   return prisma.courses.findUnique({
     where: {
@@ -9,6 +51,7 @@ export const getCourseById = (course_id: number) => {
     select: {
       id: true,
       title: true,
+      enabled: true,
       thumbnail: true,
       creator: {
         select: {
@@ -59,39 +102,31 @@ export const getCourseById = (course_id: number) => {
   })
 }
 
-export const getAllCourses = (
-  status: CourseQueryStatus = CourseQueryStatus.all,
-) => {
-  const select = {
-    id: true,
-    title: true,
-    enabled: true,
-    thumbnail: true,
-    creator: {
-      select: {
-        name: true,
+export const getAllCourses = (status: boolean | undefined = undefined) => {
+  return prisma.courses.findMany({
+    where: {
+      enabled: status,
+    },
+    select: {
+      id: true,
+      title: true,
+      enabled: true,
+      thumbnail: true,
+      creator: {
+        select: {
+          name: true,
+        },
       },
     },
-  }
-  let where
-
-  switch (status) {
-    case CourseQueryStatus.all:
-      where = {}
-      break
-    case CourseQueryStatus.enabled:
-      where = { enabled: { equals: true } }
-      break
-    case CourseQueryStatus.disabled:
-      where = { enabled: { equals: false } }
-      break
-
-    default:
-      break
-  }
-
-  return prisma.courses.findMany({
-    where,
-    select,
   })
+}
+
+export const updateCourseById = async (courseId: number, data: any) => {
+  await prisma.courses.update({
+    where: {
+      id: courseId,
+    },
+    data,
+  })
+  return await getCourseById(courseId)
 }

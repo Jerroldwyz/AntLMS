@@ -6,23 +6,32 @@ export const getTagById = (tag_id: number) => {
       id: tag_id,
     },
     select: {
+      id: true,
       name: true,
     },
   })
 }
 
-export const getTags = () => {
-  return prisma.tags.findMany()
+export const getTags = async (tag_names: string | undefined = undefined) => {
+  const tags = await prisma.tags.findMany({
+    where: {
+      name: tag_names,
+    },
+    select: {
+      id: true, // Select only the 'id' field of the matching tags
+    },
+  })
+
+  const tagIds = tags.map((tag) => tag.id)
+  return tagIds
 }
 
-export const updateTag = (tag_id: number, name: string) => {
+export const updateTag = (tag_id: number, data: any) => {
   return prisma.tags.update({
     where: {
       id: tag_id,
     },
-    data: {
-      name,
-    },
+    data,
   })
 }
 
@@ -31,5 +40,11 @@ export const deleteTag = (tag_id: number) => {
     where: {
       id: tag_id,
     },
+  })
+}
+
+export const createTag = (data: any) => {
+  return prisma.tags.create({
+    data,
   })
 }

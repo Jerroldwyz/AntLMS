@@ -1,33 +1,32 @@
-import { CourseQueryStatus } from "~/types"
+import { object, string, InferType, bool } from "yup"
+import { getCourseByTagId, getCourseByName } from "~/server/utils/db/courses"
 
 export default defineEventHandler(async (event) => {
-  try {
-    const query = getQuery(event)
-    // all, enabled, disabled
-    const courseQueryString = query.status ?? "all"
-    let queryStatus: CourseQueryStatus = CourseQueryStatus.all
+  // Query params
+  const unvalidatedQueryParams = getQuery(event)
+  const queryParamsSchema = object({
+    status: bool().optional().default(undefined),
+    searchQuery: string().optional(),
+  })
+  type queryParamsType = InferType<typeof queryParamsSchema>
+  const queryParams = await validateAndParse<queryParamsType>({
+    schema: queryParamsSchema,
+    value: unvalidatedQueryParams,
+    msgOnError: "Bad query params",
+  })
 
-    switch (courseQueryString) {
-      case "all":
-        queryStatus = CourseQueryStatus.all
-        break
-      case "enabled":
-        queryStatus = CourseQueryStatus.enabled
-        break
-      case "disabled":
-        queryStatus = CourseQueryStatus.disabled
-        break
-      default:
-        return sendError(
-          event,
-          new Error(
-            `Query: status can only be "all", "enabled" or "disabled", ${courseQueryString} is not allowed`,
-          ),
-        )
-        break
+  try {
+    const enabled = queryParams.status
+    if (queryParams.searchQuery) {
+      const searchQuery = queryParams.searchQuery
+      const tag_ids = await getTags(searchQuery)
+      const courseById = await getCourseByTagId(tag_ids as number[], enabled)
+      const courseByName = await getCourseByName(searchQuery, enabled)
+      return [...courseById, ...courseByName]
     }
-    return await getAllCourses(queryStatus)
+    // all, enabled, disabled
+    return await getAllCourses(enabled)
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    throw prismaErrorHandler(e)
   }
 })

@@ -1,15 +1,34 @@
 import { getAuth } from "firebase-admin/auth"
+import { InferType, string } from "yup"
+import { deleteUser } from "~/server/utils/db/users"
+import { useFirebaseAdmin } from "~/composables/useFirebaseAdmin.server"
 
 export default defineEventHandler(async (event) => {
-  const userId = getRouterParam(event, "id")
+  // Route params
+  const unvalidatedId = getRouterParam(event, "id")
+  const IdSchema = string().required().uuid()
+  type IdType = InferType<typeof IdSchema>
+  const id = await validateAndParse<IdType>({
+    schema: IdSchema,
+    value: unvalidatedId,
+    msgOnError: "Bad request router params",
+  })
+
+  let data
+  const userId = id
+  try {
+    data = await deleteUser(userId)
+  } catch (e) {
+    throw prismaErrorHandler(e)
+  }
 
   try {
-    const result = await deleteUser(userId as string)
-    const app = useFirebaseAdmin()!
+    const app = useFirebaseAdmin()
     const auth = getAuth(app)
     await auth.deleteUser(userId as string)
-    return result
   } catch (e) {
-    return sendError(event, prismaErrorHandler(e))
+    console.log(e)
   }
+
+  return data
 })
