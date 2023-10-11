@@ -15,8 +15,7 @@ export default defineEventHandler(async (event) => {
   const userId = queryParams.userId
 
   try {
-    const course = await getCreatorCourses(userId as string)
-    return mycourseTransformer(course)
+    return getCreatorCourses(userId as string)
   } catch (e) {
     throw prismaErrorHandler(e)
   }
