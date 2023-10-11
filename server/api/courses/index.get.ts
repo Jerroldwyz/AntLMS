@@ -1,12 +1,12 @@
-import { object, string, InferType } from "yup"
+import { object, string, InferType, bool } from "yup"
+import { getCourseByTagId, getCourseByName } from "~/server/utils/db/courses"
 
 export default defineEventHandler(async (event) => {
   // Query params
   const unvalidatedQueryParams = getQuery(event)
   const queryParamsSchema = object({
-    status: string()
-      .optional()
-      .matches(/(all|enabled|disabled)/, { excludeEmptyString: true }),
+    status: bool().optional().default(undefined),
+    searchQuery: string().optional(),
   })
   type queryParamsType = InferType<typeof queryParamsSchema>
   const queryParams = await validateAndParse<queryParamsType>({
@@ -14,11 +14,18 @@ export default defineEventHandler(async (event) => {
     value: unvalidatedQueryParams,
     msgOnError: "Bad query params",
   })
-  const status = queryParams.status ?? "all"
 
   try {
+    const enabled = queryParams.status
+    if (queryParams.searchQuery) {
+      const searchQuery = queryParams.searchQuery
+      const tag_ids = await getTags(searchQuery)
+      const courseById = await getCourseByTagId(tag_ids as number[], enabled)
+      const courseByName = await getCourseByName(searchQuery, enabled)
+      return [...courseById, ...courseByName]
+    }
     // all, enabled, disabled
-    return await getAllCourses(status)
+    return await getAllCourses(enabled)
   } catch (e) {
     throw prismaErrorHandler(e)
   }

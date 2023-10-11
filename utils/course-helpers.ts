@@ -12,7 +12,7 @@ export async function fetchAllCourses() {
 }
 
 export async function fetchSearchQuery(searchQuery: string) {
-  const allCourses = await $fetch("/api/courses/search", {
+  const allCourses = await $fetch("/api/courses", {
     method: "get",
     query: { searchQuery },
   })
