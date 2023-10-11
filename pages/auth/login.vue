@@ -97,9 +97,10 @@ const signIn = async () => {
   disabled.value = true
   try {
     await login(email.value, password.value)
-    router.push("/")
   } catch (error) {
     alert(error)
+  } finally {
+    router.push("/")
   }
   disabled.value = false
 }

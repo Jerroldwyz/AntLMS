@@ -3,7 +3,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   } else {
     const token = useFirebaseToken()
     if (!token.value) {
-      if (process.server) return navigateTo("/auth/login")
+      if (process.server) return
+      return navigateTo("/auth/login")
     }
   }
 })
