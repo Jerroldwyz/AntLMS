@@ -7,7 +7,7 @@ const createImage = async (height: number, width: number) => {
   const imageUrl = faker.image.url({ height, width })
   const imageName = randomUUID()
   const downloadFilePath = `${tempDir}/${imageName}.jpg`
-  const s3FilePath = `image/${imageName}.jpg`
+  const s3FilePath = `images/${imageName}.jpg`
   await downloadImage(imageUrl, downloadFilePath)
   const metaData = {
     "Content-Type": "image/jpg",
