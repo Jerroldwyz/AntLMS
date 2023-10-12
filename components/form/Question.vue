@@ -83,6 +83,7 @@
       <v-btn
         style="size: 8px"
         variant="elevated"
+        :disabled="disableChoice"
         @click="addChoice"
         >Add Choices</v-btn
       >
@@ -126,6 +127,7 @@ const questionText = ref("")
 const explanation = ref("")
 const choices = ref([])
 const activeChoice = ref(0)
+const disableChoice = ref(false)
 
 // props
 const props = defineProps(["id", "quizId"])
@@ -156,6 +158,9 @@ const addChoice = () => {
       choiceText: "",
       isCorrect: false,
     })
+    if (choices.value.length === 4) {
+      disableChoice.value = true
+    }
   }
 }
 
