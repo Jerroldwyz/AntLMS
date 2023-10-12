@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (appConfig() === "development") {
-  } else {
+  const userStore = useUserStore()
+  if (!userStore.isAdmin) {
+    return navigateTo("/")
   }
 })

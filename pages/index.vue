@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ["user"],
 })
 
-const courses = await fetchAllEnrolledCourses()
+const courses: any = fetchAllEnrolledCourses()
 const handleOnClick = async (courseId: number) => {
   await navigateTo(`/courses/${courseId}`)
 }

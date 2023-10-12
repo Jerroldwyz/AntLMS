@@ -66,8 +66,14 @@ const password = ref("")
 const signIn = async () => {
   disabled.value = true
   try {
-    await login(email.value, password.value)
-    router.push("/admin")
+    const result = await login(email.value, password.value)
+
+    if (result) {
+      const userStore = useUserStore()
+      userStore.$subscribe((mutate, state) => {
+        router.push("/")
+      })
+    }
   } catch (error) {
     alert(error)
   }

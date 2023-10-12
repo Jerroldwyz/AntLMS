@@ -20,16 +20,16 @@
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
             <v-checkbox
               v-model="checkbox"
-              :rules="[(v) => !!v || 'You must agree to continue!']"
+              :rules="[(v: any) => !!v || 'You must agree to continue!']"
               label="Remember me?"
               required
               hide-details
             ></v-checkbox>
             <div class="ml-auto">
-              <a
-                href="javascript:void(0)"
+              <NuxtLink
+                to="/auth/reset-password"
                 class="text-primary text-decoration-none"
-                >Forgot password?</a
+                >Forgot password?</NuxtLink
               >
             </div>
           </div>
@@ -53,7 +53,7 @@
               ></v-icon>
               Continue with Google
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               class="mb-4"
               block
               @click="facebookSignIn"
@@ -63,7 +63,7 @@
                 icon="mdi-facebook"
               ></v-icon>
               Continue with Facebook
-            </v-btn>
+            </v-btn> -->
           </div>
         </v-form>
         <h6 class="text-subtitle-1 text-grey-darken-1">
@@ -82,7 +82,6 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-  middleware: "guest",
 })
 
 const { login, signInWithGoogle, signInWithFacebook } = useAuth()
@@ -96,17 +95,25 @@ const password = ref("")
 const signIn = async () => {
   disabled.value = true
   try {
-    await login(email.value, password.value)
+    const result = await login(email.value, password.value)
+
+    if (result) {
+      const userStore = useUserStore()
+      userStore.$subscribe((mutate, state) => {
+        router.push("/")
+      })
+    }
   } catch (error) {
     alert(error)
-  } finally {
-    router.push("/")
   }
   disabled.value = false
 }
 
-const googleSignIn = () => {
-  signInWithGoogle()
+const googleSignIn = async () => {
+  const result = await signInWithGoogle()
+  if (result) {
+    router.push("/")
+  }
 }
 
 const facebookSignIn = () => {

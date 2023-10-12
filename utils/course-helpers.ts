@@ -21,31 +21,41 @@ export async function fetchSearchQuery(searchQuery: string) {
 }
 
 // TODO: change any to proper type
-export async function fetchAllUserCreatedCourses(): Promise<any> {
+export function fetchAllUserCreatedCourses() {
   const userStore = useUserStore()
 
-  // TODO: add type
-  const allCourses = await $fetch("/api/mycourses", {
-    method: "get",
-    query: { userId: userStore.user?.uid },
+  let allCourses
+
+  userStore.$subscribe(async (mutate, state) => {
+    if (state.user) {
+      // TODO: add type
+      allCourses = await $fetch("/api/mycourses", {
+        method: "get",
+        query: { userId: userStore.user?.uid },
+      })
+    }
   })
 
   return allCourses
 }
 
-export async function fetchAllEnrolledCourses(): Promise<any> {
+export function fetchAllEnrolledCourses() {
   const userStore = useUserStore()
-  const userUid = userStore.user?.uid
 
-  if (userUid) {
-    const allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
-      method: "get",
-    })
+  let allEnrollments
 
-    return allEnrollments.map((enrollment) => enrollment.course)
-  }
-  // TODO: Throw error?
-  return "ERROR: Not logged in"
+  userStore.$subscribe(async (mutate, state) => {
+    const userUid = state.user?.uid
+    if (userUid) {
+      allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
+        method: "get",
+      })
+
+      allEnrollments.map((enrollment) => enrollment.course)
+    }
+  })
+
+  return allEnrollments
 }
 
 export async function fetchEnrolledCourse(courseId: string | string[]) {

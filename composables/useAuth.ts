@@ -12,36 +12,32 @@ import {
 
 export const useAuth = () => {
   const register = async ({ ...userData }) => {
-    const { $firebaseAuth } = useNuxtApp()
-    const userCredentials = await createUserWithEmailAndPassword(
-      $firebaseAuth,
-      userData.email,
-      userData.password,
-    )
+    // const { $firebaseAuth } = useNuxtApp()
+    // const userCredentials = await createUserWithEmailAndPassword(
+    //   $firebaseAuth,
+    //   userData.email,
+    //   userData.password,
+    // )
 
-    const firebaseUser = userCredentials.user
+    // const firebaseUser = userCredentials.user
 
-    const userProps = {
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      name: userData.name,
-      contact_details: {
-        phone_number: userData.phone_number,
-      },
-    }
-    await $fetch("/api/signup", {
+    // const userProps = {
+    //   uid: firebaseUser.uid,
+    //   email: firebaseUser.email,
+    //   name: userData.name,
+    //   contact_details: {
+    //     phone_number: userData.phone_number,
+    //   },
+    // }
+    return await $fetch("/api/auth/signup", {
       method: "POST",
-      body: userProps,
+      body: userData,
     })
-      .catch((error) => console.error(error))
-      .then(() => console.log("You have register"))
-
-    return firebaseUser
   }
 
   const login = async (email: string, password: string) => {
     const { $firebaseAuth } = useNuxtApp()
-    await signInWithEmailAndPassword($firebaseAuth, email, password)
+    return await signInWithEmailAndPassword($firebaseAuth, email, password)
   }
 
   const logout = async () => {
@@ -78,15 +74,14 @@ export const useAuth = () => {
     }
   }
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
     const { $firebaseAuth } = useNuxtApp()
-    const router = useRouter()
-    signInWithPopup($firebaseAuth, provider).then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential?.idToken
-      router.push("/")
-    })
+    try {
+      return await signInWithPopup($firebaseAuth, provider)
+    } catch (error) {
+      alert(error)
+    }
   }
 
   const signInWithFacebook = async () => {
