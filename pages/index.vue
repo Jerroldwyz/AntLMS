@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
 definePageMeta({
-  middleware: ["user"],
+  middleware: "01-user",
 })
 
 const courses: any = fetchAllEnrolledCourses()

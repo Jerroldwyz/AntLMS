@@ -8,7 +8,7 @@ import {
 
 definePageMeta({
   layout: "admin",
-  middleware: "admin",
+  middleware: "02-admin",
 })
 
 export default {

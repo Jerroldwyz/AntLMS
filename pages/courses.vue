@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: "user",
+  middleware: "01-user",
 })
 </script>
 

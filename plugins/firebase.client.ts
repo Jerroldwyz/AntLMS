@@ -24,7 +24,6 @@ export default defineNuxtPlugin((nuxtApp) => {
             if (signedInUser) {
               if (idTokenResult.claims.admin || signedInUser!.is_admin) {
                 userStore.isAdmin = true
-                navigateTo("/admin")
               }
               userStore.setUser(signedInUser)
               await setServerSession(token)

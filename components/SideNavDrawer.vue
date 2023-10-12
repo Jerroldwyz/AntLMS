@@ -64,7 +64,7 @@
           </v-list-item>
         </template>
 
-        <!-- <v-list-item
+        <v-list-item
           v-for="course in courses"
           :id="course.id"
           :key="course.id"
@@ -72,7 +72,7 @@
           prepend-icon="mdi-circle-small"
           to=""
         >
-        </v-list-item> -->
+        </v-list-item>
       </v-list-group>
     </v-list>
 
@@ -89,7 +89,7 @@
 <script setup lang="ts">
 import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
 
-const courses = await fetchAllEnrolledCourses()
+const courses: any = fetchAllEnrolledCourses()
 const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 

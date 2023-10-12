@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["user"],
+  middleware: "01-user",
 })
 
 const courses = ref(fetchAllUserCreatedCourses() as any)

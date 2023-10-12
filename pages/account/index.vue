@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["user"],
+  middleware: "01-user",
 })
 
 const tab = ref("option-1")

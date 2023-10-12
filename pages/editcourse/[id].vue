@@ -2,7 +2,7 @@
 import { Course } from "~/types"
 
 definePageMeta({
-  middleware: ["user"],
+  middleware: "01-user",
 })
 
 const loading = ref(false)
