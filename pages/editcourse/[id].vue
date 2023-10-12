@@ -17,7 +17,9 @@ const { data: course } = useFetch<Course>(
   () => `/api/mycourses/${route.params.id}`,
 )
 
-console.log(course.value)
+async function refreshCourse() {
+  course.value = await $fetch(`/api/mycourses/${route.params.id}`)
+}
 
 const file = ref<File[]>([])
 
@@ -30,7 +32,6 @@ async function submitCourse() {
         await deleteImage(course.value.thumbnail)
         course.value.thumbnail = newThumbnail
       }
-      console.log(course.value)
       await updateCourse(course.value, route.params.id)
       loading.value = false
       alertSuccess.value = true
@@ -80,7 +81,7 @@ function validRoute() {
           />
           <ContentList
             v-model:course="course"
-            @delete="refreshNuxtData"
+            @delete="refreshCourse"
           />
         </template>
       </v-container>
