@@ -4,7 +4,15 @@ definePageMeta({
   middleware: "01-user",
 })
 
-const courses: any = fetchAllEnrolledCourses()
+const courses = ref(await fetchAllEnrolledCourses())
+const userStore = useUserStore()
+
+userStore.$subscribe(async (_, state) => {
+  if (state.user) {
+    courses.value = await fetchAllEnrolledCourses()
+  }
+})
+
 const handleOnClick = async (courseId: number) => {
   await navigateTo(`/courses/${courseId}`)
 }

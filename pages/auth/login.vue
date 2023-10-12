@@ -100,7 +100,9 @@ const signIn = async () => {
     if (result) {
       const userStore = useUserStore()
       userStore.$subscribe((mutate, state) => {
-        router.push("/")
+        if (state.user) {
+          navigateTo("/")
+        }
       })
     }
   } catch (error) {

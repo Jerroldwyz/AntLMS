@@ -91,7 +91,6 @@ import {
 } from "firebase/auth"
 definePageMeta({
   layout: false,
-  middleware: "guest",
 })
 
 const { register } = useAuth()

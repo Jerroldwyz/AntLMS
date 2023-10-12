@@ -21,41 +21,31 @@ export async function fetchSearchQuery(searchQuery: string) {
 }
 
 // TODO: change any to proper type
-export function fetchAllUserCreatedCourses() {
+export async function fetchAllUserCreatedCourses(): Promise<any> {
   const userStore = useUserStore()
 
-  let allCourses
-
-  userStore.$subscribe(async (mutate, state) => {
-    if (state.user) {
-      // TODO: add type
-      allCourses = await $fetch("/api/mycourses", {
-        method: "get",
-        query: { userId: userStore.user?.uid },
-      })
-    }
+  // TODO: add type
+  const allCourses = await $fetch("/api/mycourses", {
+    method: "get",
+    query: { userId: userStore.user?.uid },
   })
 
   return allCourses
 }
 
-export function fetchAllEnrolledCourses() {
+export async function fetchAllEnrolledCourses(): Promise<any> {
   const userStore = useUserStore()
+  const userUid = userStore.user?.uid
 
-  let allEnrollments
+  if (userUid) {
+    const allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
+      method: "get",
+    })
 
-  userStore.$subscribe(async (mutate, state) => {
-    const userUid = state.user?.uid
-    if (userUid) {
-      allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
-        method: "get",
-      })
-
-      allEnrollments.map((enrollment) => enrollment.course)
-    }
-  })
-
-  return allEnrollments
+    return allEnrollments.map((enrollment) => enrollment.course)
+  }
+  // TODO: Throw error?
+  return "ERROR: Not logged in"
 }
 
 export async function fetchEnrolledCourse(courseId: string | string[]) {

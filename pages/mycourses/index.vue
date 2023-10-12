@@ -3,7 +3,15 @@ definePageMeta({
   middleware: "01-user",
 })
 
-const courses = ref(fetchAllUserCreatedCourses() as any)
+const courses = ref(await fetchAllUserCreatedCourses())
+
+const userStore = useUserStore()
+
+userStore.$subscribe(async (_, state) => {
+  if (state.user) {
+    courses.value = ref(await fetchAllUserCreatedCourses())
+  }
+})
 
 const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
