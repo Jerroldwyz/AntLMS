@@ -35,12 +35,19 @@ async function handleSubmit(status: boolean) {
     text="Something went wrong. Please try again later."
   ></v-alert>
 
-  <v-container
-    fluid
-    class="d-flex flex-wrap"
-    style="gap: 2em"
-  >
-    <CreateCourseBtn @click="createCourseDialog = true" />
+  <v-row>
+    <v-col>
+      <h1 class="mb-4">My Courses</h1>
+    </v-col>
+    <v-col class="d-flex justify-end">
+      <v-btn
+        class="mb-2 bg-primary"
+        icon="mdi-plus"
+      ></v-btn>
+    </v-col>
+  </v-row>
+  <v-divider class="mb-2"></v-divider>
+  <v-row>
     <Course
       v-for="course in courses"
       :id="course.id"
@@ -48,7 +55,7 @@ async function handleSubmit(status: boolean) {
       :title="course.title"
       :thumbnail="course.thumbnail"
     />
-  </v-container>
+  </v-row>
 
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
