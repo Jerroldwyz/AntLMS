@@ -11,17 +11,21 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request router params",
   })
 
+  let signInUser
+
   try {
-    const signInUser = await getUserById(uid)
+    signInUser = await getUserById(uid)
     if (signInUser) {
       return signInUser
-    } else {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "User not found",
-      })
     }
   } catch (e) {
     throw prismaErrorHandler(e)
+  }
+
+  if (signInUser === null) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found",
+    })
   }
 })

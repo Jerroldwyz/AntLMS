@@ -70,9 +70,8 @@ const signIn = async () => {
 
     if (result) {
       const userStore = useUserStore()
-      userStore.$subscribe((mutate, state) => {
-        router.push("/")
-      })
+      userStore.setUser(await formatUser(result.user))
+      await navigateTo("/admin")
     }
   } catch (error) {
     alert(error)

@@ -2,6 +2,7 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
@@ -78,7 +79,23 @@ export const useAuth = () => {
     const provider = new GoogleAuthProvider()
     const { $firebaseAuth } = useNuxtApp()
     try {
-      return await signInWithPopup($firebaseAuth, provider)
+      return await signInWithPopup($firebaseAuth, provider).catch(
+        function (error) {
+          if (error.code === "auth/account-exists-with-different-credential") {
+            const pendingCred = error.credential
+            const email = error.email
+            fetchSignInMethodsForEmail($firebaseAuth, email).then(
+              function (methods) {
+                if (methods[0] === "password") {
+                  alert(
+                    "Google account's email already exist in another provider. Please signin using your password",
+                  )
+                }
+              },
+            )
+          }
+        },
+      )
     } catch (error) {
       alert(error)
     }

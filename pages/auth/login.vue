@@ -42,6 +42,17 @@
               :disabled="disabled"
               >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
             >
+            <div class="d-flex d-row align-center mb-3">
+              <v-divider
+                :thickness="2"
+                class="border-opacity-25"
+              ></v-divider>
+              <p class="text-body-1 mx-3">or</p>
+              <v-divider
+                :thickness="2"
+                class="border-opacity-25"
+              ></v-divider>
+            </div>
             <v-btn
               class="mb-4"
               block
@@ -51,7 +62,7 @@
                 start
                 icon="mdi-google"
               ></v-icon>
-              Continue with Google
+              Continue with Goggle
             </v-btn>
             <!-- <v-btn
               class="mb-4"
@@ -82,6 +93,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
+  middleware: "03-guest",
 })
 
 const { login, signInWithGoogle, signInWithFacebook } = useAuth()
@@ -110,9 +122,9 @@ const signIn = async () => {
 
 const googleSignIn = async () => {
   const result = await signInWithGoogle()
-  console.log(result)
   if (result) {
-    router.push("/")
+    userStore.setUser(await formatUser(result.user))
+    await navigateTo("/")
   }
 }
 

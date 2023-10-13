@@ -58,8 +58,8 @@ const initials = computed(() => {
 
 const signOut = async () => {
   await logout()
-  const router = useRouter()
-  router.push("/auth/login")
+  // const router = useRouter()
+  // router.push("/auth/login")
 }
 </script>
 <style scoped></style>

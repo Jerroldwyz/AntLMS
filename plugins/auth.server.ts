@@ -13,7 +13,11 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
   try {
     const token = await auth.verifyIdToken(firebaseToken.value)
-    userStore.setUser((await formatUser(token)) as unknown as User)
+    if (token) {
+      const userRecord = await auth.getUser(token.uid)
+      const isAdmin: boolean = userRecord.customClaims?.admin
+      userStore.setUser(await formatUser(userRecord, isAdmin))
+    }
   } catch (error) {
     console.error("Can't verify session:", error)
   }
