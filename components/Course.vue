@@ -63,7 +63,7 @@ async function handleDelete() {
           </v-toolbar>
         </v-img>
         <v-container>
-          <v-card-title class="text-h6 text-left font-weight-medium">
+          <v-card-title class="text-h6 text-center font-weight-medium">
             {{ title }}
           </v-card-title>
         </v-container>
