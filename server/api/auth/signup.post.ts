@@ -1,5 +1,4 @@
 import { InferType, string, object, bool } from "yup"
-import { v4 as uuidv4 } from "uuid"
 import { FirebaseError } from "firebase-admin/app"
 import { UserRecord, getAuth } from "firebase-admin/auth"
 import { createUser } from "~/server/utils/db/users"
@@ -30,17 +29,7 @@ export default defineEventHandler(async (event) => {
 
   // create user on firebase
   try {
-    let newUid: string = uuidv4()
-    let existingUser = await getUserById(newUid)
-    if (existingUser !== null) {
-      while (existingUser) {
-        newUid = uuidv4()
-        existingUser = await getUserById(newUid)
-      }
-    }
-
     createdUser = await auth.createUser({
-      uid: newUid,
       email: body.email,
       emailVerified: false,
       password: body.password,
