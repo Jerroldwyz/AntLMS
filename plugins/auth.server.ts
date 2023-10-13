@@ -1,15 +1,19 @@
-import { useServerAuth } from "~/composables/useServerAuth.server"
+import { getAuth } from "firebase-admin/auth"
+import { User } from "~/types"
 
 // server side runtime
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const token = useFirebaseToken()
+  const firebaseToken = useFirebaseToken()
 
-  if (!token.value) return
+  if (!firebaseToken.value) return
 
-  const auth = useServerAuth()!
+  const app = useFirebaseAdmin()!
+  const auth = getAuth(app)
+  const userStore = useUserStore()
 
   try {
-    await auth.verifySessionCookie(token.value)
+    const token = await auth.verifyIdToken(firebaseToken.value)
+    userStore.setUser((await formatUser(token)) as unknown as User)
   } catch (error) {
     console.error("Can't verify session:", error)
   }

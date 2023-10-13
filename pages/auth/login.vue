@@ -91,6 +91,7 @@ const checkbox = ref(false)
 const router = useRouter()
 const email = ref("")
 const password = ref("")
+const userStore = useUserStore()
 
 const signIn = async () => {
   disabled.value = true
@@ -98,12 +99,8 @@ const signIn = async () => {
     const result = await login(email.value, password.value)
 
     if (result) {
-      const userStore = useUserStore()
-      userStore.$subscribe((mutate, state) => {
-        if (state.user) {
-          navigateTo("/")
-        }
-      })
+      userStore.setUser(await formatUser(result.user))
+      await navigateTo("/")
     }
   } catch (error) {
     alert(error)
@@ -113,6 +110,7 @@ const signIn = async () => {
 
 const googleSignIn = async () => {
   const result = await signInWithGoogle()
+  console.log(result)
   if (result) {
     router.push("/")
   }

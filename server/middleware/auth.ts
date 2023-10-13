@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     const app = useFirebaseAdmin()!
     const auth = getAuth(app)
     try {
-      await auth.verifySessionCookie(token, true)
+      await auth.verifyIdToken(token, true)
     } catch (error) {
       console.error(error)
       // throw createError({

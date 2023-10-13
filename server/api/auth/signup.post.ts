@@ -72,16 +72,5 @@ export default defineEventHandler(async (event) => {
     throw prismaErrorHandler(e)
   }
 
-  // send custom token
-  try {
-    return await auth.createCustomToken(userWithoutPassword.uid)
-  } catch (e) {
-    const error = e as unknown as FirebaseError
-    throw createError({
-      statusCode: 500,
-      statusMessage: `firebase-admin/custome-token: ${JSON.stringify(
-        error.message,
-      )}`,
-    })
-  }
+  return createdUser
 })

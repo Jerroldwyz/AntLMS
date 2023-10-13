@@ -89,11 +89,12 @@ import {
   sendSignInLinkToEmail,
   signInWithCustomToken,
 } from "firebase/auth"
+import Login from "./login.vue"
 definePageMeta({
   layout: false,
 })
 
-const { register } = useAuth()
+const { register, login } = useAuth()
 
 const email = ref("")
 const password = ref("")
@@ -132,9 +133,8 @@ const signUp = async () => {
       password: password.value,
       contact_details: {},
     }
-    const idToken = await register(userRecord)
-    const { $firebaseAuth } = useNuxtApp()
-    await signInWithCustomToken($firebaseAuth, idToken)
+    const user: any = await register(userRecord)
+    await login(email.value, password.value)
   } catch (error) {
     alert(error)
   }

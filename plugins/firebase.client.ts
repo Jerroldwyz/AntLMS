@@ -14,22 +14,27 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hooks.hook("app:beforeMount", () => {
     auth.onIdTokenChanged(async (user) => {
       if (user) {
+        // if (!user.emailVerified) {
+        //   navigateTo("/auth/verify")
+        // } else {
+        //   userStore.isAdmin = false
+        //   user.getIdTokenResult(true).then(async (idTokenResult) => {
+        //     const token = idTokenResult.token
+        //     const signedInUser = (await formatUser(user)) as unknown as User
+        //     if (signedInUser) {
+        //       if (idTokenResult.claims.admin || signedInUser!.is_admin) {
+        //         userStore.isAdmin = true
+        //       }
+        //       await setServerSession(token)
+        //     }
+        //   })
+        // }
         if (!user.emailVerified) {
           navigateTo("/auth/verify")
-        } else {
-          userStore.isAdmin = false
-          user.getIdTokenResult(true).then(async (idTokenResult) => {
-            const token = idTokenResult.token
-            const signedInUser = (await formatUser(user)) as unknown as User
-            if (signedInUser) {
-              if (idTokenResult.claims.admin || signedInUser!.is_admin) {
-                userStore.isAdmin = true
-              }
-              userStore.setUser(signedInUser)
-              await setServerSession(token)
-            }
-          })
         }
+        const token = await user.getIdToken(true)
+        await setServerSession(token)
+        userStore.setUser(await formatUser(user))
       } else {
         await setServerSession(null)
         userStore.setUser(null)
@@ -45,7 +50,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 })
 
-const setServerSession = async (token: string | null) => {
+export const setServerSession = async (token: string | null) => {
   await useFetch("/api/auth/session", {
     method: "post",
     body: {

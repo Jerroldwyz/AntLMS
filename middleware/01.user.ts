@@ -1,10 +1,10 @@
 export default defineNuxtRouteMiddleware((to, from) => {
   const token = useFirebaseToken()
-  if (process.server) {
-    return
-  }
+  const userStore = useUserStore()
 
-  if (!token.value) {
-    // return navigateTo("/auth/login")
+  // if(process.server) return
+
+  if (!userStore.user) {
+    return navigateTo("/auth/login")
   }
 })

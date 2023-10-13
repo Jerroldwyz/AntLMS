@@ -3,13 +3,15 @@ import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
 definePageMeta({
   middleware: "01-user",
 })
+const isLoading = ref(true)
+const courses = ref()
 
-const courses = ref(await fetchAllEnrolledCourses())
-const userStore = useUserStore()
-
-userStore.$subscribe(async (_, state) => {
-  if (state.user) {
+onMounted(async () => {
+  isLoading.value = true
+  try {
     courses.value = await fetchAllEnrolledCourses()
+  } finally {
+    isLoading.value = false
   }
 })
 
@@ -19,14 +21,22 @@ const handleOnClick = async (courseId: number) => {
 </script>
 
 <template>
-  <v-row>
-    <CourseTile
-      v-for="course in courses"
-      :id="course.id"
-      :key="course.id"
-      :title="course.title"
-      :thumbnail="course.thumbnail"
-      @click="handleOnClick(course.id)"
-    />
-  </v-row>
+  <div>
+    <v-progress-linear
+      v-if="isLoading"
+      color="primary"
+      indeterminate
+      :height="12"
+    ></v-progress-linear>
+    <v-row v-else>
+      <CourseTile
+        v-for="course in courses"
+        :id="course.id"
+        :key="course.id"
+        :title="course.title"
+        :thumbnail="course.thumbnail"
+        @click="handleOnClick(course.id)"
+      />
+    </v-row>
+  </div>
 </template>
