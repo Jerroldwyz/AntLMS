@@ -11,8 +11,6 @@ const alertError = ref(false)
 
 const route = useRoute()
 
-console.log(route.name)
-
 const { data: course } = useFetch<Course>(
   () => `/api/mycourses/${route.params.id}`,
 )

@@ -4,8 +4,10 @@ const props = defineProps(["quizId"])
 const emit = defineEmits(["clicked"])
 const quiz = await fetchUserQuiz(props.quizId)
 const dialog = ref(false)
-const threshold = ref(0)
+
+const threshold = ref(quiz.value.threshold)
 const thresholdAlert = ref(false)
+const selectedQuestion = ref(0)
 
 const deleteQuestion = async (id, index) => {
   try {
@@ -76,20 +78,36 @@ const setThreshold = async () => {
         v-for="(question, index) in quiz.questions"
         :key="index"
       >
-        <v-col
-          class="d-flex justify-start align-center"
-          @click="emit('clicked', question.id)"
-        >
-          <v-icon icon="mdi-help" />
-          <div v-html="question.questionText"></div>
-        </v-col>
-        <v-col class="d-flex justify-end align-center">
-          <v-btn
-            icon="mdi-delete"
-            variant="flat"
-            @click="dialog = true"
-          />
-        </v-col>
+        <v-hover v-slot="{ isHovering, props }">
+          <v-card
+            style="display: flex; align-items: center; width: 100%"
+            :color="isHovering ? 'primary' : 'white'"
+            v-bind="props"
+            :class="{ bold: selectedQuestion === index }"
+            @click="
+              () => {
+                emit('clicked', question.id)
+                selectedQuestion = index
+              }
+            "
+          >
+            <v-col style="width: 10%">
+              <v-icon icon="mdi-help" />
+            </v-col>
+            <v-col class="d-flex justify-start">
+              <div
+                v-bind="props"
+                v-html="question.questionText"
+              ></div>
+            </v-col>
+            <v-col class="d-flex justify-end"
+              ><v-btn
+                icon="mdi-delete"
+                variant="flat"
+                @click="dialog = true"
+            /></v-col>
+          </v-card>
+        </v-hover>
         <v-dialog
           v-model="dialog"
           persistent
@@ -141,5 +159,9 @@ const setThreshold = async () => {
 
 .list-item .v-list-item-action {
   margin-left: 10px;
+}
+
+.bold {
+  font-weight: bold;
 }
 </style>
