@@ -9,9 +9,13 @@ const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)
 
+async function refreshCourses() {
+  courses.value = await fetchAllUserCreatedCourses()
+}
+
 async function handleSubmit(status: boolean) {
   status ? (alertSuccess.value = status) : (alertError.value = status)
-  courses.value = await fetchAllUserCreatedCourses()
+  await refreshCourses()
 }
 </script>
 
@@ -49,6 +53,7 @@ async function handleSubmit(status: boolean) {
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      @delete="refreshCourses"
     />
   </v-row>
 

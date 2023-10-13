@@ -5,6 +5,8 @@ const props = defineProps<{
   thumbnail: string | null
 }>()
 
+const emit = defineEmits(["delete"])
+
 const thumbnailUrl = ref<string | null>(null)
 
 onMounted(async () => {
@@ -12,6 +14,11 @@ onMounted(async () => {
     thumbnailUrl.value = await getImage(props.thumbnail)
   }
 })
+
+async function handleDelete() {
+  await deleteCourseById(props.id)
+  emit("delete")
+}
 </script>
 
 <template>
@@ -36,6 +43,24 @@ onMounted(async () => {
               : 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
           "
         >
+          <v-toolbar color="rgba(0,0,0,0)">
+            <template #append>
+              <v-menu offset="0, 100">
+                <template #activator="{ props }">
+                  <v-btn
+                    icon="mdi-dots-vertical"
+                    v-bind="props"
+                  ></v-btn>
+                </template>
+
+                <v-list>
+                  <v-list-item>
+                    <v-btn @click="handleDelete">Delete</v-btn>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </template>
+          </v-toolbar>
         </v-img>
         <v-container>
           <v-card-title class="text-h6 text-left font-weight-medium">
