@@ -10,7 +10,7 @@ const alertSuccess = ref(false)
 const alertError = ref(false)
 
 async function handleSubmit(status: boolean) {
-  status ? (alertError.value = status) : (alertSuccess.value = status)
+  status ? (alertSuccess.value = status) : (alertError.value = status)
   courses.value = await fetchAllUserCreatedCourses()
 }
 </script>

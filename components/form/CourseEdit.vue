@@ -4,7 +4,7 @@ import { tags } from "~~/constants"
 
 // TODO: change any to real type
 const props = defineProps<{
-  course: Course
+  course: any
   file: File[]
 }>()
 
@@ -13,6 +13,8 @@ const emit = defineEmits<{
   (e: "update:file", file: File[]): void
   (e: "changed"): void
 }>()
+
+console.log(props.course)
 
 function formatThumbnail(thumbnail: string) {
   if (props.file[0]) {
@@ -48,14 +50,13 @@ function formatThumbnail(thumbnail: string) {
           "
         ></v-text-field>
         <v-select
-          :model-value="course.courseTags"
+          :model-value="course.tags"
           multiple
           :items="tags"
           variant="outlined"
           chips
           @update:model-value="
-            (tags) =>
-              $emit('update:course', { ...course, courseTags: [...tags] })
+            (tags) => $emit('update:course', { ...course, tags: [...tags] })
           "
         ></v-select>
         <v-file-input
