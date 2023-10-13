@@ -59,7 +59,7 @@
           <v-list-item
             v-bind="props"
             prepend-icon="mdi-view-dashboard"
-            title="Courses"
+            title="Enrolled"
           >
           </v-list-item>
         </template>
@@ -70,17 +70,25 @@
           :key="course.id"
           :title="course.title"
           prepend-icon="mdi-circle-small"
-          to=""
+          @click="handleOnClick(course.id)"
         >
         </v-list-item>
       </v-list-group>
+
+      <v-list-item
+        class="listItemFont"
+        prepend-icon="mdi-view-grid-plus"
+        title="My Courses"
+        to="/mycourses"
+      >
+      </v-list-item>
     </v-list>
 
     <v-list-item
       class="listItemFont"
       prepend-icon="mdi-cog"
       title="Settings"
-      href="?"
+      to="/account"
     >
     </v-list-item>
   </v-navigation-drawer>
@@ -94,6 +102,10 @@ const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 
 const router = useRouter()
+
+const handleOnClick = async (courseId: number) => {
+  await navigateTo(`/courses/${courseId}`)
+}
 
 function navigateToSearch(title: string) {
   title = title.toLowerCase()
