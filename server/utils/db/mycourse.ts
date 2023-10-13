@@ -68,7 +68,20 @@ export const getCreatorCourses = (creator_id: string) => {
 
 export const createCourse = async (data: any) => {
   const createdData = await prisma.courses.create({
-    data,
+    data: {
+      ...data,
+      course_tags: {
+        create: data.course_tags.map((tag: string) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name: tag },
+              create: { name: tag },
+            },
+          },
+        })),
+      },
+    },
+
     include: {
       course_tags: true,
     },

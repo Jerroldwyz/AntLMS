@@ -25,6 +25,8 @@ export default defineEventHandler(async (event) => {
   try {
     data = await createCourse(course)
   } catch (e) {
+    console.log(e)
+
     throw prismaErrorHandler(e)
   }
 
