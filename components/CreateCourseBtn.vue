@@ -1,16 +1,13 @@
 <script setup lang="ts"></script>
 
 <template>
-  <v-card
-    class="d-flex justify-center align-center"
-    elevation="2"
-    rounded="lg"
-    width="175"
-    height="175"
-  >
-    <v-icon
-      icon="mdi-plus"
-      size="3em"
-    ></v-icon>
-  </v-card>
+  <v-col cols="3">
+    <v-btn class="fill-height w-100">
+      <v-icon
+        icon="mdi-plus"
+        size="4em"
+      >
+      </v-icon>
+    </v-btn>
+  </v-col>
 </template>

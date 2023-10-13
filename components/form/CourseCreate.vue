@@ -36,7 +36,7 @@ const file = ref<File[]>([])
 const course = ref<Course>({
   title: "",
   thumbnail: "",
-  tags: [],
+  courseTags: [],
   creatorId: "",
 })
 
@@ -93,7 +93,7 @@ async function submitCourse() {
           :rules="titleRules"
         ></v-text-field>
         <v-select
-          v-model="course.tags"
+          v-model="course.courseTags"
           variant="outlined"
           label="Tag(s)"
           :items="tags"

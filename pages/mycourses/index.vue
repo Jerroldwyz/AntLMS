@@ -36,18 +36,13 @@ async function handleSubmit(status: boolean) {
   ></v-alert>
 
   <v-row>
-    <v-col>
-      <h1 class="mb-4">My Courses</h1>
-    </v-col>
-    <v-col class="d-flex justify-end">
-      <v-btn
-        class="mb-2 bg-primary"
-        icon="mdi-plus"
-      ></v-btn>
+    <v-col class="d-flex align-center">
+      <h1 class="mb-2 text-h4 font-weight-medium">My Courses</h1>
     </v-col>
   </v-row>
-  <v-divider class="mb-2"></v-divider>
+  <v-divider class="mb-4"></v-divider>
   <v-row>
+    <CreateCourseBtn @click="createCourseDialog = true" />
     <Course
       v-for="course in courses"
       :id="course.id"

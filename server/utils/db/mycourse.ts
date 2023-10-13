@@ -66,9 +66,12 @@ export const getCreatorCourses = (creator_id: string) => {
   })
 }
 
-export const createCourse = async (data: any) => {
+export const createCourse = async (course_data: any) => {
+  console.log(course_data)
   const createdData = await prisma.courses.create({
-    data,
+    data: {
+      ...course_data,
+    },
     include: {
       course_tags: true,
     },

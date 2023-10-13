@@ -33,18 +33,13 @@ function formatThumbnail(thumbnail: string) {
     <v-container>
       <v-row>
         <v-col class="d-flex justify-start align-center">
-          <h4 class="text-h4">Details</h4>
-        </v-col>
-        <v-col class="d-flex justify-end align-center">
-          <v-btn
-            class="mb-2"
-            icon="mdi-dots-vertical"
-            variant="flat"
-          ></v-btn>
+          <h4 class="text-h5 font-weight-bold">Details</h4>
         </v-col>
       </v-row>
-      <v-divider class="my-2"></v-divider>
-      <v-form>
+
+      <v-divider></v-divider>
+
+      <v-form class="mt-4">
         <v-text-field
           :model-value="course.title"
           variant="outlined"
@@ -53,13 +48,14 @@ function formatThumbnail(thumbnail: string) {
           "
         ></v-text-field>
         <v-select
-          :model-value="course.tags"
+          :model-value="course.courseTags"
           multiple
           :items="tags"
           variant="outlined"
           chips
           @update:model-value="
-            (tags) => $emit('update:course', { ...course, tags: [...tags] })
+            (tags) =>
+              $emit('update:course', { ...course, courseTags: [...tags] })
           "
         ></v-select>
         <v-file-input

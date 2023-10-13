@@ -68,6 +68,8 @@ function validRoute() {
       text="Something went wrong. Please try again later."
     ></v-alert>
 
+    <h1 class="mb-2 text-h4 font-weight-medium">Edit Course</h1>
+    <v-divider></v-divider>
     <v-container fluid>
       <v-container
         class="d-flex"
@@ -89,7 +91,10 @@ function validRoute() {
         class="d-flex align-end"
         fluid
       >
-        <v-card class="d-flex justify-end bg-grey-lighten-3 w-100 pa-2">
+        <v-container
+          class="d-flex justify-end bg-grey-lighten-3 pa-2"
+          fluid
+        >
           <v-btn
             class="text-capitalize"
             variant="text"
@@ -104,7 +109,7 @@ function validRoute() {
           >
             Save Changes
           </v-btn>
-        </v-card>
+        </v-container>
       </v-container>
     </v-container>
   </template>

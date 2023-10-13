@@ -42,10 +42,10 @@ async function handleContentDelete(contentId: number) {
 
 <template>
   <v-card class="w-100">
-    <v-container>
+    <v-container fluid>
       <v-row>
         <v-col class="d-flex justify-start align-center">
-          <h4 class="text-h4">Content</h4>
+          <h4 class="text-h5 font-weight-bold">Content</h4>
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <v-btn
@@ -62,7 +62,6 @@ async function handleContentDelete(contentId: number) {
         </v-col>
       </v-row>
       <v-divider></v-divider>
-
       <v-list
         max-height="100%"
         height="400"

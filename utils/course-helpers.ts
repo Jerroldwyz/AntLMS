@@ -76,7 +76,7 @@ export async function createCourse(course: Course): Promise<any> {
   }
 
   await $fetch("/api/mycourses", {
-    method: "post",
+    method: "POST",
     body: {
       ...course,
     },
