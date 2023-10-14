@@ -1,6 +1,6 @@
 import { InferType, number, object, string } from "yup"
 import { getCourseById } from "~/server/utils/db/courses"
-import { userIdSchema } from "~/server/utils/userIdSchema"
+import { optionalIdSchema, userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   // Query params
   const unvalidatedQueryParams = getQuery(event)
   const queryParamsSchema = object({
-    userId: userIdSchema(),
+    userId: optionalIdSchema(),
   })
   type queryParamsType = InferType<typeof queryParamsSchema>
   const queryParams = await validateAndParse<queryParamsType>({
