@@ -1,5 +1,4 @@
 import { InferType, bool, number, object, string } from "yup"
-import { updateCourseById } from "~/server/utils/db/courses"
 
 export default defineEventHandler(async (event) => {
   // Route params

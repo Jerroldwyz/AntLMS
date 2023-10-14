@@ -1,5 +1,4 @@
-import { InferType, bool, number, object, string } from "yup"
-import { updateCourseById } from "~/server/utils/db/courses"
+import { InferType, bool, number, object, string, array } from "yup"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -17,6 +16,7 @@ export default defineEventHandler(async (event) => {
   const requestBodySchema = object({
     title: string().optional(),
     enabled: bool().optional(),
+    tags: array(string().nullable().optional()),
     thumbnail: string().nullable().optional(),
     creator_id: string().optional().uuid(),
   })
@@ -28,13 +28,12 @@ export default defineEventHandler(async (event) => {
   })
 
   const course = camelCaseToUnderscore(body)
-  let data
   try {
-    const courseId = id
-    data = await updateCourseById(courseId, course)
+    console.log("c: " + JSON.stringify(course))
+    const data = await updateCourseById(id, course)
+    return mycourseTransformer(data)
   } catch (e) {
+    console.log(e)
     throw prismaErrorHandler(e)
   }
-
-  return mycourseTransformer(data)
 })

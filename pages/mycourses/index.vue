@@ -46,7 +46,6 @@ async function handleSubmit(status: boolean) {
   </v-row>
   <v-divider class="mb-4"></v-divider>
   <v-row>
-    <CreateCourseBtn @click="createCourseDialog = true" />
     <Course
       v-for="course in courses"
       :id="course.id"
@@ -55,6 +54,7 @@ async function handleSubmit(status: boolean) {
       :thumbnail="course.thumbnail"
       @delete="refreshCourses"
     />
+    <CreateCourseBtn @click="createCourseDialog = true" />
   </v-row>
 
   <v-dialog v-model="createCourseDialog">

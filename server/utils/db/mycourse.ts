@@ -89,13 +89,35 @@ export const createCourse = async (data: any) => {
   return await getCreatorCourseById(createdData.id)
 }
 
-export const updateCourse = async (course_id: number, course_data: any) => {
+export const updateCourseById = async (course_id: number, course_data: any) => {
   const updatedData = await prisma.courses.update({
     where: {
       id: course_id,
     },
     data: {
-      ...course_data,
+      title: course_data.title,
+      enabled: course_data.enabled,
+      thumbnail: course_data.thumbnail,
+      topics: {
+        create: course_data.topics.map((topic: string) => ({
+          topic: {
+            connectOrCreate: {
+              where: { name: topic },
+              create: { name: topic },
+            },
+          },
+        })),
+      },
+      course_tags: {
+        create: course_data.tags.map((tag: string) => ({
+          tag: {
+            connectOrCreate: {
+              where: { name: tag },
+              create: { name: tag },
+            },
+          },
+        })),
+      },
     },
   })
   return await getCreatorCourseById(updatedData.id)

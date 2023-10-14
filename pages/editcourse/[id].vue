@@ -25,16 +25,17 @@ async function submitCourse() {
   if (course.value !== null) {
     try {
       loading.value = true
-      if (file.value.length <= 0) {
+      if (file.value.length > 0) {
         const newThumbnail = await uploadImage(file.value[0])
         await deleteImage(course.value.thumbnail)
         course.value.thumbnail = newThumbnail
       }
       await updateCourse(course.value, route.params.id)
-      loading.value = false
       alertSuccess.value = true
     } catch (e) {
       alertError.value = true
+    } finally {
+      loading.value = false
     }
   }
 }
