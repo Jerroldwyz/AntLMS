@@ -2,12 +2,11 @@ import { getAuth } from "firebase-admin/auth"
 import { InferType, string } from "yup"
 import { deleteUser } from "~/server/utils/db/users"
 import { useFirebaseAdmin } from "~/composables/useFirebaseAdmin.server"
-import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Route params
   const unvalidatedId = getRouterParam(event, "id")
-  const IdSchema = userIdSchema()
+  const IdSchema = string().required().uuid()
   type IdType = InferType<typeof IdSchema>
   const id = await validateAndParse<IdType>({
     schema: IdSchema,

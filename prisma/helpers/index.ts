@@ -19,7 +19,7 @@ import {
 } from ".prisma/client"
 import * as _ from "radash"
 import { createTempDir, cleanupTempDir } from "./fileHelpers"
-import { createUid, createUser } from "./createUser"
+import { createUser } from "./createUser"
 import { createCoursePromise } from "./createCourse"
 import { createCoursetag } from "./createCoursetag"
 import { createTopic, createMultipleTopics } from "./createTopic"
@@ -36,7 +36,7 @@ import { faker } from "./faker"
 
 const admins: users[] = [
   {
-    uid: createUid(),
+    uid: faker.string.uuid(),
     name: "admin",
     email: faker.internet.email(),
     contact_details: {},
@@ -45,7 +45,7 @@ const admins: users[] = [
     enabled: true,
   },
   {
-    uid: createUid(),
+    uid: faker.string.uuid(),
     name: "manager",
     email: faker.internet.email(),
     contact_details: {},
@@ -54,7 +54,7 @@ const admins: users[] = [
     enabled: true,
   },
   {
-    uid: createUid(),
+    uid: faker.string.uuid(),
     name: "staff",
     email: faker.internet.email(),
     contact_details: {},

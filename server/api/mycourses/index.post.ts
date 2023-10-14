@@ -1,6 +1,5 @@
 import { InferType, bool, object, string, array } from "yup"
 import { createCourse } from "~/server/utils/db/mycourse"
-import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Body params
@@ -10,7 +9,7 @@ export default defineEventHandler(async (event) => {
     enabled: bool().required().default(true),
     tags: array(string().nullable().optional()),
     thumbnail: string().nullable().optional().default(null),
-    creatorId: userIdSchema(),
+    creatorId: string().required().uuid(),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({

@@ -1,44 +1,43 @@
 import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  signInWithRedirect,
   signOut,
 } from "firebase/auth"
 
 export const useAuth = () => {
   const register = async ({ ...userData }) => {
-    // const { $firebaseAuth } = useNuxtApp()
-    // const userCredentials = await createUserWithEmailAndPassword(
-    //   $firebaseAuth,
-    //   userData.email,
-    //   userData.password,
-    // )
+    const { $firebaseAuth } = useNuxtApp()
+    const userCredentials = await createUserWithEmailAndPassword(
+      $firebaseAuth,
+      userData.email,
+      userData.password,
+    )
 
-    // const firebaseUser = userCredentials.user
+    const firebaseUser = userCredentials.user
 
-    // const userProps = {
-    //   uid: firebaseUser.uid,
-    //   email: firebaseUser.email,
-    //   name: userData.name,
-    //   contact_details: {
-    //     phone_number: userData.phone_number,
-    //   },
-    // }
-    return await $fetch("/api/auth/signup", {
+    const userProps = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      name: userData.name,
+      contact_details: {
+        phone_number: userData.phone_number,
+      },
+    }
+    await $fetch("/api/signup", {
       method: "POST",
-      body: userData,
+      body: userProps,
     })
+      .catch((error) => console.error(error))
+      .then(() => console.log("You have register"))
+
+    return firebaseUser
   }
 
   const login = async (email: string, password: string) => {
     const { $firebaseAuth } = useNuxtApp()
-    return await signInWithEmailAndPassword($firebaseAuth, email, password)
+    await signInWithEmailAndPassword($firebaseAuth, email, password)
   }
 
   const logout = async () => {
@@ -75,53 +74,9 @@ export const useAuth = () => {
     }
   }
 
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
-    const { $firebaseAuth } = useNuxtApp()
-    try {
-      return await signInWithPopup($firebaseAuth, provider).catch(
-        function (error) {
-          if (error.code === "auth/account-exists-with-different-credential") {
-            const pendingCred = error.credential
-            const email = error.email
-            fetchSignInMethodsForEmail($firebaseAuth, email).then(
-              function (methods) {
-                if (methods[0] === "password") {
-                  alert(
-                    "Google account's email already exist in another provider. Please signin using your password",
-                  )
-                }
-              },
-            )
-          }
-        },
-      )
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-  const signInWithFacebook = async () => {
-    const provider = new FacebookAuthProvider()
-    const { $firebaseAuth } = useNuxtApp()
-    const router = useRouter()
-    // signInWithPopup($firebaseAuth, provider)
-    //   .then((result) => {
-    //     const credential = FacebookAuthProvider.credentialFromResult(result)
-    //     const token = credential?.idToken
-    //     router.push('/')
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-    await signInWithRedirect($firebaseAuth, provider)
-  }
-
   return {
     register,
     login,
     logout,
-    signInWithGoogle,
-    signInWithFacebook,
   }
 }

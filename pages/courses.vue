@@ -4,10 +4,6 @@
   </NuxtLayout>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
-  middleware: "01-user",
-})
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>

@@ -84,17 +84,13 @@
 </template>
 
 <script setup lang="ts">
-import {
-  sendEmailVerification,
-  sendSignInLinkToEmail,
-  signInWithCustomToken,
-} from "firebase/auth"
-import Login from "./login.vue"
+import { sendEmailVerification, sendSignInLinkToEmail } from "firebase/auth"
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 
-const { register, login } = useAuth()
+const { register } = useAuth()
 
 const email = ref("")
 const password = ref("")
@@ -104,6 +100,7 @@ const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
 
+const emailVerified = ref(false)
 const isRegistered = ref(false)
 
 const nameRules = [(v: string) => !!v || "Name is required"]
@@ -124,17 +121,21 @@ const passwordValidation = [
   () => password.value === confirmedPassword.value || "Password must match",
 ]
 
-const signUp = async () => {
+const signUp = () => {
   disabled.value = true
   try {
-    const userRecord = {
+    const userProps = {
       email: email.value,
       name: `${firstName.value} ${lastName.value}`,
       password: password.value,
       contact_details: {},
     }
-    const user: any = await register(userRecord)
-    await login(email.value, password.value)
+    register(userProps).then((user) => {
+      const actionCodeSettings = {
+        url: "http://localhost:3000/auth/login",
+      }
+      sendEmailVerification(user, actionCodeSettings)
+    })
   } catch (error) {
     alert(error)
   }
