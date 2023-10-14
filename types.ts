@@ -6,8 +6,16 @@ export enum CourseQueryStatus {
   disabled,
 }
 
+export type UserData = {
+  id: number
+  name: string
+  email: string
+  gender: string
+  // Add profilePicture field
+  profilePicture: File | null
+}
+
 export type User = {
-  is_admin: boolean
   uid: string
   name: string
   email: string

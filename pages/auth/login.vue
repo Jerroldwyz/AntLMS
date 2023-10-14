@@ -20,62 +20,27 @@
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
             <v-checkbox
               v-model="checkbox"
-              :rules="[(v: any) => !!v || 'You must agree to continue!']"
+              :rules="[(v) => !!v || 'You must agree to continue!']"
               label="Remember me?"
               required
               hide-details
             ></v-checkbox>
             <div class="ml-auto">
-              <NuxtLink
-                to="/auth/reset-password"
+              <a
+                href="javascript:void(0)"
                 class="text-primary text-decoration-none"
-                >Forgot password?</NuxtLink
+                >Forgot password?</a
               >
             </div>
           </div>
-          <div>
-            <v-btn
-              class="mb-4"
-              color="primary"
-              block
-              type="submit"
-              :disabled="disabled"
-              >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
-            >
-            <div class="d-flex d-row align-center mb-3">
-              <v-divider
-                :thickness="2"
-                class="border-opacity-25"
-              ></v-divider>
-              <p class="text-body-1 mx-3">or</p>
-              <v-divider
-                :thickness="2"
-                class="border-opacity-25"
-              ></v-divider>
-            </div>
-            <v-btn
-              class="mb-4"
-              block
-              @click="googleSignIn"
-            >
-              <v-icon
-                start
-                icon="mdi-google"
-              ></v-icon>
-              Continue with Goggle
-            </v-btn>
-            <!-- <v-btn
-              class="mb-4"
-              block
-              @click="facebookSignIn"
-            >
-              <v-icon
-                start
-                icon="mdi-facebook"
-              ></v-icon>
-              Continue with Facebook
-            </v-btn> -->
-          </div>
+          <v-btn
+            color="primary"
+            block
+            class="py-6"
+            type="submit"
+            :disabled="disabled"
+            >{{ disabled ? "Please wait" : "Sign In" }}</v-btn
+          >
         </v-form>
         <h6 class="text-subtitle-1 text-grey-darken-1">
           Don't have an account?
@@ -93,45 +58,26 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-  middleware: "03-guest",
+  middleware: "guest",
 })
 
-const { login, signInWithGoogle, signInWithFacebook } = useAuth()
+const { login } = useAuth()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
 const router = useRouter()
 const email = ref("")
 const password = ref("")
-const userStore = useUserStore()
 
 const signIn = async () => {
   disabled.value = true
   try {
-    const result = await login(email.value, password.value)
-
-    if (result) {
-      userStore.setUser(await formatUser(result.user))
-      await navigateTo("/")
-    }
+    await login(email.value, password.value)
+    router.push("/")
   } catch (error) {
     alert(error)
   }
   disabled.value = false
-}
-
-const googleSignIn = async () => {
-  const result = await signInWithGoogle()
-  if (result) {
-    userStore.setUser(await formatUser(result.user))
-    await navigateTo("/")
-  }
-}
-
-const facebookSignIn = () => {
-  signInWithFacebook().then(() => {
-    router.push("/")
-  })
 }
 </script>
 

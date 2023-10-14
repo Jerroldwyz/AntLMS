@@ -1,7 +1,6 @@
 import { quiz_progress } from "@prisma/client"
 import { InferType, array, number, object, string } from "yup"
 import { quizPassed } from "~/server/utils/db/quiz"
-import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -17,7 +16,7 @@ export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
-    userId: userIdSchema(),
+    userId: string().required().uuid(),
     enrollmentId: number().required().integer().min(1),
     result: array().required().of(number().required().integer().min(1)),
   })

@@ -9,9 +9,9 @@ export default defineEventHandler(async (event) => {
     const expiresIn = 60 * 60 * 24 * 1000
     const app = useFirebaseAdmin()!
     const auth = getAuth(app)
-    // const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
+    const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
 
-    setCookie(event, `${cookieOptions.name}-token`, token, {
+    setCookie(event, `${cookieOptions.name}-token`, sessionCookie, {
       domain: cookieOptions.domain,
       maxAge: expiresIn ?? 0,
       path: cookieOptions.path,

@@ -1,28 +1,22 @@
-import { UserRecord } from "firebase-admin/auth"
+import { DecodedIdToken } from "firebase-admin/auth"
 import { User as FirebaseUser } from "firebase/auth"
 
 export const formatUser = async <TypeUser>(
-  user: FirebaseUser | UserRecord,
-  isAdmin: boolean = false,
+  user: FirebaseUser | DecodedIdToken,
 ) => {
-  const data = await $fetch(`/api/auth/me/`, {
-    method: "POST",
+  const { data } = await useFetch("/api/signin", {
+    method: "post",
     body: {
       uid: user.uid,
-      name: user.displayName,
       email: user.email,
-      thumbnail: null,
-      contact_details: {},
-      isAdmin,
     },
   })
 
   return <TypeUser>{
-    is_admin: data.is_admin,
     uid: user.uid,
     email: user.email,
-    name: data.name,
-    thumbnail: data.thumbnail,
-    contact_details: data.contact_details,
+    name: data.value?.name,
+    thumbnail: data.value?.thumbnail,
+    contact_details: data.value?.contact_details,
   }
 }

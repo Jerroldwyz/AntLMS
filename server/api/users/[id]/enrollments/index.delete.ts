@@ -1,11 +1,10 @@
 import { InferType, number, object, string } from "yup"
 import { unenrollUser } from "~/server/utils/db/enrollment"
-import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Route params
   const unvalidatedId = getRouterParam(event, "id")
-  const IdSchema = userIdSchema()
+  const IdSchema = string().required().uuid()
   type IdType = InferType<typeof IdSchema>
   const id = await validateAndParse<IdType>({
     schema: IdSchema,

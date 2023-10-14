@@ -1,11 +1,15 @@
-import { InferType, string, object, bool } from "yup"
+import { InferType, bool, object, string } from "yup"
+import { v4 as uuidv4 } from "uuid"
 import { createUser } from "~/server/utils/db/users"
 
 export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
-    uid: userIdSchema(),
+    uid: string()
+      .optional()
+      .uuid()
+      .default(() => uuidv4()),
     name: string().required().min(1),
     email: string().required().email(),
     thumbnail: string().nullable().optional().default(null),
@@ -20,16 +24,15 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  const existingUser = await getUserById(body.uid)
-
-  if (existingUser) {
-    return existingUser
-  } else {
-    // Create user in local database
-    try {
+  let signInUser
+  try {
+    signInUser = await getUserById(body.uid)
+    if (signInUser) {
+      return signInUser
+    } else {
       return await createUser(camelCaseToUnderscore(body))
-    } catch (e) {
-      throw prismaErrorHandler(e)
     }
+  } catch (e) {
+    throw prismaErrorHandler(e)
   }
 })

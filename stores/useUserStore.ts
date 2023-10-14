@@ -47,7 +47,6 @@ export const useUserStore = defineStore("current-user-store", {
       const updatedUser: any = await updateAccount(this.user?.uid, userToUpdate)
 
       this.user = {
-        is_admin: updatedUser.is_admin,
         uid: updatedUser.uid,
         email: updatedUser.email,
         name: updatedUser.name,
@@ -70,7 +69,6 @@ export const useUserStore = defineStore("current-user-store", {
       const updatedUser: any = await updateAccount(this.user?.uid, userToUpdate)
 
       this.user = {
-        is_admin: updatedUser.is_admin,
         uid: updatedUser.uid,
         email: updatedUser.email,
         name: updatedUser.name,
