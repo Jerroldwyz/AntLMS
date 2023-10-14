@@ -26,7 +26,7 @@ export type User = {
 export type Course = {
   title: string
   thumbnail: string
-  tags: string[]
+  courseTags: string[]
   creatorId: string
 }
 

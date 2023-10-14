@@ -3,6 +3,7 @@ export async function submitContent(
   type: string,
   content: string,
   topicId: string,
+  position: string,
 ) {
   await $fetch("/api/content", {
     method: "POST",
@@ -11,6 +12,7 @@ export async function submitContent(
       type,
       content,
       topicId: parseInt(topicId),
+      topicPosition: parseInt(position),
     },
   })
 }

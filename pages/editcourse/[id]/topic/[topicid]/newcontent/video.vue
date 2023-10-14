@@ -1,35 +1,26 @@
 <script setup lang="ts">
 const route = useRoute()
-const titleRules = [
-  (value: string) => {
-    if (value) return true
+const video = ref<File[]>([])
 
-    return "You must enter a title"
-  },
-  (value: string) => {
-    if (value.length > 5) return true
-
-    return "Title must be 5 characters or more"
-  },
-]
-
-const title = ref("")
-
-async function submitTopic() {
+async function submitVideo() {
   if (
-    typeof route.params.id === "string" &&
+    typeof video !== "undefined" &&
+    typeof route.query.title === "string" &&
+    typeof route.params.topicid === "string" &&
     typeof route.query.position === "string"
   ) {
-    await addTopic(
-      parseInt(route.params.id),
-      title.value,
-      parseInt(route.query.position),
+    const videoLink = await uploadVideo(video.value[0])
+    submitContent(
+      route.query.title,
+      "VIDEO",
+      videoLink,
+      route.params.topicid,
+      route.query.position,
     )
-    await navigateTo(`/editcourse/${route.params.id}`)
+    navigateTo(`/editcourse/${route.params.id}`)
   }
 }
 </script>
-
 <template>
   <v-dialog
     :model-value="true"
@@ -40,10 +31,10 @@ async function submitTopic() {
       fluid
     >
       <v-card width="25%">
-        <v-form @submit.prevent="submitTopic">
+        <v-form @submit.prevent="submitVideo">
           <v-row>
             <v-col>
-              <v-card-title class="text-h5"> Add New Topic </v-card-title>
+              <v-card-title class="text-h5"> Add New Video </v-card-title>
             </v-col>
             <v-col class="d-flex justify-end">
               <v-btn
@@ -54,12 +45,11 @@ async function submitTopic() {
             </v-col>
           </v-row>
           <v-container>
-            <v-text-field
-              v-model="title"
+            <v-file-input
+              v-model="video"
               variant="outlined"
-              label="Title"
-              :rules="titleRules"
-            ></v-text-field>
+              label="Video"
+            ></v-file-input>
           </v-container>
           <v-card class="d-flex justify-end bg-grey-lighten-3 pa-2">
             <v-btn

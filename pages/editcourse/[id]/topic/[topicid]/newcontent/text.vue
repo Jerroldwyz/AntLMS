@@ -8,13 +8,15 @@ const content = ref("")
 function submitTextContent() {
   if (
     typeof route.query.title === "string" &&
-    typeof route.params.topicid === "string"
+    typeof route.params.topicid === "string" &&
+    typeof route.query.position === "string"
   ) {
     submitContent(
       route.query.title,
       "TEXT",
       content.value,
       route.params.topicid,
+      route.query.position,
     )
     navigateTo(`/editcourse/${route.params.id}`)
   }

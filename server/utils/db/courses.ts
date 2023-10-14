@@ -120,13 +120,3 @@ export const getAllCourses = (status: boolean | undefined = undefined) => {
     },
   })
 }
-
-export const updateCourseById = async (courseId: number, data: any) => {
-  await prisma.courses.update({
-    where: {
-      id: courseId,
-    },
-    data,
-  })
-  return await getCourseById(courseId)
-}

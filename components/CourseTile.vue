@@ -102,7 +102,7 @@ const enrollUserNow = async () => {
         </v-img>
 
         <v-container>
-          <v-card-title class="text-h6 text-left font-weight-medium">{{
+          <v-card-title class="text-h6 text-center font-weight-medium">{{
             data.title
           }}</v-card-title>
           <v-card-text v-if="userIsEnrolled">

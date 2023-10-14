@@ -1,9 +1,14 @@
-export async function addTopic(courseId: number, title: string) {
+export async function addTopic(
+  courseId: number,
+  title: string,
+  position: number,
+) {
   await $fetch("/api/topics", {
     method: "POST",
     body: {
       courseId,
       title,
+      position,
     },
   })
 }

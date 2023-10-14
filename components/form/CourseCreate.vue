@@ -36,7 +36,7 @@ const file = ref<File[]>([])
 const course = ref<Course>({
   title: "",
   thumbnail: "",
-  tags: [],
+  courseTags: [],
   creatorId: "",
 })
 
@@ -56,11 +56,13 @@ async function submitCourse() {
     try {
       await uploadFile()
       await createCourse(course.value)
+      emit("submit", true)
+    } catch (e) {
+      emit("submit", false)
+    } finally {
       loading.value = false
       emit("close")
-      emit("submit", true)
-    } catch (e) {}
-    emit("submit", false)
+    }
   }
 }
 </script>
@@ -91,7 +93,7 @@ async function submitCourse() {
           :rules="titleRules"
         ></v-text-field>
         <v-select
-          v-model="course.tags"
+          v-model="course.courseTags"
           variant="outlined"
           label="Tag(s)"
           :items="tags"

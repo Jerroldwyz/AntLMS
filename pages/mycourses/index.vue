@@ -9,9 +9,13 @@ const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)
 
-async function handleSubmit(status: boolean) {
-  status ? (alertError.value = status) : (alertSuccess.value = status)
+async function refreshCourses() {
   courses.value = await fetchAllUserCreatedCourses()
+}
+
+async function handleSubmit(status: boolean) {
+  status ? (alertSuccess.value = status) : (alertError.value = status)
+  await refreshCourses()
 }
 </script>
 
@@ -35,20 +39,23 @@ async function handleSubmit(status: boolean) {
     text="Something went wrong. Please try again later."
   ></v-alert>
 
-  <v-container
-    fluid
-    class="d-flex flex-wrap"
-    style="gap: 2em"
-  >
-    <CreateCourseBtn @click="createCourseDialog = true" />
+  <v-row>
+    <v-col class="d-flex align-center">
+      <h1 class="mb-2 text-h4 font-weight-medium">My Courses</h1>
+    </v-col>
+  </v-row>
+  <v-divider class="mb-4"></v-divider>
+  <v-row>
     <Course
       v-for="course in courses"
       :id="course.id"
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      @delete="refreshCourses"
     />
-  </v-container>
+    <CreateCourseBtn @click="createCourseDialog = true" />
+  </v-row>
 
   <v-dialog v-model="createCourseDialog">
     <v-container fluid>
