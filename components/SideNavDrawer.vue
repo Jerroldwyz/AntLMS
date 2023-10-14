@@ -95,7 +95,9 @@
 </template>
 
 <script setup lang="ts">
-const courses = await fetchAllEnrolledCourses()
+import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
+
+const courses: any = await fetchAllEnrolledCourses()
 const browse = ["Creative", "Technology", "Business"]
 const hovered = ref(true)
 

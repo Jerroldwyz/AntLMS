@@ -22,7 +22,7 @@
           <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
             <v-checkbox
               v-model="checkbox"
-              :rules="[(v) => !!v || 'You must agree to continue!']"
+              :rules="[(v: any) => !!v || 'You must agree to continue!']"
               label="Remember me?"
               required
               hide-details
@@ -66,8 +66,13 @@ const password = ref("")
 const signIn = async () => {
   disabled.value = true
   try {
-    await login(email.value, password.value)
-    router.push("/admin")
+    const result = await login(email.value, password.value)
+
+    if (result) {
+      const userStore = useUserStore()
+      userStore.setUser(await formatUser(result.user))
+      await navigateTo("/admin")
+    }
   } catch (error) {
     alert(error)
   }

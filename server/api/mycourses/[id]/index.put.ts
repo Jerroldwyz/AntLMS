@@ -1,4 +1,7 @@
 import { InferType, bool, number, object, string, array } from "yup"
+import { updateCourseById } from "~/server/utils/db/courses"
+import { optionalIdSchema, userIdSchema } from "~/server/utils/userIdSchema"
+
 
 export default defineEventHandler(async (event) => {
   // Route params
@@ -18,7 +21,7 @@ export default defineEventHandler(async (event) => {
     enabled: bool().optional(),
     tags: array(string().nullable().optional()),
     thumbnail: string().nullable().optional(),
-    creator_id: string().optional().uuid(),
+    creator_id: optionalIdSchema(),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({

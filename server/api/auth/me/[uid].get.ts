@@ -1,32 +1,31 @@
-import { InferType, string } from "yup"
-import { getUserById } from "~/server/utils/db/users"
+import { InferType, object, string } from "yup"
 import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
-  // Route params
-  const unvalidatedId = getRouterParam(event, "id")
+  const unvalidatedId = getRouterParam(event, "uid")
   const IdSchema = userIdSchema()
   type IdType = InferType<typeof IdSchema>
-  const id = await validateAndParse<IdType>({
+  const uid = await validateAndParse<IdType>({
     schema: IdSchema,
     value: unvalidatedId,
     msgOnError: "Bad request router params",
   })
 
-  // Query DB
-  let data
+  let signInUser
+
   try {
-    const userId = id
-    data = await getUserById(userId as string)
+    signInUser = await getUserById(uid)
+    if (signInUser) {
+      return signInUser
+    }
   } catch (e) {
     throw prismaErrorHandler(e)
   }
-  if (data === null) {
+
+  if (signInUser === null) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Question ID does not exist",
+      statusMessage: "User not found",
     })
   }
-
-  return data
 })

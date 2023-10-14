@@ -1,5 +1,6 @@
 import { InferType, object, string, number } from "yup"
 import { completeContent } from "~/server/utils/db/progress"
+import { userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Body params
@@ -7,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const requestBodySchema = object({
     enrollmentId: number().required().integer().min(1),
     contentId: number().required().integer().min(1),
-    userId: string().required().uuid(),
+    userId: userIdSchema(),
   })
   type requestBodyType = InferType<typeof requestBodySchema>
   const body = await validateAndParse<requestBodyType>({
