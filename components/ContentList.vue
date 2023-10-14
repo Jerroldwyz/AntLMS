@@ -94,7 +94,9 @@ async function handleContentDelete(contentId: number) {
                         navigateTo(
                           `${route.params.id}/topic/${
                             topic.id
-                          }/newcontent?position=${topic.content.length + 1}`,
+                          }/newcontent?topicId=${topic.id}&position=${
+                            topic.content.length + 1
+                          }`,
                         )
                       "
                     >

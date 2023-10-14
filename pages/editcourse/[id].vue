@@ -43,7 +43,7 @@ async function submitCourse() {
 function validRoute() {
   return (
     route.name !== "editcourse-id-topic-topicid-newcontent-text" &&
-    route.name !== "editcourse-id-topic-topicid-newcontent-quiz"
+    route.name !== "editcourse-id-topic-topicid-newcontent-quiz-id"
   )
 }
 </script>

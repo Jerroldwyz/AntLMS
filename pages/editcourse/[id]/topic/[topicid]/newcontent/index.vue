@@ -24,16 +24,25 @@ const contentTypeRules = [
 const title = ref("")
 const contentType = ref<"quiz" | "text" | "video" | undefined>()
 
-function addContent() {
+async function handleQuiz() {
+  const quiz: any = await $fetch("/api/quiz", {
+    method: "POST",
+    body: {
+      title: title.value,
+      topic_id: route.query.topicId,
+      threshold: 50,
+      topic_position: route.query.position,
+    },
+  })
+  navigateTo({
+    path: `newcontent/quiz/${quiz.id}`,
+  })
+}
+
+async function addContent() {
   switch (contentType.value) {
     case "quiz":
-      navigateTo({
-        path: `newcontent/quiz`,
-        query: {
-          title: title.value,
-          position: route.query.position,
-        },
-      })
+      await handleQuiz()
       break
     case "text":
       navigateTo({
