@@ -19,9 +19,13 @@ const createCourseDialog = ref(false)
 const alertSuccess = ref(false)
 const alertError = ref(false)
 
-async function handleSubmit(status: boolean) {
-  status ? (alertError.value = status) : (alertSuccess.value = status)
+async function refreshCourses() {
   courses.value = await fetchAllUserCreatedCourses()
+}
+
+async function handleSubmit(status: boolean) {
+  status ? (alertSuccess.value = status) : (alertError.value = status)
+  await refreshCourses()
 }
 </script>
 

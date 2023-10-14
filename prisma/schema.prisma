@@ -50,7 +50,8 @@ model courses_tags {
   tag       tags    @relation(fields: [tag_id], references: [id], onDelete: Cascade)
   tag_id    Int
 
-  @@unique([course_id, tag_id])
+  // ONLY FOR USABILITY TESTING
+  //@@unique([course_id, tag_id])
 }
 
 model topics {

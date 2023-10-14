@@ -2,6 +2,7 @@ import { InferType, bool, number, object, string } from "yup"
 import { updateCourseById } from "~/server/utils/db/courses"
 import { optionalIdSchema, userIdSchema } from "~/server/utils/userIdSchema"
 
+
 export default defineEventHandler(async (event) => {
   // Route params
   const unvalidatedId = getRouterParam(event, "id")

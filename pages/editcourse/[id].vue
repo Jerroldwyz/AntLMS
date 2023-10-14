@@ -11,13 +11,13 @@ const alertError = ref(false)
 
 const route = useRoute()
 
-console.log(route.name)
-
 const { data: course } = useFetch<Course>(
   () => `/api/mycourses/${route.params.id}`,
 )
 
-console.log(course.value)
+async function refreshCourse() {
+  course.value = await $fetch(`/api/mycourses/${route.params.id}`)
+}
 
 const file = ref<File[]>([])
 
@@ -25,17 +25,17 @@ async function submitCourse() {
   if (course.value !== null) {
     try {
       loading.value = true
-      if (file.value.length <= 0) {
+      if (file.value.length > 0) {
         const newThumbnail = await uploadImage(file.value[0])
         await deleteImage(course.value.thumbnail)
         course.value.thumbnail = newThumbnail
       }
-      console.log(course.value)
       await updateCourse(course.value, route.params.id)
-      loading.value = false
       alertSuccess.value = true
     } catch (e) {
       alertError.value = true
+    } finally {
+      loading.value = false
     }
   }
 }
@@ -43,8 +43,7 @@ async function submitCourse() {
 function validRoute() {
   return (
     route.name !== "editcourse-id-topic-topicid-newcontent-text" &&
-    route.name !== "editcourse-id-topic-topicid-newcontent-video" &&
-    route.name !== "editcourse-id-topic-topicid-newcontent-quiz"
+    route.name !== "editcourse-id-topic-topicid-newcontent-quiz-id"
   )
 }
 </script>
@@ -68,6 +67,8 @@ function validRoute() {
       text="Something went wrong. Please try again later."
     ></v-alert>
 
+    <h1 class="mb-2 text-h4 font-weight-medium">Edit Course</h1>
+    <v-divider></v-divider>
     <v-container fluid>
       <v-container
         class="d-flex"
@@ -81,7 +82,7 @@ function validRoute() {
           />
           <ContentList
             v-model:course="course"
-            @delete="refreshNuxtData"
+            @delete="refreshCourse"
           />
         </template>
       </v-container>
@@ -89,7 +90,10 @@ function validRoute() {
         class="d-flex align-end"
         fluid
       >
-        <v-card class="d-flex justify-end bg-grey-lighten-3 w-100 pa-2">
+        <v-container
+          class="d-flex justify-end bg-grey-lighten-3 pa-2"
+          fluid
+        >
           <v-btn
             class="text-capitalize"
             variant="text"
@@ -104,7 +108,7 @@ function validRoute() {
           >
             Save Changes
           </v-btn>
-        </v-card>
+        </v-container>
       </v-container>
     </v-container>
   </template>

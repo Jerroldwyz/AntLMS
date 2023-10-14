@@ -42,21 +42,26 @@ async function handleContentDelete(contentId: number) {
 
 <template>
   <v-card class="w-100">
-    <v-container>
+    <v-container fluid>
       <v-row>
         <v-col class="d-flex justify-start align-center">
-          <h4 class="text-h4">Content</h4>
+          <h4 class="text-h5 font-weight-bold">Content</h4>
         </v-col>
         <v-col class="d-flex justify-end align-center">
           <v-btn
             class="mb-2 bg-primary"
             icon="mdi-plus"
-            @click="navigateTo(`${route.params.id}/newtopic`)"
+            @click="
+              navigateTo(
+                `${route.params.id}/newtopic?position=${
+                  course.topics.length + 1
+                }`,
+              )
+            "
           ></v-btn>
         </v-col>
       </v-row>
       <v-divider></v-divider>
-
       <v-list
         max-height="100%"
         height="400"
@@ -85,9 +90,13 @@ async function handleContentDelete(contentId: number) {
                     <v-btn
                       icon="mdi-plus"
                       variant="flat"
-                      @click="
+                      @click.stop="
                         navigateTo(
-                          `${route.params.id}/topic/${topic.id}/newcontent`,
+                          `${route.params.id}/topic/${
+                            topic.id
+                          }/newcontent?topicId=${topic.id}&position=${
+                            topic.content.length + 1
+                          }`,
                         )
                       "
                     >
@@ -95,7 +104,7 @@ async function handleContentDelete(contentId: number) {
                     <v-btn
                       icon="mdi-delete"
                       variant="flat"
-                      @click="handleTopicDelete(topic.id)"
+                      @click.stop="handleTopicDelete(topic.id)"
                     >
                     </v-btn>
                   </template>
