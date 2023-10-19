@@ -34,24 +34,16 @@ export async function fetchAllUserCreatedCourses(): Promise<any> {
   return allCourses
 }
 
-export async function fetchAllEnrolledCourses(): Promise<any> {
-  const userStore = useUserStore()
-  const userUid = userStore.user?.uid
-
-  if (userUid) {
-    const allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
-      method: "get",
-    })
-
-    return allEnrollments.map((enrollment) => enrollment.course)
-  }
-  // TODO: Throw error?
-  return "ERROR: Not logged in"
+export async function fetchAllEnrolledCourses(uid: string): Promise<any> {
+  const allEnrollments = await $fetch(`/api/users/${uid}/enrollments`, {
+    method: "GET",
+  })
+  return allEnrollments.map((enrollment) => enrollment.course)
 }
 
 export async function fetchEnrolledCourse(courseId: string | string[]) {
   const userStore = useUserStore()
-  const userUid = userStore.user?.uid
+  const userUid = userStore.uid
   return await $fetch(`/api/users/${userUid}/enrollments/${courseId}`, {
     method: "GET",
   })

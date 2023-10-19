@@ -120,10 +120,7 @@ const signIn = async () => {
   }
   try {
     const userCredentials = await login(credentialsPayload)
-    if (isAuthenticated.value && user.value) {
-      console.log("User authenticated")
-      router.push("/")
-    }
+    router.push("/")
   } catch (error) {
     alert(error)
   }

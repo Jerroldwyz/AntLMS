@@ -13,11 +13,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   const authStore = useAuthStore()
 
   nuxtApp.hooks.hook("app:beforeMount", () => {
-    auth.onIdTokenChanged(async (user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // if (!user.emailVerified) {
-        //   navigateTo("/auth/verify")
-        // }
+        userStore.uid = user.uid
 
         const idTokenResult = await user.getIdTokenResult(true)
         const isAdmin = !!idTokenResult.claims.admin
@@ -29,7 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         // }
       } else {
         await setServerSession(null)
-        userStore.setUser(null)
+        userStore.$reset()
         navigateTo("/auth/login")
       }
     })
