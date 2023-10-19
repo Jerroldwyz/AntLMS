@@ -4,15 +4,25 @@ const data = defineProps<{
   title: string
   thumbnail?: string | null
 }>()
+const emit = defineEmits(["clicked"])
 
 const fetchedThumbnail = ref<string>("")
 const courseProgressPercentage = ref(0)
 const userIsEnrolled = ref(false)
+const dialog = ref(false)
 
 const userStore = useUserStore()
 const userUid = userStore.user?.uid
 
 onMounted(async () => {
+  if (userUid !== undefined) {
+    if (await isEnrolled(userUid, data.id)) {
+      userIsEnrolled.value = true
+      courseProgressPercentage.value =
+        (await getCourseProgress(userUid, data.id)) ?? 0
+    }
+  }
+
   if (data.thumbnail) {
     try {
       const url = await getImage(data.thumbnail)
@@ -21,14 +31,6 @@ onMounted(async () => {
       console.error("Error fetching thumbnail:", error)
       fetchedThumbnail.value =
         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
-    }
-  }
-
-  if (userUid !== undefined) {
-    if (await isEnrolled(userUid, data.id)) {
-      userIsEnrolled.value = true
-      courseProgressPercentage.value =
-        (await getCourseProgress(userUid, data.id)) ?? 0
     }
   }
 })
@@ -66,39 +68,13 @@ const enrollUserNow = async () => {
       <v-card
         v-bind="props"
         :elevation="isHovering ? 5 : undefined"
+        @click="dialog = true"
       >
         <v-img
           cover
           height="170"
           :src="thumbnail"
         >
-          <v-toolbar color="rgba(0,0,0,0)">
-            <template #append>
-              <v-menu offset="0, 100">
-                <template #activator="{ props }">
-                  <v-btn
-                    icon="mdi-dots-vertical"
-                    v-bind="props"
-                  ></v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item>
-                    <v-btn
-                      v-if="userIsEnrolled"
-                      @click="unenrollUserNow"
-                      >Unenroll</v-btn
-                    >
-                    <v-btn
-                      v-if="!userIsEnrolled"
-                      @click="enrollUserNow"
-                      >Enroll</v-btn
-                    >
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </template>
-          </v-toolbar>
         </v-img>
 
         <v-container>
@@ -115,4 +91,53 @@ const enrollUserNow = async () => {
       </v-card>
     </v-hover>
   </v-col>
+  <v-dialog
+    v-model="dialog"
+    persistent
+    width="50%"
+  >
+    <v-card>
+      <v-card-title class="text-h5 bg-primary"> Enrollment </v-card-title>
+      <v-card-text>
+        {{ userIsEnrolled ? "Unenroll" : "Enroll" }} in
+        <strong> {{ data.title }}</strong>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="green-darken-1"
+          variant="text"
+          @click="dialog = false"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          v-if="!userIsEnrolled"
+          color="primary"
+          variant="elevated"
+          @click="
+            () => {
+              enrollUserNow()
+              dialog = false
+            }
+          "
+        >
+          Enroll
+        </v-btn>
+        <v-btn
+          v-else
+          color="red"
+          variant="elevated"
+          @click="
+            () => {
+              unenrollUserNow()
+              dialog = false
+            }
+          "
+        >
+          Unenroll
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

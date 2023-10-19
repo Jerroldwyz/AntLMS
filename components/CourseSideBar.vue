@@ -102,7 +102,7 @@ function setContentIcon(content) {
     case "VIDEO":
       return "mdi-video-box"
     default:
-      return "mdi-pencil-circle"
+      return "mdi-head-question"
   }
 }
 

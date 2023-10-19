@@ -2,10 +2,15 @@
 const browse = ["Creative", "Technology", "Business"]
 const courses = await fetchAllCourses()
 const router = useRouter()
+const dialog = ref(false)
 
 function navigateToSearch(title: string) {
   title = title.toLowerCase()
   router.push({ path: "/search", query: { searchQuery: title } })
+}
+
+const handleClick = (isEnrolled: boolean) => {
+  console.log(isEnrolled)
 }
 </script>
 
@@ -47,6 +52,7 @@ function navigateToSearch(title: string) {
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      @clicked="handleClick"
     >
     </CourseTile>
   </v-row>
