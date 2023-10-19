@@ -37,8 +37,8 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
-  window.addEventListener("scroll", async () => {
-    await scrollToBottom()
+  window.addEventListener("scroll", async (event) => {
+    await scrollToBottom(event)
   })
 })
 
@@ -56,9 +56,11 @@ onUnmounted(async () => {
   }
 })
 
-const scrollToBottom = async () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    await handleContentDone()
+const scrollToBottom = async (event: Event, content: string = "text") => {
+  if (content === "text") {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      await handleContentDone()
+    }
   }
 }
 

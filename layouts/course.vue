@@ -29,9 +29,6 @@
           >Next</v-btn
         >
       </v-row>
-      <v-row v-else>
-        <v-btn color="primary"> Start </v-btn>
-      </v-row>
     </div>
   </div>
 </template>
