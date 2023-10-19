@@ -17,10 +17,10 @@ export default defineEventHandler(async (event) => {
       await auth.verifyIdToken(token, true)
     } catch (error) {
       console.error(error)
-      // throw createError({
-      //   statusCode: 400,
-      //   statusMessage: "Unauthorized",
-      // })
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Unauthorized",
+      })
     }
   }
 })

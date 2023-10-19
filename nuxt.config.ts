@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       "process.env.DEBUG": true,
     },
   },
-  ssr: true,
+  ssr: false,
   // typescript: {
   //   typeCheck: true
   // },
@@ -39,5 +39,12 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ["stores", "utils"],
+  },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
   },
 })

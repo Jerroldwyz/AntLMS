@@ -30,18 +30,9 @@
           <v-row>
             <v-col>
               <v-text-field
-                v-model="firstName"
+                v-model="fullName"
                 :rules="nameRules"
-                label="First name"
-                class="mt-4"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field
-                v-model="lastName"
-                :rules="nameRules"
-                label="Last name"
+                label="Full name"
                 class="mt-4"
                 required
               ></v-text-field>
@@ -103,6 +94,7 @@ const valid = ref(false)
 const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
+const fullName = ref("")
 
 const isRegistered = ref(false)
 
@@ -129,12 +121,11 @@ const signUp = async () => {
   try {
     const userRecord = {
       email: email.value,
-      name: `${firstName.value} ${lastName.value}`,
+      name: fullName.value,
       password: password.value,
       contact_details: {},
     }
-    const user: any = await register(userRecord)
-    await login(email.value, password.value)
+    await register(userRecord)
   } catch (error) {
     alert(error)
   }

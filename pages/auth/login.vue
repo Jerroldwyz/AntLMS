@@ -56,7 +56,7 @@
             <v-btn
               class="mb-4"
               block
-              @click="googleSignIn"
+              @click="signInWithProvider(AuthStrategy.Google)"
             >
               <v-icon
                 start
@@ -64,17 +64,17 @@
               ></v-icon>
               Continue with Goggle
             </v-btn>
-            <!-- <v-btn
+            <v-btn
               class="mb-4"
               block
-              @click="facebookSignIn"
+              @click="signInWithProvider(AuthStrategy.Facebook)"
             >
               <v-icon
                 start
                 icon="mdi-facebook"
               ></v-icon>
               Continue with Facebook
-            </v-btn> -->
+            </v-btn>
           </div>
         </v-form>
         <h6 class="text-subtitle-1 text-grey-darken-1">
@@ -91,28 +91,38 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia"
+// const { login, signInWithGoogle, signInWithFacebook } = useAuth()
+import { AuthStrategy, ICredentialsPayload, login } from "~/services/firebase"
+
 definePageMeta({
   layout: false,
   middleware: "03-guest",
 })
-
-const { login, signInWithGoogle, signInWithFacebook } = useAuth()
 const valid = ref(true)
 const disabled = ref(false)
 const checkbox = ref(false)
 const router = useRouter()
 const email = ref("")
 const password = ref("")
-const userStore = useUserStore()
+const { user } = storeToRefs(useUserStore())
+const { isAuthenticated } = storeToRefs(useAuthStore())
+const token = useFirebaseToken()
 
 const signIn = async () => {
   disabled.value = true
+  const credentialsPayload: ICredentialsPayload = {
+    provider: AuthStrategy.Email,
+    credentials: {
+      email: email.value,
+      password: password.value,
+    },
+  }
   try {
-    const result = await login(email.value, password.value)
-
-    if (result) {
-      userStore.setUser(await formatUser(result.user))
-      await navigateTo("/")
+    const userCredentials = await login(credentialsPayload)
+    if (isAuthenticated.value && user.value) {
+      console.log("User authenticated")
+      router.push("/")
     }
   } catch (error) {
     alert(error)
@@ -120,18 +130,16 @@ const signIn = async () => {
   disabled.value = false
 }
 
-const googleSignIn = async () => {
-  const result = await signInWithGoogle()
-  if (result) {
-    userStore.setUser(await formatUser(result.user))
-    await navigateTo("/")
+const signInWithProvider = async (strategy: AuthStrategy) => {
+  const credentialsPayload: ICredentialsPayload = {
+    provider: strategy,
   }
-}
-
-const facebookSignIn = () => {
-  signInWithFacebook().then(() => {
-    router.push("/")
-  })
+  try {
+    const user = await login(credentialsPayload)
+    await navigateTo("/")
+  } catch (error) {
+    alert(error)
+  }
 }
 </script>
 

@@ -13,11 +13,6 @@
         class="border-opacity-100"
       ></v-divider>
       <div v-html="fetchedContent.value?.content"></div>
-      <v-btn
-        color="secondary"
-        @click="handleContentDone"
-        >Mark as done</v-btn
-      >
     </div>
   </div>
 </template>
@@ -42,7 +37,30 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+  window.addEventListener("scroll", async () => {
+    await scrollToBottom()
+  })
 })
+
+const isPageUnscrollable = () => {
+  return (
+    document.documentElement.clientHeight >=
+    document.documentElement.scrollHeight
+  )
+}
+
+onUnmounted(async () => {
+  window.removeEventListener("scroll", scrollToBottom)
+  if (isPageUnscrollable()) {
+    await handleContentDone()
+  }
+})
+
+const scrollToBottom = async () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    await handleContentDone()
+  }
+}
 
 const handleContentDone = async () => {
   const userStore = useUserStore()

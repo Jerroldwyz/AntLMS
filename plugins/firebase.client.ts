@@ -10,22 +10,23 @@ export default defineNuxtPlugin((nuxtApp) => {
   const auth = getAuth(app)
 
   const userStore = useUserStore()
+  const authStore = useAuthStore()
 
   nuxtApp.hooks.hook("app:beforeMount", () => {
     auth.onIdTokenChanged(async (user) => {
       if (user) {
-        if (!user.emailVerified) {
-          navigateTo("/auth/verify")
-        }
+        // if (!user.emailVerified) {
+        //   navigateTo("/auth/verify")
+        // }
 
         const idTokenResult = await user.getIdTokenResult(true)
         const isAdmin = !!idTokenResult.claims.admin
         const token = await user.getIdToken(true)
         await setServerSession(token)
-        userStore.setUser(await formatUser(user, isAdmin))
-        if (isAdmin) {
-          navigateTo("/admin")
-        }
+        await authStore.authenticateUser(token)
+        // if (isAdmin) {
+        //   navigateTo("/admin")
+        // }
       } else {
         await setServerSession(null)
         userStore.setUser(null)

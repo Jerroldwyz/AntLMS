@@ -1,7 +1,6 @@
 import { InferType, bool, number, object, string } from "yup"
-import { updateCourseById } from "~/server/utils/db/courses"
+import { updateCourseById } from "~/server/utils/db/mycourse"
 import { optionalIdSchema, userIdSchema } from "~/server/utils/userIdSchema"
-
 
 export default defineEventHandler(async (event) => {
   // Route params

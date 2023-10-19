@@ -13,26 +13,23 @@ import {
 
 export const useAuth = () => {
   const register = async ({ ...userData }) => {
-    // const { $firebaseAuth } = useNuxtApp()
-    // const userCredentials = await createUserWithEmailAndPassword(
-    //   $firebaseAuth,
-    //   userData.email,
-    //   userData.password,
-    // )
+    const { $firebaseAuth } = useNuxtApp()
+    const userCredentials = await createUserWithEmailAndPassword(
+      $firebaseAuth,
+      userData.email,
+      userData.password,
+    )
 
-    // const firebaseUser = userCredentials.user
+    const firebaseUser = userCredentials.user
 
-    // const userProps = {
-    //   uid: firebaseUser.uid,
-    //   email: firebaseUser.email,
-    //   name: userData.name,
-    //   contact_details: {
-    //     phone_number: userData.phone_number,
-    //   },
-    // }
+    const userProps = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      name: userData.name,
+    }
     return await $fetch("/api/auth/signup", {
       method: "POST",
-      body: userData,
+      body: userProps,
     })
   }
 

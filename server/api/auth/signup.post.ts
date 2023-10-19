@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
+    uid: userIdSchema(),
     name: string().required().min(1),
     email: string().required().email(),
-    password: string().required().min(8),
     thumbnail: string().nullable().optional().default(null),
     contactDetails: object().optional().default({}),
     isAdmin: bool().optional().default(false),
@@ -23,43 +23,10 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
-  let createdUser: UserRecord
-  const app = useFirebaseAdmin()!
-  const auth = getAuth(app)
-
-  // create user on firebase
-  try {
-    createdUser = await auth.createUser({
-      email: body.email,
-      emailVerified: false,
-      password: body.password,
-      displayName: body.name,
-      disabled: !body.enabled,
-    })
-  } catch (e) {
-    const error = e as unknown as FirebaseError
-    throw createError({
-      statusCode: 500,
-      statusMessage: `Firebase admin: ${JSON.stringify(error.message)}`,
-    })
-  }
-
-  const userWithoutPassword = {
-    uid: createdUser.uid,
-    name: createdUser.displayName,
-    email: createdUser.email,
-    thumbnail: body.thumbnail,
-    contact_details: body.contactDetails,
-    isAdmin: body.isAdmin,
-    enabled: body.enabled,
-  }
-
   // Create user in local database
   try {
-    await createUser(camelCaseToUnderscore(userWithoutPassword))
+    return await createUser(camelCaseToUnderscore(body))
   } catch (e) {
     throw prismaErrorHandler(e)
   }
-
-  return createdUser
 })

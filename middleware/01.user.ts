@@ -1,16 +1,21 @@
+import { storeToRefs } from "pinia"
+
 export default defineNuxtRouteMiddleware((to, from) => {
   const token = useFirebaseToken()
-  const userStore = useUserStore()
+  const authStore = useAuthStore()
+  const { isAuthenticated } = storeToRefs(authStore)
 
-  // if(process.server) return
+  // token exist
+  if (token.value) {
+    isAuthenticated.value = true
+  }
 
-  if (!userStore.user) {
+  if (token.value && to?.name === "/auth/login") {
+    return navigateTo("/")
+  }
+
+  if (!token.value && to.name !== "/auth/login") {
+    abortNavigation()
     return navigateTo("/auth/login")
-  } else {
-    if (process.server) return
-
-    if (userStore.user.is_admin) {
-      return navigateTo("/")
-    }
   }
 })
