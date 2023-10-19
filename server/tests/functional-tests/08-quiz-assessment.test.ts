@@ -5,7 +5,11 @@ await setup({
   server: true,
 })
 
-let testUser: any, testCourse: any, testTopic: any, testQuiz: any
+let testUser: any,
+  testCourse: any,
+  testEnrollment: any,
+  testTopic: any,
+  testQuiz: any
 describe("My test", () => {
   beforeAll(async () => {
     testUser = await $fetch("/api/users", {
@@ -26,6 +30,12 @@ describe("My test", () => {
         enabled: true,
         thumbnail: null,
         creatorId: testUser.uid,
+      },
+    })
+    testEnrollment = await $fetch(`/api/users/${testUser.uid}/enrollments`, {
+      method: "POST",
+      body: {
+        courseId: testCourse.id,
       },
     })
     testTopic = await $fetch("/api/topics", {
@@ -81,6 +91,10 @@ describe("My test", () => {
         choices: [
           {
             choiceText: "1",
+            isCorrect: false,
+          },
+          {
+            choiceText: "2",
             isCorrect: true,
           },
         ],
@@ -88,49 +102,45 @@ describe("My test", () => {
         explanation: "1",
       },
     })
-    const getQuestion = await $fetch(`/api/question/${createQuestion.id}`)
-    expect(getQuestion).toEqual({
-      id: createQuestion.id,
-      quizId: createQuestion.quizId,
-      questionText: "1",
-      explanation: "1",
-      choices: [
-        {
-          id: createQuestion.choices[0].id,
-          choiceText: "1",
-          isCorrect: true,
-        },
-      ],
-    })
-    const updateQuestion = await $fetch(`/api/question/${createQuestion.id}`, {
-      method: "PUT",
+    const evaluateQuizFail = await $fetch(`/api/quiz/${testQuiz.id}/evaluate`, {
+      method: "POST",
       body: {
-        questionText: "2",
-        explanation: "2",
-        choices: [
-          {
-            choiceText: "2",
-            isCorrect: false,
-          },
-        ],
+        userId: testUser.uid,
+        enrollmentId: testEnrollment.id,
+        result: [createQuestion.choices[0].id],
       },
     })
-    const getQuestionAgain = await $fetch(`/api/question/${createQuestion.id}`)
-    expect(getQuestionAgain).toEqual({
-      id: createQuestion.id,
-      quizId: createQuestion.quizId,
-      questionText: "2",
-      explanation: "2",
-      choices: [
+    expect(evaluateQuizFail).toEqual({
+      correctAnswer: 0,
+      result: [
         {
-          id: updateQuestion.choices[0].id,
-          choiceText: "2",
+          id: createQuestion.choices[0].id,
           isCorrect: false,
+          questionId: createQuestion.id,
         },
       ],
+      threshold: 1,
+      totalQuestion: 1,
     })
-    const deleteQuestion = await $fetch(`/api/question/${updateQuestion.id}`, {
-      method: "DELETE",
+    const evaluateQuizPass = await $fetch(`/api/quiz/${testQuiz.id}/evaluate`, {
+      method: "POST",
+      body: {
+        userId: testUser.uid,
+        enrollmentId: testEnrollment.id,
+        result: [createQuestion.choices[1].id],
+      },
+    })
+    expect(evaluateQuizPass).toEqual({
+      correctAnswer: 1,
+      result: [
+        {
+          id: createQuestion.choices[1].id,
+          isCorrect: true,
+          questionId: createQuestion.id,
+        },
+      ],
+      threshold: 1,
+      totalQuestion: 1,
     })
   })
 })
