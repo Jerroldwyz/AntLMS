@@ -13,7 +13,8 @@ const handleOnClick = async (courseId: number) => {
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
-      @click="handleOnClick(course.id)"
+      :home="true"
+      @clicked="handleOnClick(course.id)"
     />
   </v-row>
 </template>

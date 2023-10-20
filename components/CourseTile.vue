@@ -3,6 +3,7 @@ const data = defineProps<{
   id: number
   title: string
   thumbnail?: string | null
+  home: boolean | false
 }>()
 const emit = defineEmits(["clicked"])
 
@@ -15,7 +16,7 @@ const userStore = useUserStore()
 const userUid = userStore.user?.uid
 
 onMounted(async () => {
-  if (userUid !== undefined) {
+  if (userUid !== undefined && data.home) {
     if (await isEnrolled(userUid, data.id)) {
       userIsEnrolled.value = true
       courseProgressPercentage.value =
@@ -66,9 +67,10 @@ const enrollUserNow = async () => {
   >
     <v-hover v-slot="{ isHovering, props }">
       <v-card
+        v-if="home"
         v-bind="props"
         :elevation="isHovering ? 5 : undefined"
-        @click="dialog = true"
+        @click="emit('clicked')"
       >
         <v-img
           cover
@@ -87,6 +89,25 @@ const enrollUserNow = async () => {
               v-model:model-value="courseProgressPercentage"
             ></v-progress-linear>
           </v-card-text>
+        </v-container>
+      </v-card>
+      <v-card
+        v-else
+        v-bind="props"
+        :elevation="isHovering ? 5 : undefined"
+        @click="dialog = true"
+      >
+        <v-img
+          cover
+          height="170"
+          :src="thumbnail"
+        >
+        </v-img>
+
+        <v-container>
+          <v-card-title class="text-h6 text-center font-weight-medium">{{
+            data.title
+          }}</v-card-title>
         </v-container>
       </v-card>
     </v-hover>
