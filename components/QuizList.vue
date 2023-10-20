@@ -114,9 +114,10 @@ const setThreshold = async () => {
           width="auto"
         >
           <v-card>
-            <v-card-title class="text-h5">
+            <v-card-title class="text-h5 bg-red"> Delete Quiz </v-card-title>
+            <v-card-text>
               Are you sure you want to delete this quiz?
-            </v-card-title>
+            </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn

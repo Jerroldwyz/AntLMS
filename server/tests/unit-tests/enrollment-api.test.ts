@@ -46,40 +46,44 @@ describe("My test", () => {
     } catch (e) {}
   })
 
-  it("Can perform CRUD on topics", async () => {
-    const createTopic = await $fetch("/api/topics", {
-      method: "POST",
-      body: {
-        courseId: testCourse.id,
-        title: "1",
-        position: 1,
+  it("Can enrol a user into a course", async () => {
+    const enrolIntoCourse = await $fetch(
+      `/api/users/${testUser.uid}/enrollments`,
+      {
+        method: "POST",
+        body: {
+          courseId: testCourse.id,
+        },
       },
-    })
-    const getTopic = await $fetch(`/api/topics/${createTopic.id}`)
-    expect(getTopic).toEqual({
-      id: createTopic.id,
-      courseId: testCourse.id,
-      title: "1",
-      content: [],
-      position: 1,
-    })
-    const updateTopic = await $fetch(`/api/topics/${createTopic.id}`, {
-      method: "PUT",
-      body: {
-        title: "2",
-        position: 2,
+    )
+    const getEnrollments = await $fetch(
+      `/api/users/${testUser.uid}/enrollments`,
+    )
+    expect(getEnrollments).toEqual([
+      {
+        id: enrolIntoCourse.id,
+        course: {
+          id: testCourse.id,
+          title: "1",
+          thumbnail: null,
+          creator: { name: testUser.name },
+        },
+        progress: [],
+        quiz_progress: [],
       },
-    })
-    const getTopicAgain = await $fetch(`/api/topics/${updateTopic.id}`)
-    expect(getTopicAgain).toEqual({
-      id: createTopic.id,
-      courseId: testCourse.id,
-      title: "2",
-      content: [],
-      position: 2,
-    })
-    const deleteTopic = await $fetch(`/api/topics/${updateTopic.id}`, {
-      method: "DELETE",
-    })
+    ])
+    const deleteEnrollment = await $fetch(
+      `/api/users/${testUser.uid}/enrollments`,
+      {
+        method: "DELETE",
+        body: {
+          courseId: testCourse.id,
+        },
+      },
+    )
+    const getEnrollmentsAgain = await $fetch(
+      `/api/users/${testUser.uid}/enrollments`,
+    )
+    expect(getEnrollmentsAgain).toEqual([])
   })
 })

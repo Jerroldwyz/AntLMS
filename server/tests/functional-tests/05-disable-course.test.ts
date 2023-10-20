@@ -5,8 +5,8 @@ await setup({
   server: true,
 })
 
-let testUser: any, testCourse: any
 describe("My test", () => {
+  let testUser: any, testCourse: any
   beforeAll(async () => {
     testUser = await $fetch("/api/users", {
       method: "POST",
@@ -46,40 +46,38 @@ describe("My test", () => {
     } catch (e) {}
   })
 
-  it("Can perform CRUD on topics", async () => {
-    const createTopic = await $fetch("/api/topics", {
-      method: "POST",
-      body: {
-        courseId: testCourse.id,
-        title: "1",
-        position: 1,
-      },
-    })
-    const getTopic = await $fetch(`/api/topics/${createTopic.id}`)
-    expect(getTopic).toEqual({
-      id: createTopic.id,
-      courseId: testCourse.id,
-      title: "1",
-      content: [],
-      position: 1,
-    })
-    const updateTopic = await $fetch(`/api/topics/${createTopic.id}`, {
+  it("Course can be disabled and enabled", async () => {
+    const disabledCourse = await $fetch(`/api/mycourses/${testCourse.id}`, {
       method: "PUT",
       body: {
-        title: "2",
-        position: 2,
+        enabled: false,
       },
     })
-    const getTopicAgain = await $fetch(`/api/topics/${updateTopic.id}`)
-    expect(getTopicAgain).toEqual({
-      id: createTopic.id,
-      courseId: testCourse.id,
-      title: "2",
-      content: [],
-      position: 2,
+    const getCourse = await $fetch(`/api/mycourses/${disabledCourse.id}`)
+    expect(getCourse).toEqual({
+      id: testCourse.id,
+      title: "1",
+      enabled: false,
+      thumbnail: "",
+      creator: testUser.name,
+      topics: [],
+      tags: [],
     })
-    const deleteTopic = await $fetch(`/api/topics/${updateTopic.id}`, {
-      method: "DELETE",
+    const enabledCourse = await $fetch(`/api/mycourses/${disabledCourse.id}`, {
+      method: "PUT",
+      body: {
+        enabled: true,
+      },
+    })
+    const getCourseAgain = await $fetch(`/api/mycourses/${enabledCourse.id}`)
+    expect(getCourseAgain).toEqual({
+      id: testCourse.id,
+      title: "2",
+      enabled: true,
+      thumbnail: "",
+      creator: testUser.name,
+      topics: [],
+      tags: [],
     })
   })
 })

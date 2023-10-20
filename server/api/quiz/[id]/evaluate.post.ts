@@ -1,4 +1,3 @@
-import { quiz_progress } from "@prisma/client"
 import { InferType, array, number, object, string } from "yup"
 import { quizPassed } from "~/server/utils/db/quiz"
 import { userIdSchema } from "~/server/utils/userIdSchema"

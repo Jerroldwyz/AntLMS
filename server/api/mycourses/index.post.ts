@@ -22,6 +22,8 @@ export default defineEventHandler(async (event) => {
   // Query DB
   const course = camelCaseToUnderscore(body)
 
+  console.log(course)
+
   try {
     const data = await createCourse(course)
     return courseTransformer(data)
