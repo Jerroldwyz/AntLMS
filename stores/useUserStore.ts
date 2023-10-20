@@ -1,11 +1,11 @@
 import { JsonObject } from "@prisma/client/runtime/library"
 import { defineStore } from "pinia"
+import { User as FirebaseUser } from "firebase/auth"
 import { User } from "~~/types"
 
 // store for user on client side
 export const useUserStore = defineStore("current-user-store", {
   state: () => ({
-    uid: null as string | null,
     user: null as User | null,
     isAdmin: false,
   }),
@@ -22,8 +22,24 @@ export const useUserStore = defineStore("current-user-store", {
     },
   },
   actions: {
-    setUser(user: User | null) {
-      this.user = user
+    async fetchCurrentUser(currentUser: FirebaseUser) {
+      try {
+        const data = await $fetch(`/api/auth/me`, {
+          method: "POST",
+          body: {
+            user: currentUser,
+          },
+        })
+
+        this.user = {
+          is_admin: data.is_admin,
+          uid: data.uid,
+          email: data.email,
+          name: data.name,
+          thumbnail: data.thumbnail,
+          contact_details: data.contact_details as JsonObject,
+        }
+      } catch (error) {}
     },
     async updateThumbnail(thumbnailPath: string | null) {
       const userToUpdate = {

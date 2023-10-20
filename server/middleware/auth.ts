@@ -14,13 +14,10 @@ export default defineEventHandler(async (event) => {
     const app = useFirebaseAdmin()!
     const auth = getAuth(app)
     try {
-      await auth.verifyIdToken(token, true)
+      // await auth.verifyIdToken(token, true)
+      await auth.verifySessionCookie(token, true)
     } catch (error) {
-      console.error(error)
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Unauthorized",
-      })
+      sendRedirect(event, "/auth/login", 400)
     }
   }
 })

@@ -6,12 +6,16 @@ export default defineEventHandler(async (event) => {
   const cookieOptions = useRuntimeConfig().public.firebaseAuthCookie
 
   if (token && token.length > 0) {
-    const expiresIn = 60 * 60 * 24 * 1000
     const app = useFirebaseAdmin()!
     const auth = getAuth(app)
-    // const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
+    // check user existed in local database
+    const decodedToken = await auth.verifyIdToken(token)
+    const uid = decodedToken.uid
 
-    setCookie(event, `${cookieOptions.name}-token`, token, {
+    const expiresIn = 60 * 60 * 24 * 1000
+    const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
+
+    setCookie(event, `${cookieOptions.name}-token`, sessionCookie, {
       domain: cookieOptions.domain,
       maxAge: expiresIn ?? 0,
       path: cookieOptions.path,

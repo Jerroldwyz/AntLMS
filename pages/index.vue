@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
 import { fetchAllEnrolledCourses } from "~/utils/course-helpers"
 definePageMeta({
-  middleware: "01-user",
+  middleware: "auth",
 })
 const isLoading = ref(true)
 const courses = ref()
-const { uid } = storeToRefs(useUserStore())
 
 onMounted(async () => {
   isLoading.value = true
   try {
-    courses.value = await fetchAllEnrolledCourses(uid.value!)
+    courses.value = await fetchAllEnrolledCourses()
   } finally {
     isLoading.value = false
   }

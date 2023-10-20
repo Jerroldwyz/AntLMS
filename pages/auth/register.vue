@@ -83,6 +83,7 @@ import {
 import Login from "./login.vue"
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 
 const { register, login } = useAuth()

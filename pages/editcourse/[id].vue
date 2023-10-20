@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Course } from "~/types"
-
 definePageMeta({
-  middleware: "01-user",
+  middleware: "auth",
 })
 
 const loading = ref(false)

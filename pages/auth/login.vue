@@ -91,13 +91,18 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-// const { login, signInWithGoogle, signInWithFacebook } = useAuth()
-import { AuthStrategy, ICredentialsPayload, login } from "~/services/firebase"
+import { getRedirectResult } from "firebase/auth"
+import {
+  AuthStrategy,
+  ICredentialsPayload,
+  loginWithEmailAndPassword,
+  popupLoginWithOAuthProvider,
+  resolveCredentials,
+} from "~/services/firebase"
 
 definePageMeta({
   layout: false,
-  middleware: "03-guest",
+  middleware: "guest",
 })
 const valid = ref(true)
 const disabled = ref(false)
@@ -105,39 +110,49 @@ const checkbox = ref(false)
 const router = useRouter()
 const email = ref("")
 const password = ref("")
-const { user } = storeToRefs(useUserStore())
-const { isAuthenticated } = storeToRefs(useAuthStore())
 const token = useFirebaseToken()
 
 const signIn = async () => {
-  disabled.value = true
   const credentialsPayload: ICredentialsPayload = {
-    provider: AuthStrategy.Email,
+    strategy: AuthStrategy.Email,
     credentials: {
       email: email.value,
       password: password.value,
     },
   }
+  disabled.value = true
   try {
-    const userCredentials = await login(credentialsPayload)
-    router.push("/")
+    const user = await loginWithEmailAndPassword(
+      credentialsPayload.credentials!,
+    )
+    if (user) await resolveCredentials(user)
   } catch (error) {
     alert(error)
+  } finally {
+    router.push("/")
   }
   disabled.value = false
 }
 
 const signInWithProvider = async (strategy: AuthStrategy) => {
-  const credentialsPayload: ICredentialsPayload = {
-    provider: strategy,
-  }
   try {
-    const user = await login(credentialsPayload)
-    await navigateTo("/")
+    const userCredentials = await popupLoginWithOAuthProvider(strategy)
+    if (userCredentials) {
+      await resolveCredentials(userCredentials)
+    }
   } catch (error) {
     alert(error)
+  } finally {
+    router.push("/")
   }
 }
+
+// OAuth redirect not working
+onMounted(async () => {
+  // const { $firebaseAuth } = useNuxtApp()
+  // const result = await getRedirectResult($firebaseAuth)
+  // console.log(result)
+})
 </script>
 
 <style scoped></style>

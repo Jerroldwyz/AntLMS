@@ -21,6 +21,7 @@ import { sendEmailVerification } from "firebase/auth"
 
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 
 const { $firebaseAuth } = useNuxtApp()

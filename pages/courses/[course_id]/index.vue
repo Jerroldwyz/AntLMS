@@ -22,6 +22,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: "auth",
+})
 const route = useRoute()
 const course: any = await $fetch(`/api/courses/${route.params.course_id}`, {
   method: "GET",

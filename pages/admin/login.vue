@@ -52,6 +52,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
+  middleware: "guest",
 })
 
 const { login } = useAuth()
@@ -70,7 +71,6 @@ const signIn = async () => {
 
     if (result) {
       const userStore = useUserStore()
-      userStore.setUser(await formatUser(result.user))
       await navigateTo("/admin")
     }
   } catch (error) {

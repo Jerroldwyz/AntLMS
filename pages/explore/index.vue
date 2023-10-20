@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: "auth",
+})
 const browse = ["Creative", "Technology", "Business"]
 const courses = await fetchAllCourses()
 const router = useRouter()

@@ -23,30 +23,57 @@ export async function fetchSearchQuery(searchQuery: string) {
 
 // TODO: change any to proper type
 export async function fetchAllUserCreatedCourses(): Promise<any> {
-  const userStore = useUserStore()
+  const { $firebaseAuth } = useNuxtApp()
 
-  // TODO: add type
-  const allCourses = await $fetch("/api/mycourses", {
-    method: "get",
-    query: { userId: userStore.user?.uid },
-  })
+  if ($firebaseAuth.currentUser) {
+    // TODO: add type
+    const allCourses = await $fetch("/api/mycourses", {
+      method: "get",
+      query: { userId: $firebaseAuth.currentUser.uid },
+    })
 
-  return allCourses
+    return allCourses
+  } else {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    })
+  }
 }
 
-export async function fetchAllEnrolledCourses(uid: string): Promise<any> {
-  const allEnrollments = await $fetch(`/api/users/${uid}/enrollments`, {
-    method: "GET",
-  })
-  return allEnrollments.map((enrollment) => enrollment.course)
+export async function fetchAllEnrolledCourses(): Promise<any> {
+  const { $firebaseAuth } = useNuxtApp()
+  if ($firebaseAuth.currentUser) {
+    const allEnrollments = await $fetch(
+      `/api/users/${$firebaseAuth.currentUser.uid}/enrollments`,
+      {
+        method: "GET",
+      },
+    )
+    return allEnrollments.map((enrollment) => enrollment.course)
+  } else {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    })
+  }
 }
 
 export async function fetchEnrolledCourse(courseId: string | string[]) {
-  const userStore = useUserStore()
-  const userUid = userStore.uid
-  return await $fetch(`/api/users/${userUid}/enrollments/${courseId}`, {
-    method: "GET",
-  })
+  const { $firebaseAuth } = useNuxtApp()
+  if ($firebaseAuth.currentUser) {
+    return await $fetch(
+      `/api/users/${$firebaseAuth.currentUser.uid}/enrollments/${courseId}`,
+      {
+        method: "GET",
+      },
+    )
+  } else {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    })
+  }
 }
 
 // TODO: change any to proper type

@@ -8,39 +8,45 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth"
+import { setServerSession } from "~/plugins/firebase.client"
 
 export enum AuthStrategy {
-  Email = 0,
+  Email,
   Google,
   Facebook,
 }
 
 export interface ICredentialsPayload {
-  credentials?: {} | null
-  provider: AuthStrategy
+  credentials?: {
+    email: string
+    password: string
+  } | null
+  strategy: AuthStrategy
 }
 
-export async function login(
-  payload: ICredentialsPayload,
-): Promise<UserCredential | null> {
-  switch (payload.provider) {
-    case AuthStrategy.Email:
-      return await loginWithCredentials(payload.credentials!)
-    case AuthStrategy.Google:
-      return await loginWithGoogle()
-    case AuthStrategy.Facebook:
-      return await loginWithFacebook()
-    default:
-      return Promise.resolve(null)
+export async function resolveCredentials(userCredential: UserCredential) {
+  try {
+    const token = await userCredential?.user.getIdToken()
+    await setServerSession(token!)
+  } catch (error) {
+    alert("Unsuccessfully creating session")
   }
 }
 
 export async function logout(): Promise<void> {
   const { $firebaseAuth } = useNuxtApp()
-  await signOut($firebaseAuth)
+  try {
+    await signOut($firebaseAuth)
+    await setServerSession(null)
+  } catch (error) {
+    alert("Failed to log you out")
+  } finally {
+    const router = useRouter()
+    router.push("/auth/login")
+  }
 }
 
-async function loginWithCredentials({
+export async function loginWithEmailAndPassword({
   ...credentials
 }): Promise<UserCredential | null> {
   const { $firebaseAuth } = useNuxtApp()
@@ -51,14 +57,32 @@ async function loginWithCredentials({
   )
 }
 
-async function loginWithGoogle(): Promise<UserCredential | null> {
+export async function loginWithOAuthProvider(authStrategy: AuthStrategy) {
   const { $firebaseAuth } = useNuxtApp()
-  const provider = new GoogleAuthProvider()
-  return await signInWithPopup($firebaseAuth, provider)
+  let provider: GoogleAuthProvider | FacebookAuthProvider
+  switch (authStrategy) {
+    case AuthStrategy.Google:
+      provider = new GoogleAuthProvider()
+      break
+    default:
+      provider = new FacebookAuthProvider()
+      break
+  }
+
+  await signInWithRedirect($firebaseAuth, provider)
 }
 
-async function loginWithFacebook(): Promise<UserCredential | null> {
+export async function popupLoginWithOAuthProvider(authStrategy: AuthStrategy) {
   const { $firebaseAuth } = useNuxtApp()
-  const provider = new FacebookAuthProvider()
+  let provider: GoogleAuthProvider | FacebookAuthProvider
+  switch (authStrategy) {
+    case AuthStrategy.Google:
+      provider = new GoogleAuthProvider()
+      break
+    default:
+      provider = new FacebookAuthProvider()
+      break
+  }
+
   return await signInWithPopup($firebaseAuth, provider)
 }

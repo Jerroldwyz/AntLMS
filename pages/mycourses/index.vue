@@ -1,8 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: "01-user",
+  middleware: "auth",
 })
-
 const courses = ref()
 const isLoading = ref(true)
 
