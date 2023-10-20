@@ -40,11 +40,4 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["stores", "utils"],
   },
-  devtools: {
-    enabled: true,
-
-    timeline: {
-      enabled: true,
-    },
-  },
 })
