@@ -34,10 +34,7 @@ export async function fetchAllUserCreatedCourses(): Promise<any> {
 
     return allCourses
   } else {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    })
+    return null
   }
 }
 
@@ -52,10 +49,7 @@ export async function fetchAllEnrolledCourses(): Promise<any> {
     )
     return allEnrollments.map((enrollment) => enrollment.course)
   } else {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    })
+    return null
   }
 }
 
@@ -69,10 +63,7 @@ export async function fetchEnrolledCourse(courseId: string | string[]) {
       },
     )
   } else {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    })
+    return null
   }
 }
 
