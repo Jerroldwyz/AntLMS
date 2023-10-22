@@ -2,7 +2,6 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   UserCredential,
-  getRedirectResult,
   signInWithEmailAndPassword,
   signInWithRedirect,
   signInWithPopup,

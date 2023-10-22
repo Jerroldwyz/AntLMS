@@ -27,7 +27,7 @@ export const useUserStore = defineStore("current-user-store", {
         const data = await $fetch(`/api/auth/me`, {
           method: "POST",
           body: {
-            user: currentUser,
+            uid: currentUser.uid,
           },
         })
 

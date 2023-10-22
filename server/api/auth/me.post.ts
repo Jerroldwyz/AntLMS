@@ -1,21 +1,52 @@
-import { UserRecord } from "firebase-admin/auth"
+import { UserRecord, getAuth } from "firebase-admin/auth"
+import { InferType, object } from "yup"
 import { createUser } from "~/server/utils/db/users"
+import { useFirebaseAdmin } from "~/composables/useFirebaseAdmin.server"
 
 export default defineEventHandler(async (event) => {
-  const { user }: { user: UserRecord } = await readBody(event)
-  const firebaseUid = user.uid
+  const unvalidatedBody = await readBody(event)
+  const requestBodySchema = object({
+    uid: userIdSchema(),
+  })
+  type requestBodyType = InferType<typeof requestBodySchema>
+  const body = await validateAndParse<requestBodyType>({
+    schema: requestBodySchema,
+    value: unvalidatedBody,
+    msgOnError: "Bad request body params",
+  })
 
-  const existingUser = await getUserById(firebaseUid)
-  if (existingUser) {
-    return existingUser
+  const { uid } = body
+
+  const app = useFirebaseAdmin()!
+  const auth = getAuth(app)
+
+  const existedFirebaseUser = await auth.getUser(uid)
+  if (!existedFirebaseUser) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "User not found",
+    })
+  }
+
+  const existedLocalUser = await getUserById(uid)
+
+  if (existedLocalUser) {
+    return existedLocalUser
   } else {
+    let isAdmin: boolean = false
+    if (existedFirebaseUser.customClaims) {
+      if (existedFirebaseUser.customClaims.admin) {
+        isAdmin = true
+      }
+    }
     const newUser = {
-      uid: firebaseUid,
-      name: user.displayName,
-      email: user.email,
+      uid: existedFirebaseUser.uid,
+      name: existedFirebaseUser.displayName,
+      email: existedFirebaseUser.email,
       thumbnail: null,
-      is_admin: user.customClaims && user.customClaims.admin,
-      enabled: !user.disabled,
+      contact_details: {},
+      is_admin: isAdmin,
+      enabled: !existedFirebaseUser.disabled,
     }
 
     return await createUser(camelCaseToUnderscore(newUser))

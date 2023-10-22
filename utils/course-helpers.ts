@@ -1,5 +1,3 @@
-import { content, quizzes, topics, progress } from "@prisma/client"
-import { storeToRefs } from "pinia"
 import { useUserStore } from "~/stores/useUserStore"
 import { Course } from "~~/types"
 
