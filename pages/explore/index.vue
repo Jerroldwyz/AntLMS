@@ -55,6 +55,7 @@ const handleClick = (isEnrolled: boolean) => {
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      :home="false"
       @clicked="handleClick"
     >
     </CourseTile>

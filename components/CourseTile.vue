@@ -12,8 +12,8 @@ const courseProgressPercentage = ref(0)
 const userIsEnrolled = ref(false)
 const dialog = ref(false)
 
-const userStore = useUserStore()
-const userUid = userStore.user?.uid
+const { $firebaseAuth } = useNuxtApp()
+const userUid = $firebaseAuth.currentUser!.uid
 
 onMounted(async () => {
   if (userUid !== undefined && data.home) {

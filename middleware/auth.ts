@@ -1,17 +1,18 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const sessionCookie = useFirebaseToken()
-  if (!sessionCookie.value) {
-    return navigateTo("/auth/login")
-  }
 
-  const isAdmin = await $fetch("/api/auth/authorize", {
+  const { authenticated, admin } = await $fetch("/api/auth/authorize", {
     method: "POST",
     body: {
       session_cookie: sessionCookie.value,
     },
   })
 
-  if (isAdmin) {
+  if (!authenticated) {
+    return navigateTo("/auth/login")
+  }
+
+  if (admin) {
     return navigateTo("/admin")
   }
 })

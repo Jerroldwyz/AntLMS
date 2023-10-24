@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     const decodedToken = await auth.verifyIdToken(token)
     const uid = decodedToken.uid
 
+    // expire in 1 day
     const expiresIn = 60 * 60 * 24 * 1000
     const sessionCookie = await auth.createSessionCookie(token, { expiresIn })
 

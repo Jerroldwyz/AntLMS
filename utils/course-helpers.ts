@@ -45,7 +45,9 @@ export async function fetchAllEnrolledCourses(): Promise<any> {
         method: "GET",
       },
     )
-    return allEnrollments.map((enrollment) => enrollment.course)
+    if (allEnrollments)
+      return allEnrollments.map((enrollment) => enrollment.course)
+    else return null
   } else {
     return null
   }
