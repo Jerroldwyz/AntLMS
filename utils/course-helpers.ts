@@ -1,4 +1,3 @@
-import { content, quizzes, topics, progress } from "@prisma/client"
 import { useUserStore } from "~/stores/useUserStore"
 import { Course } from "~~/types"
 
@@ -22,38 +21,50 @@ export async function fetchSearchQuery(searchQuery: string) {
 
 // TODO: change any to proper type
 export async function fetchAllUserCreatedCourses(): Promise<any> {
-  const userStore = useUserStore()
+  const { $firebaseAuth } = useNuxtApp()
 
-  // TODO: add type
-  const allCourses = await $fetch("/api/mycourses", {
-    method: "get",
-    query: { userId: userStore.user?.uid },
-  })
+  if ($firebaseAuth.currentUser) {
+    // TODO: add type
+    const allCourses = await $fetch("/api/mycourses", {
+      method: "get",
+      query: { userId: $firebaseAuth.currentUser.uid },
+    })
 
-  return allCourses
+    return allCourses
+  } else {
+    return null
+  }
 }
 
 export async function fetchAllEnrolledCourses(): Promise<any> {
-  const userStore = useUserStore()
-  const userUid = userStore.user?.uid
-
-  if (userUid) {
-    const allEnrollments = await $fetch(`/api/users/${userUid}/enrollments`, {
-      method: "get",
-    })
-
-    return allEnrollments.map((enrollment) => enrollment.course)
+  const { $firebaseAuth } = useNuxtApp()
+  if ($firebaseAuth.currentUser) {
+    const allEnrollments = await $fetch(
+      `/api/users/${$firebaseAuth.currentUser.uid}/enrollments`,
+      {
+        method: "GET",
+      },
+    )
+    if (allEnrollments)
+      return allEnrollments.map((enrollment) => enrollment.course)
+    else return null
+  } else {
+    return null
   }
-  // TODO: Throw error?
-  return "ERROR: Not logged in"
 }
 
 export async function fetchEnrolledCourse(courseId: string | string[]) {
-  const userStore = useUserStore()
-  const userUid = userStore.user?.uid
-  return await $fetch(`/api/users/${userUid}/enrollments/${courseId}`, {
-    method: "GET",
-  })
+  const { $firebaseAuth } = useNuxtApp()
+  if ($firebaseAuth.currentUser) {
+    return await $fetch(
+      `/api/users/${$firebaseAuth.currentUser.uid}/enrollments/${courseId}`,
+      {
+        method: "GET",
+      },
+    )
+  } else {
+    return null
+  }
 }
 
 // TODO: change any to proper type

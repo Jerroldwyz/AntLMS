@@ -22,10 +22,16 @@ export const useCourseProgressStore = defineStore("course-progress", {
   }),
   actions: {
     async updateContentProgress(courseId: string | string[]) {
-      this.progress = (await fetchEnrolledCourse(courseId)).progress
+      const enrolledCourse = await fetchEnrolledCourse(courseId)
+      if (enrolledCourse) {
+        this.progress = enrolledCourse.progress
+      }
     },
     async updateQuizProgress(courseId: string | string[]) {
-      this.quizProgress = (await fetchEnrolledCourse(courseId)).quiz_progress
+      const enrolledCourse = await fetchEnrolledCourse(courseId)
+      if (enrolledCourse) {
+        this.quizProgress = enrolledCourse.quiz_progress
+      }
     },
   },
 })

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: "auth",
+})
 const browse = ["Creative", "Technology", "Business"]
 const courses = await fetchAllCourses()
 const router = useRouter()
@@ -52,6 +55,7 @@ const handleClick = (isEnrolled: boolean) => {
       :key="course.id"
       :title="course.title"
       :thumbnail="course.thumbnail"
+      :home="false"
       @clicked="handleClick"
     >
     </CourseTile>

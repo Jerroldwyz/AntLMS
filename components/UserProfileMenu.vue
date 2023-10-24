@@ -43,17 +43,11 @@
 </template>
 
 <script setup lang="ts">
+import { logout } from "../services/firebase"
 const userStore = useUserStore()
-const { logout } = useAuth()
 
-const isAuthenticated = computed(() => {
-  return userStore.isAuthenticated
-})
 const currentUser = computed(() => {
   return userStore.user
-})
-const initials = computed(() => {
-  return userStore.initials
 })
 
 const signOut = async () => {
