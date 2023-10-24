@@ -1,4 +1,5 @@
 import { createEnrollmentProgress } from "~/server/utils/db/enrollment"
+import { contentCompleted } from "~/server/utils/db/progress"
 
 export default defineEventHandler(async (event) => {
   const userId = getRouterParam(event, "id") as string
@@ -7,7 +8,13 @@ export default defineEventHandler(async (event) => {
   const contentId = parseInt(body.contentId as string)
 
   try {
-    return await createEnrollmentProgress(enrollmentId, contentId, userId)
+    const hasCompleted = await contentCompleted(enrollmentId, contentId)
+    console.log(hasCompleted)
+    if (!hasCompleted) {
+      return await createEnrollmentProgress(enrollmentId, contentId, userId)
+    } else {
+      return null
+    }
   } catch (error) {
     return sendError(event, prismaErrorHandler(error))
   }
