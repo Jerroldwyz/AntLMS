@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
 
   try {
     const hasCompleted = await contentCompleted(enrollmentId, contentId)
-    console.log(hasCompleted)
     if (!hasCompleted) {
       return await createEnrollmentProgress(enrollmentId, contentId, userId)
     } else {
