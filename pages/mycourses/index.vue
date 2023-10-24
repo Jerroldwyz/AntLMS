@@ -55,11 +55,9 @@ async function handleSubmit(status: boolean) {
       text="Something went wrong. Please try again later."
     ></v-alert>
 
-    <v-container
-      fluid
-      class="d-flex flex-wrap"
-      style="gap: 2em"
-    >
+    <div class="text-h2">My Courses</div>
+    <v-divider class="mb-4"></v-divider>
+    <v-row>
       <CreateCourseBtn @click="createCourseDialog = true" />
       <Course
         v-for="course in courses"
@@ -68,7 +66,7 @@ async function handleSubmit(status: boolean) {
         :title="course.title"
         :thumbnail="course.thumbnail"
       />
-    </v-container>
+    </v-row>
 
     <v-dialog v-model="createCourseDialog">
       <v-container fluid>

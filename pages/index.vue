@@ -22,6 +22,8 @@ const handleOnClick = async (courseId: number) => {
 
 <template>
   <div>
+    <h1 class="text-h2">Home</h1>
+    <v-divider class="mb-4"></v-divider>
     <v-progress-linear
       v-if="isLoading"
       color="primary"

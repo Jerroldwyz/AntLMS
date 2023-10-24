@@ -18,7 +18,7 @@ const handleClick = (isEnrolled: boolean) => {
 </script>
 
 <template>
-  <div class="text-h4 font-weight-medium">Explore</div>
+  <div class="text-h2">Explore</div>
   <br />
   <div class="text-h5 font-weight-bold">Browse Categories</div>
   <div class="font-weight-light py-2">
