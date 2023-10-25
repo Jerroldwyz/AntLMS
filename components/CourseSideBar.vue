@@ -67,12 +67,11 @@ const enrollment = await fetchEnrolledCourse(props.courseId)
 
 const onContentComplete = (type, contentId) => {
   let completed = false
-  if (type === "TEXT") {
+  if (type === "TEXT" || type === "VIDEO") {
     completed =
       courseProgressStore.progress.findIndex(
         (content) => content.content_id === contentId,
       ) !== -1
-  } else if (type === "VIDEO") {
   } else {
     completed =
       courseProgressStore.quizProgress.findIndex(
@@ -85,7 +84,7 @@ const onContentComplete = (type, contentId) => {
 
 const contentPath = (type, topicId, contentId) => {
   let path = `/courses/${props.courseId}/topics/${topicId}/content/${contentId}`
-  if (type !== "TEXT") {
+  if (type === null || type === undefined) {
     path = `/courses/${props.courseId}/topics/${topicId}/quizzes/${contentId}`
   }
   return path

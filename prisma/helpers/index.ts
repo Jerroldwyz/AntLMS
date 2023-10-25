@@ -33,6 +33,7 @@ import { createAdminRoleAttachment } from "./createAdminRoleAttachment"
 import { createQuiz } from "./createQuiz"
 
 import { faker } from "./faker"
+import { createVideos } from "./videoHelpers"
 
 const admins: users[] = [
   {
@@ -218,6 +219,9 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   let permissions: permissions[] = []
   let admin_role_attachments: admin_role_attachments[] = []
   let role_permissions_attachments: role_permissions_attachments[] = []
+  let videoUrls: string[] = []
+
+  videoUrls = await createVideos()
 
   roles_list.forEach((role) => roles.push(role))
   permissions_list.forEach((permission) => permissions.push(permission))
@@ -267,9 +271,12 @@ export const generateData = async (prisma: PrismaClient, amount: number) => {
   enrollments = _.unique(enrollments, (x) => `${x.course_id}${x.user_id}`)
 
   topics.forEach((topic) => {
-    createMultipleContent(topic).forEach((content) => contents.push(content))
+    const multipleContents = createMultipleContent(topic, videoUrls)
+    multipleContents.forEach((content) => contents.push(content))
     quizzes.push(createQuiz(topic))
   })
+
+  console.log(contents)
 
   contents = _.unique(contents, (x) => x.id)
   quizzes = _.unique(quizzes, (x) => x.id)

@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto"
 import { faker } from "./faker"
-import { tempDir, downloadImage } from "./fileHelpers"
+import { tempDir, downloadFile } from "./fileHelpers"
 import { uploadFile } from "./minio"
 
 const createImage = async (height: number, width: number) => {
@@ -8,7 +8,7 @@ const createImage = async (height: number, width: number) => {
   const imageName = randomUUID()
   const downloadFilePath = `${tempDir}/${imageName}.jpg`
   const s3FilePath = `images/${imageName}.jpg`
-  await downloadImage(imageUrl, downloadFilePath)
+  await downloadFile(imageUrl, downloadFilePath)
   const metaData = {
     "Content-Type": "image/jpg",
   }
