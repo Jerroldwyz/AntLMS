@@ -22,3 +22,24 @@ export async function deleteContent(contentId: number) {
     method: "DELETE",
   })
 }
+
+export async function handleContentDone(contentId: number, courseId: number) {
+  const userStore = useUserStore()
+  const courseProgressStore = useCourseProgressStore()
+  try {
+    const result = await $fetch(`/api/users/${userStore.user?.uid}/progress`, {
+      method: "POST",
+      body: {
+        enrollmentId: courseProgressStore.enrollmentId,
+        contentId,
+        userId: userStore.user?.uid,
+      },
+    })
+
+    if (result) {
+      courseProgressStore.updateContentProgress(courseId)
+    }
+  } catch (error) {
+    alert(error)
+  }
+}

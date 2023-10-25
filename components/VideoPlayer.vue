@@ -14,9 +14,11 @@
       />
       <div v-else>
         <video
+          ref="videoPlayer"
           class="w-100"
           height="480"
           controls
+          @timeupdate="(event) => trackVideoProgress(event)"
         >
           <source
             :src="videoUrl"
@@ -33,6 +35,7 @@ import { getVideo } from "~/utils/video-helpers"
 const props = defineProps(["path"])
 const videoUrl = ref()
 const isLoading = ref(true)
+const route = useRoute()
 
 onMounted(async () => {
   isLoading.value = true
@@ -45,6 +48,19 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
+
+// const video = document.getElementById('videoPlayer')
+const videoPlayer = ref<any>(null)
+
+const trackVideoProgress = async (event: Event) => {
+  const ended = videoPlayer.value.ended
+  if (ended) {
+    await handleContentDone(
+      route.params.content_id as unknown as number,
+      route.params.course_id as unknown as number,
+    )
+  }
+}
 </script>
 
 <style scoped></style>
