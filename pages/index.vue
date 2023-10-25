@@ -22,7 +22,7 @@ const handleOnClick = async (courseId: number) => {
 
 <template>
   <div>
-    <h1 class="text-h2">Home</h1>
+    <div class="text-h4 font-weight-medium">Dashboard</div>
     <v-divider class="mb-4"></v-divider>
     <v-progress-linear
       v-if="isLoading"

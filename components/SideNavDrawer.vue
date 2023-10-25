@@ -15,8 +15,8 @@
     >
       <v-list-item
         class="listItemFont"
-        prepend-icon="mdi-home"
-        title="Home"
+        prepend-icon="mdi-view-dashboard"
+        title="Dashboard"
         to="/"
       >
       </v-list-item>
@@ -58,7 +58,7 @@
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-view-dashboard"
+            prepend-icon="mdi-book-open-page-variant"
             title="Enrolled"
           >
           </v-list-item>
@@ -72,6 +72,12 @@
           prepend-icon="mdi-circle-small"
           @click="handleOnClick(course.id)"
         >
+          <v-tooltip
+            activator="parent"
+            location="start"
+          >
+            {{ course.title }}
+          </v-tooltip>
         </v-list-item>
       </v-list-group>
 
