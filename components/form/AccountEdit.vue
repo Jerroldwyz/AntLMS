@@ -45,7 +45,7 @@
       />
       <v-btn
         type="submit"
-        color="blue"
+        color="primary"
         variant="elevated"
         >Save changes</v-btn
       >

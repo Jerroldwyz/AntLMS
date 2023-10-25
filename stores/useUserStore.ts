@@ -15,9 +15,18 @@ export const useUserStore = defineStore("current-user-store", {
     initials: (state) => {
       const userName = state.user?.name || ""
       const nameParts = userName.split(" ")
-      const initials = nameParts
-        ?.map((part) => part.charAt(0).toUpperCase())
-        .join("")
+
+      let initials = ""
+
+      if (nameParts.length > 2) {
+        initials =
+          nameParts[0].charAt(0).toUpperCase() +
+          nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+      } else {
+        initials = nameParts
+          ?.map((part) => part.charAt(0).toUpperCase())
+          .join("")
+      }
       return initials
     },
   },
