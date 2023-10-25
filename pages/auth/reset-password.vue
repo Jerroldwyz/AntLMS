@@ -8,16 +8,28 @@
       elevation="10"
       class="pa-7 pa-sm-10"
     >
-      <p class="text-h6">
-        Email {{ $firebaseAuth.currentUser?.email }} Unverified
-      </p>
-      <v-btn @click="sendEmail"> Send verification link to my email </v-btn>
+      <p class="text-h6">Reset password</p>
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="sendEmail"
+      >
+        <FormEmailInput v-model="email" />
+        <v-btn
+          class="mb-4"
+          color="primary"
+          block
+          type="submit"
+        >
+          Send password reset to my email
+        </v-btn>
+      </v-form>
     </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { sendEmailVerification } from "firebase/auth"
+import { sendEmailVerification, sendPasswordResetEmail } from "firebase/auth"
 
 definePageMeta({
   layout: false,
@@ -25,6 +37,8 @@ definePageMeta({
 })
 
 const { $firebaseAuth } = useNuxtApp()
+const valid = ref(true)
+const email = ref("")
 
 const sendEmail = () => {
   try {
@@ -35,15 +49,13 @@ const sendEmail = () => {
       // This must be true.
       handleCodeInApp: true,
     }
-    sendEmailVerification($firebaseAuth.currentUser!, actionCodeSettings).then(
-      () => {
-        alert(
-          "Successfully send email verification link! Please check your inbox or spam folder",
-        )
-      },
-    )
+    sendPasswordResetEmail($firebaseAuth, email.value, actionCodeSettings)
   } catch (error) {
     alert(error)
+  } finally {
+    alert(
+      "We have sent you a password reset link to your email! Please check inbox or spam folder",
+    )
   }
 }
 </script>

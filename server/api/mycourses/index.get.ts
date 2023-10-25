@@ -1,10 +1,11 @@
 import { object, string, InferType } from "yup"
+import { optionalIdSchema, userIdSchema } from "~/server/utils/userIdSchema"
 
 export default defineEventHandler(async (event) => {
   // Query params
   const unvalidatedQueryParams = getQuery(event)
   const queryParamsSchema = object({
-    userId: string().optional().uuid(),
+    userId: optionalIdSchema(),
   })
   type queryParamsType = InferType<typeof queryParamsSchema>
   const queryParams = await validateAndParse<queryParamsType>({

@@ -1,15 +1,14 @@
 import { InferType, string, object, bool } from "yup"
-import { v4 as uuidv4 } from "uuid"
+import { FirebaseError } from "firebase-admin/app"
+import { UserRecord, getAuth } from "firebase-admin/auth"
 import { createUser } from "~/server/utils/db/users"
+import { useFirebaseAdmin } from "~/composables/useFirebaseAdmin.server"
 
 export default defineEventHandler(async (event) => {
   // Body params
   const unvalidatedBody = await readBody(event)
   const requestBodySchema = object({
-    uid: string()
-      .optional()
-      .uuid()
-      .default(() => uuidv4()),
+    uid: userIdSchema(),
     name: string().required().min(1),
     email: string().required().email(),
     thumbnail: string().nullable().optional().default(null),
@@ -24,6 +23,7 @@ export default defineEventHandler(async (event) => {
     msgOnError: "Bad request body params",
   })
 
+  // Create user in local database
   try {
     return await createUser(camelCaseToUnderscore(body))
   } catch (e) {

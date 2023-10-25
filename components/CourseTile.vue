@@ -12,8 +12,8 @@ const courseProgressPercentage = ref(0)
 const userIsEnrolled = ref(false)
 const dialog = ref(false)
 
-const userStore = useUserStore()
-const userUid = userStore.user?.uid
+const { $firebaseAuth } = useNuxtApp()
+const userUid = $firebaseAuth.currentUser!.uid
 
 onMounted(async () => {
   if (userUid !== undefined && data.home) {
@@ -77,6 +77,33 @@ const enrollUserNow = async () => {
           height="170"
           :src="thumbnail"
         >
+          <v-toolbar color="rgba(0,0,0,0)">
+            <template #append>
+              <v-menu offset="0, 100">
+                <template #activator="{ props }">
+                  <v-btn
+                    icon="mdi-dots-vertical"
+                    v-bind="props"
+                  ></v-btn>
+                </template>
+
+                <v-list>
+                  <v-list-item>
+                    <v-btn
+                      v-if="userIsEnrolled"
+                      @click="dialog = true"
+                      >Unenroll</v-btn
+                    >
+                    <v-btn
+                      v-if="!userIsEnrolled"
+                      @click="dialog = true"
+                      >Enroll</v-btn
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </template>
+          </v-toolbar>
         </v-img>
 
         <v-container>
@@ -84,7 +111,7 @@ const enrollUserNow = async () => {
             data.title
           }}</v-card-title>
           <v-card-text v-if="userIsEnrolled">
-            <p>{{ courseProgressPercentage }}%</p>
+            <p>{{ courseProgressPercentage }}% Completed</p>
             <v-progress-linear
               v-model:model-value="courseProgressPercentage"
             ></v-progress-linear>
