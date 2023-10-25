@@ -31,7 +31,9 @@ const onUpdate = (event: any) => {
       variant="elevated"
       color="surface"
     >
-      <v-card-title>{{ props.text }}</v-card-title>
+      <v-card-title>
+        <div v-html="props.text"></div>
+      </v-card-title>
       <v-card-text>
         <div class="text-body-1 py-3">
           {{ props.explanation }}
