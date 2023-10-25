@@ -12,7 +12,13 @@
         :thickness="7"
         class="border-opacity-100"
       ></v-divider>
-      <div v-html="fetchedContent.value?.content"></div>
+      <div
+        v-if="isTextContent(fetchedContent.value.type)"
+        v-html="fetchedContent.value?.content"
+      ></div>
+      <div v-else>
+        <VideoPlayer :path="fetchedContent.value.content"></VideoPlayer>
+      </div>
     </div>
   </div>
 </template>
@@ -41,6 +47,10 @@ onMounted(async () => {
     await scrollToBottom(event)
   })
 })
+
+const isTextContent = (type: string) => {
+  return type === "TEXT"
+}
 
 const isPageUnscrollable = () => {
   return (
