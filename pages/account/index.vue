@@ -2,7 +2,7 @@
 
 <template>
   <v-container class="w-75">
-    <v-toolbar color="blue">
+    <v-toolbar color="primary">
       <v-toolbar-title>Account Settings</v-toolbar-title>
     </v-toolbar>
     <v-row>
@@ -10,7 +10,7 @@
         <v-tabs
           v-model="tab"
           direction="vertical"
-          color="blue"
+          color="primary"
         >
           <v-tab value="profile">
             <v-icon start> mdi-account </v-icon>
@@ -48,9 +48,8 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ["user"],
+  middleware: "auth",
 })
-
 const tab = ref("option-1")
 </script>
 

@@ -30,18 +30,9 @@
           <v-row>
             <v-col>
               <v-text-field
-                v-model="firstName"
+                v-model="fullName"
                 :rules="nameRules"
-                label="First name"
-                class="mt-4"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field
-                v-model="lastName"
-                :rules="nameRules"
-                label="Last name"
+                label="Full name"
                 class="mt-4"
                 required
               ></v-text-field>
@@ -84,13 +75,18 @@
 </template>
 
 <script setup lang="ts">
-import { sendEmailVerification, sendSignInLinkToEmail } from "firebase/auth"
+import {
+  sendEmailVerification,
+  sendSignInLinkToEmail,
+  signInWithCustomToken,
+} from "firebase/auth"
+import Login from "./login.vue"
 definePageMeta({
   layout: false,
   middleware: "guest",
 })
 
-const { register } = useAuth()
+const { register, login } = useAuth()
 
 const email = ref("")
 const password = ref("")
@@ -99,8 +95,8 @@ const valid = ref(false)
 const disabled = ref(false)
 const firstName = ref("")
 const lastName = ref("")
+const fullName = ref("")
 
-const emailVerified = ref(false)
 const isRegistered = ref(false)
 
 const nameRules = [(v: string) => !!v || "Name is required"]
@@ -121,21 +117,16 @@ const passwordValidation = [
   () => password.value === confirmedPassword.value || "Password must match",
 ]
 
-const signUp = () => {
+const signUp = async () => {
   disabled.value = true
   try {
-    const userProps = {
+    const userRecord = {
       email: email.value,
-      name: `${firstName.value} ${lastName.value}`,
+      name: fullName.value,
       password: password.value,
       contact_details: {},
     }
-    register(userProps).then((user) => {
-      const actionCodeSettings = {
-        url: "http://localhost:3000/auth/login",
-      }
-      sendEmailVerification(user, actionCodeSettings)
-    })
+    await register(userRecord)
   } catch (error) {
     alert(error)
   }

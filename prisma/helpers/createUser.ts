@@ -4,7 +4,7 @@ import { createThumbnail } from "./imageHelpers"
 
 export const createUser = async (): Promise<users> => {
   return {
-    uid: faker.string.uuid(),
+    uid: createUid(),
     name: faker.person.fullName(),
     email: faker.internet.email(),
     thumbnail: await createThumbnail(),
@@ -12,4 +12,8 @@ export const createUser = async (): Promise<users> => {
     is_admin: faker.datatype.boolean(),
     enabled: faker.datatype.boolean(),
   }
+}
+
+export const createUid = () => {
+  return faker.string.alphanumeric({ length: { min: 20, max: 38 } })
 }

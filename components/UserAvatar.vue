@@ -8,7 +8,7 @@
     ></v-img>
     <span
       v-else
-      class="text-h1"
+      class="text-h4"
       >{{ userStore.initials }}</span
     >
   </v-avatar>

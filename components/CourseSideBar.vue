@@ -63,10 +63,6 @@ const courseProgressStore = useCourseProgressStore()
 courseProgressStore.updateContentProgress(props.courseId)
 courseProgressStore.updateQuizProgress(props.courseId)
 
-courseProgressStore.$subscribe((mutation, state) => {
-  console.log(state)
-})
-
 const enrollment = await fetchEnrolledCourse(props.courseId)
 
 const onContentComplete = (type, contentId) => {

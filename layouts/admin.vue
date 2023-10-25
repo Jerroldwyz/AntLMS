@@ -12,7 +12,7 @@
           size="large"
         >
           <NuxtLink
-            to="/home"
+            to="/"
             class="text-button text-decoration-none text-black"
             >AntLMS</NuxtLink
           >

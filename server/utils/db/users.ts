@@ -17,6 +17,7 @@ export const getUserById = (user_id: string) => {
       uid: user_id,
     },
     select: {
+      uid: true,
       email: true,
       name: true,
       thumbnail: true,
