@@ -84,6 +84,7 @@ const enrollUserNow = async () => {
                   <v-btn
                     icon="mdi-dots-vertical"
                     v-bind="props"
+                    class="bg-white"
                   ></v-btn>
                 </template>
 
