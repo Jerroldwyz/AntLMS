@@ -1,1 +1,1 @@
-export const tags = ["Creative", "Technology", "Business"]
+export const tags = ["creative", "technology", "business"]
