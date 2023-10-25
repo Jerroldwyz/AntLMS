@@ -6,6 +6,8 @@ const handleOnClick = async (courseId: number) => {
 </script>
 
 <template>
+  <div class="text-h4 font-weight-medium">Dashboard</div>
+  <br />
   <v-row>
     <CourseTile
       v-for="course in courses"
