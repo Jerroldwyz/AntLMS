@@ -27,7 +27,7 @@
       <p>
         Your score:
         <span>{{ data.correctAnswer }}</span
-        >/<span>{{ data.threshold }}</span>
+        >/<span>{{ data.totalQuestions }}</span>
       </p>
     </v-card>
     <QuizResultBox
