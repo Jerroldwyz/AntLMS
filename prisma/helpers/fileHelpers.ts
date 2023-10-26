@@ -3,7 +3,7 @@ import Axios from "axios"
 
 export const tempDir = "tmp"
 
-export const downloadImage = async (url: string, filepath: string) => {
+export const downloadFile = async (url: string, filepath: string) => {
   const response = await Axios({
     url,
     method: "GET",

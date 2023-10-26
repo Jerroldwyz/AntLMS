@@ -23,7 +23,7 @@ export const uploadVideo = async (file: File): Promise<string> => {
 }
 
 export const getVideo = async (path: string): Promise<string> => {
-  const { data } = await useFetch(`/api/videos/${path}`, {
+  const { data } = await useFetch(`/api/videos/`, {
     method: "GET",
     params: { path },
   })
@@ -31,7 +31,7 @@ export const getVideo = async (path: string): Promise<string> => {
 }
 
 export const deleteVideo = async (path: string): Promise<boolean> => {
-  const { success } = await $fetch(`/api/videos/${path}`, {
+  const { success } = await $fetch(`/api/videos/`, {
     method: "DELETE",
     body: {
       path,

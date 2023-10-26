@@ -12,12 +12,20 @@
         :thickness="7"
         class="border-opacity-100"
       ></v-divider>
-      <div v-html="fetchedContent.value?.content"></div>
+      <div
+        v-if="isTextContent(fetchedContent.value.type)"
+        v-html="fetchedContent.value?.content"
+      ></div>
+      <div v-else>
+        <VideoPlayer :path="fetchedContent.value.content"></VideoPlayer>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { handleContentDone } from "~/utils/content-helpers"
+
 const route = useRoute()
 const isLoading = ref(true)
 const fetchData = async () => {
@@ -30,6 +38,10 @@ const fetchData = async () => {
 
 const fetchedContent = ref()
 
+const isTextContent = (type: string) => {
+  return type === "TEXT"
+}
+
 onMounted(async () => {
   isLoading.value = true
   try {
@@ -37,6 +49,7 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
+
   window.addEventListener("scroll", async (event) => {
     await scrollToBottom(event)
   })
@@ -51,37 +64,22 @@ const isPageUnscrollable = () => {
 
 onUnmounted(async () => {
   window.removeEventListener("scroll", scrollToBottom)
-  if (isPageUnscrollable()) {
-    await handleContentDone()
+  if (isPageUnscrollable() && fetchedContent.value.type === "TEXT") {
+    await handleContentDone(
+      route.params.content_id as unknown as number,
+      route.params.course_id as unknown as number,
+    )
   }
 })
 
-const scrollToBottom = async (event: Event, content: string = "text") => {
-  if (content === "text") {
+const scrollToBottom = async (event: Event) => {
+  if (fetchedContent.value.type === "TEXT") {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      await handleContentDone()
+      await handleContentDone(
+        route.params.content_id as unknown as number,
+        route.params.course_id as unknown as number,
+      )
     }
-  }
-}
-
-const handleContentDone = async () => {
-  const userStore = useUserStore()
-  const courseProgressStore = useCourseProgressStore()
-  try {
-    const result = await $fetch(`/api/users/${userStore.user?.uid}/progress`, {
-      method: "POST",
-      body: {
-        enrollmentId: courseProgressStore.enrollmentId,
-        contentId: route.params.content_id,
-        userId: userStore.user?.uid,
-      },
-    })
-
-    if (result) {
-      courseProgressStore.updateContentProgress(route.params.course_id)
-    }
-  } catch (error) {
-    console.log(error)
   }
 }
 </script>

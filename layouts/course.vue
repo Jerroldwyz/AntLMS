@@ -37,9 +37,9 @@
 const route = useRoute()
 const router = useRouter()
 const { course_id, topic_id, content_id } = route.params
-const userStore = useUserStore()
+const { $firebaseAuth } = useNuxtApp()
 const enrollment = await $fetch(
-  `/api/users/${userStore.user?.uid}/enrollments/${course_id}`,
+  `/api/users/${$firebaseAuth.currentUser!.uid}/enrollments/${course_id}`,
   {
     method: "GET",
   },
