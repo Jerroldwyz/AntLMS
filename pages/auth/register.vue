@@ -129,6 +129,9 @@ const signUp = async () => {
     await register(userRecord)
   } catch (error) {
     alert(error)
+  } finally {
+    const router = useRouter()
+    router.push("/auth/login")
   }
 }
 </script>
