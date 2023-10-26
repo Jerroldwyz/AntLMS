@@ -62,7 +62,7 @@
                 start
                 icon="mdi-google"
               ></v-icon>
-              Continue with Goggle
+              Continue with Google
             </v-btn>
             <v-btn
               class="mb-4"
