@@ -7,17 +7,17 @@
       :height="12"
     ></v-progress-linear>
     <div v-else>
-      <div class="text-h2 mb-6">{{ fetchedContent.value?.title }}</div>
+      <div class="text-h2 mb-6">{{ fetchedContent.title }}</div>
       <v-divider
         :thickness="7"
         class="border-opacity-100"
       ></v-divider>
       <div
-        v-if="isTextContent(fetchedContent.value.type)"
-        v-html="fetchedContent.value?.content"
+        v-if="isTextContent(fetchedContent.type)"
+        v-html="fetchedContent.content"
       ></div>
       <div v-else>
-        <VideoPlayer :path="fetchedContent.value.content"></VideoPlayer>
+        <VideoPlayer :path="fetchedContent.content"></VideoPlayer>
       </div>
     </div>
   </div>
@@ -28,13 +28,6 @@ import { handleContentDone } from "~/utils/content-helpers"
 
 const route = useRoute()
 const isLoading = ref(true)
-const fetchData = async () => {
-  const { data } = await useFetch(`/api/content/${route.params.content_id}`, {
-    method: "GET",
-  })
-
-  return data
-}
 
 const fetchedContent = ref()
 
@@ -45,7 +38,12 @@ const isTextContent = (type: string) => {
 onMounted(async () => {
   isLoading.value = true
   try {
-    fetchedContent.value = await fetchData()
+    fetchedContent.value = await $fetch(
+      `/api/content/${route.params.content_id}`,
+      {
+        method: "GET",
+      },
+    )
   } finally {
     isLoading.value = false
   }
